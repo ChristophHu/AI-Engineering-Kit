@@ -1,0 +1,12 @@
+# AI Engineering Rules
+
+1. **Arbeite vom gewünschten Ergebnis aus.** Formuliere Nutzen und beobachtbares Verhalten vor der technischen Lösung.
+2. **Verknüpfe Kriterien und Nachweise.** Jedes Abnahmekriterium braucht einen passenden Implementierungs- oder Verifikationsnachweis.
+3. **Trenne Fakten und Annahmen.** Erfinde keine Produktanforderungen. Markiere Annahmen und mache ihre Auswirkung sichtbar.
+4. **Halte den Umfang eng.** Ändere nur, was zum Ziel gehört; nutze bestehende Muster und Abhängigkeiten.
+5. **Aktualisiere Artefakte bei Richtungswechseln.** Wenn neue Erkenntnisse Scope, Verhalten oder technische Entscheidungen ändern, passe Spec und Plan an.
+6. **Verifiziere risikogerecht.** Wähle Checks passend zur Änderung und zum Projekt. Berichte ehrlich, was ausgeführt wurde und was nicht.
+7. **Behandle Fehlerfälle und Grenzen.** Berücksichtige relevante Randfälle, Rückwärtskompatibilität, Berechtigungen und Datenfolgen.
+8. **Halte den Prozess leichtgewichtig.** Verwende so viel Dokumentation wie zur gemeinsamen Klarheit und späteren Nachvollziehbarkeit nötig ist.
+9. **Keine stillen Seiteneffekte.** Externe Kommunikation, Veröffentlichung, destruktive Aktionen oder Änderungen außerhalb des Projekts nur bei entsprechender Autorisierung.
+10. **Abschluss ist kriteriumsbezogen.** Fasse Änderungen, Verifikationsnachweise und offene Punkte zusammen.
