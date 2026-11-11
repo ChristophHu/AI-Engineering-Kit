@@ -1,22 +1,26 @@
 # AI Engineering Kit für Codex
 
-Ein projektübergreifend wiederverwendbares Spec-Driven-Development-Kit. Die Paketdateien liegen im Verzeichnis `.codex`; das Installationsskript kopiert die Skills an Codex' projektweiten Skill-Erkennungspfad `.agents/skills` und ergänzt `AGENTS.md` um einen kurzen Verweis auf die Kit-Regeln.
+Ein projektübergreifend wiederverwendbares Spec-Driven-Development-Kit. Die Paketdateien liegen im Verzeichnis `.codex`; nach der Installation enthält das Zielprojekt dort die Unterordner `agents`, `rules` und `skills`. Das Installationsskript kopiert die Skills zusätzlich an Codex' projektweiten Skill-Erkennungspfad `.agents/skills` und ergänzt `AGENTS.md` um einen kurzen Verweis auf die Kit-Regeln.
 
 ## Installation in einem Codex-Projekt
 
-Kopiere den Ordner `.codex` und `install.sh` in das Projekt-Root und führe dort aus:
-
-```sh
-./install.sh
-```
-
-Alternativ:
+Führe das Installationsskript aus dem Kit-Ordner aus und gib den gewünschten Ziel-Projektordner als Argument an. Der Ordner wird angelegt, falls er noch nicht existiert:
 
 ```sh
 bash install.sh /pfad/zum/projekt
 ```
 
-Das Skript legt eine Sicherung vorhandener `AGENTS.md` an, fügt einen markierten Kit-Abschnitt hinzu und installiert Skills ohne vorhandene gleichnamige Skills zu überschreiben. Bei Namenskonflikten bricht es ab und nennt die betroffenen Pfade. Die installierte Kit-Kopie bleibt unter `.codex/ai-engineering/`; Skills werden aus `.codex/skills/` nach `.agents/skills/` kopiert, damit Codex sie erkennt.
+Beispiel:
+
+```sh
+bash install.sh "$HOME/Projects/mein-projekt"
+```
+
+Ohne genau einen Zielpfad bricht das Skript mit einer Verwendungshilfe ab. Das Kit wird nicht in seinen eigenen Quellordner installiert. Existiert der Zielpfad bereits als Datei, bricht das Skript mit einer Fehlermeldung ab.
+
+Das Skript legt eine Sicherung vorhandener `AGENTS.md` an, fügt einen markierten Kit-Abschnitt hinzu und installiert Skills ohne vorhandene gleichnamige Skills zu überschreiben. Bei Namenskonflikten bricht es ab und nennt die betroffenen Pfade. Regeln, Workflow und Vorlagen liegen unter `.codex/rules/`, Skills unter `.codex/skills/`; Skills werden zusätzlich nach `.agents/skills/` kopiert, damit Codex sie erkennt.
+
+Nach der Installation fragt das Skript interaktiv nach einer ersten Projektbeschreibung und speichert sie unter `.codex/PROJECT.md`. Als Orientierung nennt es mögliche Inhalte wie Projektziel, Plattform und Frontend-Technologie (z. B. Next.js oder Angular), Anwendungsstruktur, Systemdesign, Referenzprodukt, Nutzer, Monetarisierung, Integrationen und Datenbankstrukturen. Bei nicht-interaktiver Ausführung wird dort eine ausfüllbare Vorlage mit diesen Hinweisen angelegt.
 
 ## Ablauf
 
@@ -29,10 +33,13 @@ Für kleine, eindeutige Aufgaben kann Codex Spec und Plan knapp halten. Bei Änd
 
 ## Inhalt
 
-- `.codex/ai-engineering/WORKFLOW.md` – Phasen, Übergänge und Artefakte
-- `.codex/ai-engineering/RULES.md` – projektweite Arbeitsregeln
-- `.codex/ai-engineering/templates/` – Spec-, Plan- und Verifikationsvorlagen
-- `.codex/skills/` – drei Codex-Skills für Spec, Planung und Umsetzung/Review
+- `.codex/PROJECT.md` – erste Beschreibung des installierten Projekts (wird vom Installer angelegt)
+- `.codex/agents/` – Ablage für projektspezifische Agent-Definitionen
+- `.codex/rules/WORKFLOW.md` – Phasen, Übergänge und Artefakte
+- `.codex/rules/RULES.md` – projektweite Arbeitsregeln
+- `.codex/rules/ARCHITECTURE.md` und die beiden Architekturdiagramme – Referenzarchitekturen für native Apple-Apps und Web-Apps
+- `.codex/rules/templates/` – Spec-, Plan- und Verifikationsvorlagen
+- `.codex/skills/` – Spec-/Planungs- und DSGVO-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
 - `install.sh` – idempotente, konfliktbewusste Integration
 
 Nach Installation kann ein Skill mit `$spec-driven-development`, `$feature-planning` oder `$implementation-review` aufgerufen werden.

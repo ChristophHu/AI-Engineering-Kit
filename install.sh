@@ -2,7 +2,20 @@
 set -euo pipefail
 
 SOURCE_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
-TARGET_DIR="${1:-$PWD}"
+if [[ $# -ne 1 ]]; then
+  printf 'Verwendung: bash %s /pfad/zum/projekt\n' "$0" >&2
+  printf 'Bitte gib genau einen bestehenden Projektordner als Ziel an.\n' >&2
+  exit 2
+fi
+
+TARGET_DIR="$1"
+if [[ ! -d "$TARGET_DIR" ]]; then
+  if [[ -e "$TARGET_DIR" ]]; then
+    printf 'Fehler: Der Zielpfad existiert, ist aber kein Ordner: %s\n' "$TARGET_DIR" >&2
+    exit 2
+  fi
+  mkdir -p -- "$TARGET_DIR"
+fi
 TARGET_DIR="$(cd -- "$TARGET_DIR" && pwd)"
 KIT_SOURCE="$SOURCE_DIR/.codex"
 KIT_DEST="$TARGET_DIR/.codex"
@@ -14,16 +27,29 @@ if [[ ! -d "$KIT_SOURCE" ]]; then
   exit 1
 fi
 
-mkdir -p "$KIT_DEST"
-if [[ -e "$KIT_DEST/ai-engineering" ]]; then
-  printf 'Fehler: %s existiert bereits; Kit-Dateien werden nicht überschrieben.\n' "$KIT_DEST/ai-engineering" >&2
-  exit 1
+if [[ "$TARGET_DIR" == "$SOURCE_DIR" ]]; then
+  printf 'Fehler: Das Kit kann nicht in seinen eigenen Paketordner installiert werden.\n' >&2
+  printf 'Gib den Pfad zu einem anderen Projektordner an.\n' >&2
+  exit 2
 fi
+
 AGENTS="$TARGET_DIR/AGENTS.md"
 if [[ -f "$AGENTS" ]] && grep -Fq "$MARKER_START" "$AGENTS"; then
   printf 'Fehler: AGENTS.md enthält bereits einen AI-Engineering-Kit-Abschnitt.\n' >&2
   exit 1
 fi
+
+for category in agents rules skills; do
+  if [[ -e "$KIT_DEST/$category" ]]; then
+    printf 'Fehler: %s existiert bereits; Kit-Dateien werden nicht überschrieben.\n' "$KIT_DEST/$category" >&2
+    exit 1
+  fi
+done
+if [[ -e "$KIT_DEST/PROJECT.md" ]]; then
+  printf 'Fehler: %s existiert bereits; die Projektbeschreibung wird nicht überschrieben.\n' "$KIT_DEST/PROJECT.md" >&2
+  exit 1
+fi
+
 mkdir -p "$TARGET_DIR/.agents/skills"
 for skill_dir in "$KIT_SOURCE"/skills/*; do
   skill_name="$(basename -- "$skill_dir")"
@@ -37,11 +63,14 @@ done
 BLOCK="$MARKER_START
 ## AI Engineering Kit
 
-Für Entwicklungsaufgaben beachte `.codex/ai-engineering/RULES.md` und den passenden Ablauf in `.codex/ai-engineering/WORKFLOW.md`. Spec-Driven Development ist der Standard für mehrteilige oder unklare Anforderungen; halte einfache Änderungen leichtgewichtig. Skills liegen unter `.agents/skills/`.
+Für Entwicklungsaufgaben beachte \`.codex/rules/RULES.md\` und den passenden Ablauf in \`.codex/rules/WORKFLOW.md\`. Spec-Driven Development ist der Standard für mehrteilige oder unklare Anforderungen; halte einfache Änderungen leichtgewichtig. Skills liegen unter \`.codex/skills/\` und \`.agents/skills/\`.
 $MARKER_END"
 
-cp -R "$KIT_SOURCE/ai-engineering" "$KIT_DEST/"
-cp -R "$KIT_SOURCE/skills" "$KIT_DEST/"
+mkdir -p "$KIT_DEST"
+for category in agents rules skills; do
+  cp -R "$KIT_SOURCE/$category" "$KIT_DEST/"
+done
+
 if [[ -f "$AGENTS" ]]; then
   cp "$AGENTS" "$AGENTS.bak"
   printf '\n\n%s\n' "$BLOCK" >> "$AGENTS"
@@ -55,4 +84,25 @@ for skill_dir in "$KIT_DEST"/skills/*; do
   cp -R "$skill_dir" "$skill_dest"
 done
 
-printf 'AI Engineering Kit installiert in %s\n' "$TARGET_DIR"
+PROJECT_FILE="$KIT_DEST/PROJECT.md"
+if [[ -t 0 ]]; then
+  printf 'AI Engineering Kit installiert in %s\n\n' "$TARGET_DIR"
+  printf 'Beschreibe jetzt das Projekt. Du kannst zum Beispiel Ziel, Plattform (native Apple-App oder Web-App), Frontend (z. B. Next.js oder Angular), Anwendungsstruktur, Systemdesign, Technologien, Referenzprodukt, Nutzer, Monetarisierung, Integrationen und Datenbankstrukturen beschreiben.\n'
+  printf 'Beende die Eingabe mit einer leeren Zeile.\n'
+  PROJECT_DESCRIPTION=""
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && break
+    PROJECT_DESCRIPTION+="$line"$'\n'
+  done
+
+  if [[ -z "$PROJECT_DESCRIPTION" ]]; then
+    printf 'Bitte ergänze die Projektbeschreibung später in %s.\n' "$PROJECT_FILE"
+    printf '# Projektbeschreibung\n\nBeschreibe die für dieses Projekt relevanten Punkte, zum Beispiel:\n\n- Ziel des Projekts\n- Plattform (native Apple-App, Web-App oder beides)\n- Frontend-Technologie (z. B. Next.js oder Angular)\n- Anwendungsstruktur, Systemdesign und weitere Technologien\n- Referenzprodukt und Nutzer\n- Monetarisierung und Integrationen\n- Datenbankstrukturen\n' > "$PROJECT_FILE"
+  else
+    printf '# Projektbeschreibung\n\n%s' "$PROJECT_DESCRIPTION" > "$PROJECT_FILE"
+  fi
+else
+  printf '# Projektbeschreibung\n\nBeschreibe die für dieses Projekt relevanten Punkte, zum Beispiel:\n\n- Ziel des Projekts\n- Plattform (native Apple-App, Web-App oder beides)\n- Frontend-Technologie (z. B. Next.js oder Angular)\n- Anwendungsstruktur, Systemdesign und weitere Technologien\n- Referenzprodukt und Nutzer\n- Monetarisierung und Integrationen\n- Datenbankstrukturen\n' > "$PROJECT_FILE"
+  printf 'AI Engineering Kit installiert in %s\n' "$TARGET_DIR"
+  printf 'Ergänze die erste Projektbeschreibung in %s.\n' "$PROJECT_FILE"
+fi

@@ -7,11 +7,15 @@ description: Übersetzt eine abgestimmte Spec in einen umsetzbaren, kriteriumsbe
 
 Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt werden soll.
 
-1. Lies Projektanweisungen, die Spec, `.codex/ai-engineering/WORKFLOW.md` und `.codex/ai-engineering/RULES.md`.
+1. Lies Projektanweisungen, die Spec, `.codex/rules/WORKFLOW.md` und `.codex/rules/RULES.md`. Bei nativen Apple-Apps oder Web-Apps berücksichtige zusätzlich `.codex/rules/ARCHITECTURE.md`.
 2. Prüfe die relevanten Module, Tests, Architektur und vorhandenen Konventionen. Stütze Datei- und Technikvorschläge auf diese Prüfung.
 3. Zerlege die Arbeit in kleine Schritte mit klaren Ergebnissen. Verknüpfe jeden Schritt mit Spec-Kriterien und geeigneter Verifikation.
 4. Notiere Abhängigkeiten, Risiken und noch offene Entscheidungen. Schlage keine unnötige Generalisierung vor.
-5. Nutze `.codex/ai-engineering/templates/PLAN.md`, wenn das Projekt keine eigene Planstruktur hat.
-6. Prüfe rückwärts, ob alle Abnahmekriterien durch mindestens einen Schritt und einen Nachweis abgedeckt sind.
+5. Nutze `.codex/rules/templates/PLAN.md`, wenn das Projekt keine eigene Planstruktur hat.
+6. Bei nativen Apple-Apps und Web-Apps plane die zutreffenden technischen Entscheidungen und Plattformchecks aus `.codex/rules/ARCHITECTURE.md` ein.
+7. Gib die Umsetzung erst frei, wenn die Startkriterien aus `.codex/rules/ARCHITECTURE.md` erfüllt oder begründet als Annahmen dokumentiert sind.
+8. Prüfe rückwärts, ob alle Abnahmekriterien durch mindestens einen Schritt und einen Nachweis abgedeckt sind.
+9. Richte plattformspezifische Planung an `$swiftui-app-development`, `$nextjs-app-development` oder `$angular-app-development` aus. Die Skills identifizieren zuerst Version, Zielplattform und vorhandene Muster; sie geben kein neues Architekturmodell vor.
+10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo-datenschutz` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
 
 Ergebnis: ein ausführbarer Plan, der die Spec abdeckt und die Verifikation mitplant.
