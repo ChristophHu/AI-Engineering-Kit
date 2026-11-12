@@ -24,6 +24,16 @@ Nach der Installation fragt das Skript interaktiv nach einer ersten Projektbesch
 
 Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
 
+## Projektarbeit nach der Installation starten
+
+Das Installationsskript startet keinen Agenten. Öffne nach erfolgreicher Installation das Zielprojekt in Codex oder starte eine Codex-Sitzung im Zielverzeichnis. Falls die Projektbeschreibung bei einer nicht interaktiven Installation angelegt wurde, ergänze zunächst `.codex/PROJECT.md`.
+
+Gib dem Agenten anschließend beispielsweise diesen Auftrag:
+
+> Lies `.codex/PROJECT.md` und die Projektanweisungen und beginne die Arbeit an diesem Projekt. Prüfe zuerst Git gemäß dem installierten Git-Workflow und wähle danach den passenden Einstieg für Initialisierung oder Planung.
+
+Der erste Agent prüft Git wie oben beschrieben. Bei einer neuen oder noch unklaren Projektidee beginnt er mit `$init`, klärt Produktvision, Designrichtung und Prioritäten und legt sie dem Nutzer zur Bestätigung vor. Bei einem bereits ausreichend beschriebenen Projekt nutzt er für die vereinbarte Aufgabe `$spec-driven-development` und anschließend `$feature-planning`. Nach Klärung der notwendigen Entscheidungen führt der Agent die vereinbarte Umsetzung und passende Verifikation entlang des Plans durch.
+
 ## Ablauf
 
 1. **Specify:** Ziel, Nutzer, Kontext, Grenzen und Abnahmekriterien festhalten.
