@@ -20,7 +20,7 @@ Wenn es um eine neue oder noch vage Produktidee geht, beginne zuerst mit `$init`
 9. Wenn die Aufgabe personenbezogene Daten verarbeitet, nutze `$dsgvo`, um Datenflüsse, offene Datenschutzentscheidungen, technische Maßnahmen und passende Verifikation in Spec und Plan einzubeziehen.
 10. Wenn Supabase Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$supabase-backend-development` für Datenmodell, Migrationen, Zugriffsschutz und Backend-Verifikation heran.
 11. Wenn NestJS mit PostgreSQL Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$nestjs-postgres-backend-development` für API, Datenmodell, Migrationen, Zugriffsschutz, geschützte Swagger UI und Backend-Verifikation heran.
-12. Wenn ein C#-/ASP.NET-Core-Backend mit Microsoft SQL Server Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$csharp-sqlserver-backend-development` für API, SQL-Server-Schema/Migrationen, Zugriffsschutz, geschützte Swagger/OpenAPI-Endpunkte und Backend-Verifikation heran.
+12. Wenn ein C#-/ASP.NET-Core-Backend mit Microsoft SQL Server Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$backend-csharp-sqlserver-development` für API, SQL-Server-Schema/Migrationen, Zugriffsschutz, geschützte Swagger/OpenAPI-Endpunkte und Backend-Verifikation heran.
 13. Wenn SQLite in einer App, im Backend oder im Browser eingesetzt wird, ziehe `$sqlite-data-development` für Speicherort, Datenhoheit, Migrationen, Offline-Verhalten und Synchronisierung heran.
 14. Wenn die Umsetzung von lokaler Laufzeit, CLI, Konfiguration oder Zielumgebung abhängt, nutze `$verify-setup` für eine sichere Readiness-Prüfung.
 

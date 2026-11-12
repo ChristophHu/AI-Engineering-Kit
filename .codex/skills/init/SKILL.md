@@ -84,8 +84,8 @@ If NestJS with PostgreSQL is selected:
 
 If C# with Microsoft SQL Server is selected:
 
-- Do not add “C# backend/SQL Server setup” as a user-facing product feature. Record the .NET API, SQL Server, local configuration, and migration workflow as setup dependencies for `$verify-setup` and `$csharp-sqlserver-backend-development`.
-- Hand off API structure, SQL Server schema/data access, migrations, authentication/authorization, protected Swagger/OpenAPI, and backend verification to `$csharp-sqlserver-backend-development`.
+- Do not add “C# backend/SQL Server setup” as a user-facing product feature. Record the .NET API, SQL Server, local configuration, and migration workflow as setup dependencies for `$verify-setup` and `$backend-csharp-sqlserver-development`.
+- Hand off API structure, SQL Server schema/data access, migrations, authentication/authorization, protected Swagger/OpenAPI, and backend verification to `$backend-csharp-sqlserver-development`.
 - Record the target .NET version, SQL Server environment, and hosting model (for example Windows Server/IIS) in the technical handoff. Do not assume Windows authentication, Azure hosting, or production credentials.
 
 ### Local and offline data
