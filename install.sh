@@ -74,7 +74,6 @@ for category in agents rules skills; do
 done
 
 if [[ -f "$AGENTS" ]]; then
-  cp "$AGENTS" "$AGENTS.bak"
   printf '\n\n%s\n' "$BLOCK" >> "$AGENTS"
 else
   printf '%s\n' "$BLOCK" > "$AGENTS"
