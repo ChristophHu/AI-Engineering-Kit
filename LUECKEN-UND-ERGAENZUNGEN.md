@@ -1,19 +1,19 @@
 # Lücken und Ergänzungsvorschläge
 
-Stand: 12. November 2026. Diese Vorschläge ergänzen den `KONSISTENZBERICHT.md`; sie sind keine Behauptung, dass jedes Projekt alle genannten Komponenten benötigt. Vorhanden sind acht Agentenprofile, 17 Skills sowie Spec-, Plan- und Verifikationsvorlagen.
+Stand: 12. November 2026; aktualisiert nach Einführung der Backend-Entscheidungsvorlage. Diese Vorschläge ergänzen den `KONSISTENZBERICHT.md`; nicht jedes Projekt benötigt alle genannten Komponenten. Vorhanden sind acht Agentenprofile, 17 Skills sowie Spec-, Plan-, Verifikations- und Backend-Entscheidungsvorlagen.
 
 ## Hohe Priorität
 
 1. **Registrierung und Lifecycle der Agenten:** Eine dokumentierte, zur verwendeten Codex-Version passende Registrierung und ein Installationsnachweis für die acht Profile fehlen. Zuerst die tatsächlichen Anforderungen prüfen; dann Installer und Anleitung entsprechend ergänzen.
 2. **Upgrade und Skill-Synchronisierung:** Ein versioniertes Verfahren für Updates, Umbenennungen und Konflikte zwischen `.codex/skills` und `.agents/skills` fehlt. Es sollte eigene Änderungen erhalten und alte Skill-Namen kontrolliert behandeln.
-3. **Installations- und Konsistenzprüfungen:** Eine automatisierbare Prüfung für frische und wiederholte Installation, Konflikte, Sicherungen, Skill-Namen, Referenzen und Agentenregistrierung fehlt. Sie sollte isolierte temporäre Zielprojekte verwenden und keine Nutzerdaten verändern.
+3. **Installations- und Konsistenzprüfungen:** Eine dauerhafte automatisierte Prüfung für frische und wiederholte Installation, Konflikte, Erhalt bestehender Dateien, Skill-Namen, Referenzen und Agentenregistrierung fehlt. Zwei einmalige Installationsprüfungen in temporären Verzeichnissen deckten das Verhalten der `AGENTS.md` und des früheren Backups ab; eine neue Sicherung ist nicht vorgesehen. Weitere Prüfungen sollten isolierte temporäre Zielprojekte verwenden.
 4. **Umgesetzt – Entscheidungsvorlage für Architektur:** `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` verbindet Backend-Auswahl, lokale Speicherung, SQLite, Datenhoheit, Hosting, Alternativen und geschützten Swagger-Zugang mit den Architektur- und Initialisierungsregeln.
 
 ## Mittlere Priorität
 
-5. **Offline- und Synchronisationsvertrag als Template:** Datenhoheit, Konfliktauflösung, Reihenfolge, Wiederholung/Idempotenz, Löschungen, Kontowechsel, Speicherverlust und Wiederherstellung sind in den SQLite-Anweisungen enthalten, aber nicht als ausfüllbare Vorlage vorhanden.
-6. **Sicherheits- und Datenfluss-Template:** Vertrauensgrenzen, Identitäten, Rollen, Datenzugriff, Geheimnisse und Nachweise für Schutzmaßnahmen könnten projektbezogen festgehalten werden. Vorhandene Backend- und DSGVO-Skills einbeziehen.
-7. **Betriebs- und Wiederherstellungsvorlage:** Backup, Restore-Probe, Migration, Monitoring, Rollback und Zuständigkeiten für PostgreSQL, SQL Server und serverseitiges SQLite konkretisieren, soweit die gewählte Architektur sie benötigt.
+5. **Offline- und Synchronisationsvertrag als Template:** Die Backend-Entscheidungsvorlage erfasst Datenhoheit und grundlegende Sync-Fragen. Eine ausführliche Vorlage für Reihenfolge, Wiederholung/Idempotenz, Konflikte, Löschungen, Kontowechsel, Speicherverlust und Wiederherstellung fehlt weiterhin.
+6. **Sicherheits- und Datenfluss-Template:** Die Backend-Entscheidungsvorlage erfasst Zugriff und Swagger-Schutz. Eine ausführliche Vorlage für Vertrauensgrenzen, Identitäten, Datenflüsse, Geheimnisse und Nachweise könnte die vorhandenen Backend- und DSGVO-Skills ergänzen.
+7. **Betriebs- und Wiederherstellungsvorlage:** Die Backend-Entscheidungsvorlage spricht Sicherung und Wiederherstellung bei SQLite an. Ein ausführlicher Betriebsplan für Restore-Probe, Migration, Monitoring, Rollback und Zuständigkeiten für PostgreSQL, SQL Server und serverseitiges SQLite fehlt weiterhin.
 8. **Delegationsauftrag und Ergebnisvorlage:** `DELEGATION.md` beschreibt bereits die erforderlichen Felder; ein wiederverwendbares Template könnte Zuständigkeit für Dateien, Abhängigkeiten, Prüfungen, Grenzen und Evidenz vereinheitlichen.
 9. **Änderungs- und Übergabevorlage für bestehende Projekte:** Eine Vorlage für Inventar vorhandener Agenten, Skills, Konfiguration, Abweichungen und Migrationsentscheidungen würde die Einführung des Kits in bestehende Repositories unterstützen.
 
@@ -24,4 +24,4 @@ Stand: 12. November 2026. Diese Vorschläge ergänzen den `KONSISTENZBERICHT.md`
 12. **Release-/Operations-Spezialist:** Bei häufigen Releases könnte ein Agent das vorhandene `deploy`-Skill mit einem Betriebs-Template verbinden. Autorisierung und Zielumgebung bleiben ausdrücklich beim Nutzer und der Hauptinstanz.
 13. **API-Vertrags- und Kompatibilitäts-Skill:** Erst bei wiederkehrendem Bedarf ergänzen, um OpenAPI-Verträge, Versionierung und Client-Kompatibilität über mehrere Backend-Stacks hinweg zu prüfen. Die vorhandenen Backend-Skills enthalten bereits Grundlagen.
 
-Die tatsächliche Notwendigkeit dieser Ergänzungen hängt von Projekten und Arbeitsweise ab. Die Vorschläge wurden nicht implementiert und nicht anhand eines produktiven Zielprojekts erprobt.
+Die tatsächliche Notwendigkeit der offenen Ergänzungen hängt von Projekten und Arbeitsweise ab. Die Entscheidungsvorlage ist erstellt und verknüpft; sie wurde noch nicht anhand eines produktiven Zielprojekts erprobt. Die übrigen Vorschläge bleiben offen.
