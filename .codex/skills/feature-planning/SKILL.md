@@ -16,6 +16,10 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 7. Gib die Umsetzung erst frei, wenn die Startkriterien aus `.codex/rules/ARCHITECTURE.md` erfüllt oder begründet als Annahmen dokumentiert sind.
 8. Prüfe rückwärts, ob alle Abnahmekriterien durch mindestens einen Schritt und einen Nachweis abgedeckt sind.
 9. Richte plattformspezifische Planung an `$swiftui-app-development`, `$nextjs-app-development` oder `$angular-app-development` aus. Die Skills identifizieren zuerst Version, Zielplattform und vorhandene Muster; sie geben kein neues Architekturmodell vor.
-10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo-datenschutz` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
+10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
+11. Bei Release- oder Deployment-Arbeiten plane nach `$deploy`; erkenne dafür zuerst bestehende Umgebung, Provider, CI/CD und Rollback-Möglichkeiten.
+12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$supabase-backend-development`.
+13. Bei NestJS-/PostgreSQL-Änderungen plane API-Module, Validierung, Authentifizierung/Autorisierung, Datenbankschema und Migrationen, Geheimnisverwaltung sowie die geschützte Swagger UI mit `$nestjs-postgres-backend-development`.
+14. Wenn lokale Laufzeit, CLI, Konfiguration oder Zielumgebung Voraussetzung sind, plane einen Setup-Readiness-Check mit `$verify-setup` ein.
 
 Ergebnis: ein ausführbarer Plan, der die Spec abdeckt und die Verifikation mitplant.

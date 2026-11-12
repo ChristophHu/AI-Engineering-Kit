@@ -9,7 +9,7 @@ Use this skill for native Apple app work when the project uses SwiftUI, includin
 
 ## Discover the project before changing it
 
-1. Read project instructions and `.codex/PROJECT.md` if present.
+1. Read project instructions, `.codex/PROJECT.md`, and `docs/design-system.md` if present.
 2. Inspect the Xcode project or workspace, build configuration, package manifest, and relevant source and test files.
 3. Identify supported Apple platforms (iOS, iPadOS, macOS, and any others in the project), deployment targets, Swift and SDK versions, app lifecycle, current navigation and state patterns, persistence, and existing Apple frameworks. Do not assume the app targets every Apple platform just because it uses SwiftUI.
 4. Follow the codebase's conventions. Do not introduce a new architecture, dependency, framework, or minimum OS target merely because it is a common SwiftUI pattern.

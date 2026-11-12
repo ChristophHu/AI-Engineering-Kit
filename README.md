@@ -39,7 +39,8 @@ Für kleine, eindeutige Aufgaben kann Codex Spec und Plan knapp halten. Bei Änd
 - `.codex/rules/RULES.md` – projektweite Arbeitsregeln
 - `.codex/rules/ARCHITECTURE.md` und die beiden Architekturdiagramme – Referenzarchitekturen für native Apple-Apps und Web-Apps
 - `.codex/rules/templates/` – Spec-, Plan- und Verifikationsvorlagen
-- `.codex/skills/` – Spec-/Planungs- und DSGVO-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
+- `.codex/skills/` – Projektinitialisierung, Setup-Verifikation, Spec-/Planungs-, Supabase- und NestJS/PostgreSQL-Backend-, DSGVO- und Deploy-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
+- `$init` – Discovery-Interview, Produktvision, priorisierte Feature-Map und Design-System vor der Implementierung
 - `install.sh` – idempotente, konfliktbewusste Integration
 
-Nach Installation kann ein Skill mit `$spec-driven-development`, `$feature-planning` oder `$implementation-review` aufgerufen werden.
+Nach Installation kann ein Skill mit `$init`, `$spec-driven-development`, `$feature-planning`, `$verify-setup` oder `$implementation-review` aufgerufen werden.

@@ -14,6 +14,10 @@ Nutze diesen Skill, wenn ein Spec-Driven-Plan umgesetzt oder eine Umsetzung anha
 5. Prüfe neben den Spec-Kriterien die passenden Plattformchecks aus `.codex/rules/ARCHITECTURE.md`. Weise nicht ausgeführte Checks und bekannte Einschränkungen ausdrücklich aus.
 6. Berichte Abweichungen, Risiken und nicht erfüllte Kriterien. Nutze `.codex/rules/templates/VERIFICATION.md`, wenn ein dauerhafter Nachweis sinnvoll ist.
 7. Bei UI-Änderungen nutze `$frontend-design-accessibility` für die Qualitätsprüfung und `$ui-verification` für die plattformgerechte Auswahl und Dokumentation von Checks.
-8. Bei Änderungen an personenbezogener Datenverarbeitung nutze `$dsgvo-datenschutz`, um Datenschutzkriterien, Datenzugriffe, Löschung und ausgewiesene offene Entscheidungen zu prüfen.
+8. Bei Änderungen an personenbezogener Datenverarbeitung nutze `$dsgvo`, um Datenschutzkriterien, Datenzugriffe, Löschung und ausgewiesene offene Entscheidungen zu prüfen.
+9. Bei Release- oder Deployment-Arbeiten nutze `$deploy` für Preflight, autorisierte Veröffentlichung und Nachkontrolle.
+10. Bei Supabase-Änderungen nutze `$supabase-backend-development`, um Migrationen, Grants/RLS, Auth, Storage oder Edge Functions entsprechend dem betroffenen Umfang zu prüfen.
+11. Bei NestJS-/PostgreSQL-Änderungen nutze `$nestjs-postgres-backend-development`, um API-Sicherheit, Schema/Migrationen, Authentifizierung/Autorisierung und den Schutz der Swagger UI entsprechend dem betroffenen Umfang zu prüfen.
+12. Wenn die Umsetzung von lokaler Laufzeit, CLI, Konfiguration oder Umgebungsvariablen abhängt, nutze `$verify-setup` für die Readiness-Prüfung, ohne geheime Werte offenzulegen.
 
 Ergebnis: Implementierung beziehungsweise Review mit nachvollziehbarem Status pro Abnahmekriterium.

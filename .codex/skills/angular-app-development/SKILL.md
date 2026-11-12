@@ -9,7 +9,7 @@ Use this skill for work in an Angular project. Start with the approved Spec and 
 
 ## Discover the project before changing it
 
-1. Read project instructions and `.codex/PROJECT.md` if present.
+1. Read project instructions, `.codex/PROJECT.md`, and `docs/design-system.md` if present.
 2. Inspect `package.json`, the lockfile, Angular version, `angular.json`, build and test scripts, route configuration, and relevant source and test files.
 3. Identify the project's component model, dependency-injection patterns, routing, forms, HTTP/data access, state approach, supported browsers, and deployment setup.
 4. Follow existing conventions. Do not convert components, replace state management, or add a library without a requirement and an explicit plan.

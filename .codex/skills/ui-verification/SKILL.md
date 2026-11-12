@@ -5,7 +5,7 @@ description: Select and perform UI and feature checks for native Apple, Next.js,
 
 # UI Verification
 
-Use this skill to verify a UI feature or release candidate. For a full implementation, use it after changes are complete. Read the Spec, Plan, project instructions, and `.codex/rules/ARCHITECTURE.md` when present.
+Use this skill to verify a UI feature or release candidate. For a full implementation, use it after changes are complete. Read the Spec, Plan, project instructions, `docs/design-system.md` if present, and `.codex/rules/ARCHITECTURE.md` when present.
 
 ## Select checks from the project
 

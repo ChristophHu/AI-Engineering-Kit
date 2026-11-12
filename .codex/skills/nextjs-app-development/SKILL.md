@@ -9,7 +9,7 @@ Use this skill for work in a Next.js project. Start with the approved Spec and P
 
 ## Discover the project before changing it
 
-1. Read project instructions and `.codex/PROJECT.md` if present.
+1. Read project instructions, `.codex/PROJECT.md`, and `docs/design-system.md` if present.
 2. Inspect `package.json`, the lockfile, Next.js version, scripts, configuration, route tree, and relevant components and tests.
 3. Identify whether the project uses App Router, Pages Router, or a deliberate mix; determine its runtime, rendering and data-fetching patterns, authentication, and deployment constraints.
 4. Follow existing conventions. Do not migrate routers, change rendering strategy, or add a state/data library without a requirement and an explicit plan.

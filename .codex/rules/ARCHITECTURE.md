@@ -9,7 +9,7 @@ Dieses Kit unterstützt insbesondere native Apple-Anwendungen und Web-Apps. Die 
 Das Diagramm zeigt eine iOS-Referenz. Bei iPadOS- und macOS-Apps bleiben Backend- und Integrationsfragen relevant; UI, Navigation, Fenster- und Eingabeverhalten richten sich nach den jeweiligen Plattformen und den Projektkonventionen.
 
 - **App:** native iOS-Anwendung mit SwiftUI; UI/Views und App-Logik bilden die Client-Seite.
-- **Backend:** Supabase als Referenz für Authentifizierung, PostgreSQL mit Row Level Security (RLS), Dateispeicher und Edge Functions.
+- **Backend:** Supabase oder eine eigenständige NestJS-API mit PostgreSQL. Das Diagramm zeigt Supabase nur als Referenz; die Projektbeschreibung bestimmt den Backend-Stack. NestJS eignet sich besonders als separate API-Komponente für Web-Apps. Die zugehörige Swagger UI muss geschützt und darf nicht öffentlich erreichbar sein.
 - **Externe Dienste:** beispielhaft Mistral für KI, Apple In-App Purchases für Zahlungen und Brevo für E-Mails.
 - **Build und Veröffentlichung:** GitHub für Versionsverwaltung und CI/CD; App Store Connect für Builds, Testverteilung und Veröffentlichung.
 - **Verbindungen:** Die App kommuniziert mit dem Backend und klar abgegrenzten externen Diensten. App Store Connect ist Teil des Veröffentlichungswegs.
@@ -19,7 +19,7 @@ Das Diagramm zeigt eine iOS-Referenz. Bei iPadOS- und macOS-Apps bleiben Backend
 ![Referenzarchitektur einer Web-App](saas-architektur.png)
 
 - **Frontend:** Next.js oder Angular. Next.js kann Browser-Client und serverseitige Route Handler in einem Framework bereitstellen. Angular ist eine gleichwertige Frontend-Option; falls serverseitige Funktionen benötigt werden, werden sie als separate Backend- oder API-Komponente geplant.
-- **Backend:** Supabase als Referenz für Registrierung und Login, PostgreSQL mit RLS sowie File Storage.
+- **Backend:** Supabase oder eine eigenständige NestJS-API mit PostgreSQL. Supabase ist eine Referenzoption; die Projektbeschreibung legt die Auswahl fest. Bei NestJS liegt die API als separate serverseitige Komponente zwischen Frontend und PostgreSQL. Die Swagger UI ist geschützt und nicht öffentlich erreichbar.
 - **Externe Dienste:** beispielhaft Mistral für KI, Stripe für Zahlungen und Brevo für E-Mails.
 - **Build und Veröffentlichung:** GitHub für Versionsverwaltung und CI/CD; Hostinger als dargestelltes Hosting-Ziel.
 - **Verbindungen:** Browser und Server haben unterschiedliche Vertrauensgrenzen. Privilegierte Zugriffe und geheime Schlüssel gehören auf die Serverseite.
@@ -27,6 +27,7 @@ Das Diagramm zeigt eine iOS-Referenz. Bei iPadOS- und macOS-Apps bleiben Backend
 ## Architektur bei Projektarbeit anwenden
 
 1. Ermittle zuerst, ob das Projekt eine native Apple-App, eine Web-App oder eine Kombination daraus ist. Lies `.codex/PROJECT.md` und untersuche die vorhandene Architektur.
+   Ermittle außerdem das Backend aus der Projektbeschreibung. Fehlt die Angabe, frage vor der Festlegung oder Umsetzung direkt nach der Backend-Wahl; biete mindestens Supabase und NestJS mit PostgreSQL als Alternativen an, sofern keine vorhandene Codebasis die Wahl bereits vorgibt.
 2. Nutze für jede betroffene Plattform die vier Bausteine in diesem Dokument: Spec-Vorgaben, Planvorgaben, Startkriterien und Abschlusskriterien.
 3. Bewahre die Trennung zwischen UI, Anwendungslogik, Backend-Zugriff und externen Diensten. Passe die Trennung an die vorhandenen Muster des Projekts an.
 4. Schütze Daten und Zugangsdaten: nutze serverseitige Geheimnisse, angemessene Autorisierung und Datenbankrichtlinien wie RLS, sofern die Architektur sie verwendet. Lege keine geheimen Schlüssel in Client-Code ab.
@@ -71,6 +72,7 @@ Je nach Änderung berücksichtigen und dokumentieren:
 - Rendering- und Routing-Modell
 - Komponentenstruktur und Datenfluss
 - APIs, Authentifizierung und Vertrauensgrenzen zwischen Browser, Server und Backend
+- ausgewähltes Backend gemäß Projektbeschreibung (Supabase oder NestJS mit PostgreSQL); bei NestJS zusätzlich geschützte, nicht öffentliche Swagger UI
 - unterstützte Browser und Viewports
 - Hosting- und Deployment-Ziel
 

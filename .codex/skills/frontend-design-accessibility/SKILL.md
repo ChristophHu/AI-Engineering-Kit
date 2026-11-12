@@ -9,7 +9,7 @@ Use this skill when creating or reviewing app UI, interaction patterns, or acces
 
 ## Inspect before designing
 
-1. Read project instructions, `.codex/PROJECT.md`, relevant Specs, and existing design or accessibility guidance.
+1. Read project instructions, `.codex/PROJECT.md`, `docs/design-system.md` if present, relevant Specs, and existing design or accessibility guidance.
 2. Inspect nearby screens and components, design tokens, typography, spacing, navigation, and interaction patterns. Reuse them where suitable.
 3. Identify the target platform, supported devices or viewports, input methods, and accessibility needs from the project and Spec. Ask only when a missing decision would materially change the interface.
 
