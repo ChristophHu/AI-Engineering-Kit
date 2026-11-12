@@ -66,6 +66,8 @@ For a new app or an unresolved backend choice, ask whether it needs a hosted/sha
 
 Before creating a backend, establish its type and hosting conditions; ask the developer about missing server OS, hosting, database or other material constraints before recommending a stack. NestJS can run on supported platforms with Node.js. Prefer Windows Server, preferably IIS, for C#; ASP.NET Core can also run on Linux, but explicitly ask the developer to confirm an intended C#/Linux combination or resolve other conflicting requirements before creation. Preserve an already explicit, consistent decision. For every new backend with an API, ask for an explicit decision on Swagger/OpenAPI and a visual Swagger UI unless already agreed; recommend it where feasible. Record the choice, a reason for declining or infeasibility, and any alternative. Protect any served UI and OpenAPI document from public and unauthorized access. For managed services, establish the supported options and access controls rather than assuming an implementation.
 
+Use `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` or an existing equivalent decision record to capture the choices established during discovery and hand off unresolved technical details for planning. Preserve the one-question-at-a-time interview and do not invent technical decisions or implement infrastructure.
+
 If Supabase is selected:
 
 - Do not add “Supabase infrastructure setup” as a product feature. Project initialization, local services, client wiring, and environment configuration are setup work, not user-facing behavior. Record them as setup dependencies for `$verify-setup`; keep them out of the user-facing feature map.

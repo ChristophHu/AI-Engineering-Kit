@@ -7,7 +7,7 @@ Stand: 12. November 2026. Diese Vorschläge ergänzen den `KONSISTENZBERICHT.md`
 1. **Registrierung und Lifecycle der Agenten:** Eine dokumentierte, zur verwendeten Codex-Version passende Registrierung und ein Installationsnachweis für die acht Profile fehlen. Zuerst die tatsächlichen Anforderungen prüfen; dann Installer und Anleitung entsprechend ergänzen.
 2. **Upgrade und Skill-Synchronisierung:** Ein versioniertes Verfahren für Updates, Umbenennungen und Konflikte zwischen `.codex/skills` und `.agents/skills` fehlt. Es sollte eigene Änderungen erhalten und alte Skill-Namen kontrolliert behandeln.
 3. **Installations- und Konsistenzprüfungen:** Eine automatisierbare Prüfung für frische und wiederholte Installation, Konflikte, Sicherungen, Skill-Namen, Referenzen und Agentenregistrierung fehlt. Sie sollte isolierte temporäre Zielprojekte verwenden und keine Nutzerdaten verändern.
-4. **Entscheidungsvorlage für Architektur:** Ein Template für Backend-Auswahl, lokale-only Speicherung, serverseitiges SQLite, Datenhoheit, Hosting und begründete Alternativen würde die Vorgaben in `ARCHITECTURE.md` und `init/SKILL.md` nachvollziehbar verbinden. Swagger-Zugriff und Schutz von UI und OpenAPI-Dokument aufnehmen.
+4. **Umgesetzt – Entscheidungsvorlage für Architektur:** `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` verbindet Backend-Auswahl, lokale Speicherung, SQLite, Datenhoheit, Hosting, Alternativen und geschützten Swagger-Zugang mit den Architektur- und Initialisierungsregeln.
 
 ## Mittlere Priorität
 

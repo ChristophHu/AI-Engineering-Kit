@@ -12,6 +12,7 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 3. Zerlege die Arbeit in kleine Schritte mit klaren Ergebnissen. Verknüpfe jeden Schritt mit Spec-Kriterien und geeigneter Verifikation.
 4. Notiere Abhängigkeiten, Risiken und noch offene Entscheidungen. Schlage keine unnötige Generalisierung vor.
 5. Nutze `.codex/rules/templates/PLAN.md`, wenn das Projekt keine eigene Planstruktur hat.
+   Bei einer relevanten Backend- oder Speicherentscheidung nutze `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` oder vorhandene gleichwertige Architekturunterlagen und verlinke die Entscheidung im Plan. Kläre wesentliche offene Entscheidungen nach `.codex/rules/ARCHITECTURE.md` vor der Backend-Erstellung.
 6. Bei nativen Apple-Apps und Web-Apps plane die zutreffenden technischen Entscheidungen und Plattformchecks aus `.codex/rules/ARCHITECTURE.md` ein.
 7. Gib die Umsetzung erst frei, wenn die Startkriterien aus `.codex/rules/ARCHITECTURE.md` erfüllt oder begründet als Annahmen dokumentiert sind.
 8. Prüfe rückwärts, ob alle Abnahmekriterien durch mindestens einen Schritt und einen Nachweis abgedeckt sind.
