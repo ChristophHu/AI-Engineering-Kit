@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+._*
+
+# Environment files and local secrets (keep safe examples)
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.mobileprovision
+
+# Local databases and SQLite sidecar files
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+
+# Node.js / web build artifacts
+node_modules/
+.next/
+.angular/cache/
+dist/
+build/
+coverage/
+.turbo/
+
+# .NET build artifacts
+bin/
+obj/
+
+# Xcode / Swift build and per-user files
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Editors, logs, and temporary files
+.idea/
+*.log
+*.tmp
