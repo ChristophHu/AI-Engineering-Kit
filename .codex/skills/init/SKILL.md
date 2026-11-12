@@ -95,7 +95,7 @@ When offline use, local copies, or local-first behavior is a product requirement
 - For native Apple apps, consider an app-internal SQLite store when the app needs durable device-local data or continued work without connectivity.
 - For web apps, distinguish SQLite on the server behind an API from SQLite/WASM stored in the browser. Server storage can serve shared records through the API; browser storage is local to that browser origin/profile.
 - Ask whether local data is a cache, an offline working copy, or the source of truth; whether edits sync to a server or other devices; and what users should experience during conflicts, sign-out, storage loss, or quota failure.
-- Hand off SQLite schemas, migrations, persistence, and sync design to `$sqlite-data-development`. Do not add bidirectional sync unless the product requires it and its data ownership and conflict behavior are agreed.
+- Hand off SQLite schemas, migrations, persistence, and sync design to `$backend-sqlite-data-development`. Do not add bidirectional sync unless the product requires it and its data ownership and conflict behavior are agreed.
 
 If the app is genuinely frontend-only/local-only, record `No backend — local-only storage` in the project constraints, do not add an infrastructure feature, and skip backend environment-strategy questions.
 

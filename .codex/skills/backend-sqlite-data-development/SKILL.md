@@ -1,5 +1,5 @@
 ---
-name: sqlite-data-development
+name: backend-sqlite-data-development
 description: Plan, implement, or review SQLite persistence for native Apple apps, server-side APIs, and browser-based WebAssembly/OPFS storage, including offline synchronization and conflict handling.
 ---
 
