@@ -21,7 +21,7 @@ Wenn es um eine neue oder noch vage Produktidee geht, beginne zuerst mit `$init`
 10. Wenn Supabase Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$backend-dev-supabase` für Datenmodell, Migrationen, Zugriffsschutz und Backend-Verifikation heran.
 11. Wenn NestJS mit PostgreSQL Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$backend-dev-nestjs-postgres` für API, Datenmodell, Migrationen, Zugriffsschutz, geschützte Swagger UI und Backend-Verifikation heran.
 12. Wenn ein C#-/ASP.NET-Core-Backend mit Microsoft SQL Server Teil der vorhandenen oder vereinbarten Architektur ist, ziehe `$backend-dev-csharp-sqlserver` für API, SQL-Server-Schema/Migrationen, Zugriffsschutz, geschützte Swagger/OpenAPI-Endpunkte und Backend-Verifikation heran.
-13. Wenn SQLite in einer App, im Backend oder im Browser eingesetzt wird, ziehe `$backend-sqlite-data-development` für Speicherort, Datenhoheit, Migrationen, Offline-Verhalten und Synchronisierung heran.
+13. Wenn SQLite in einer App, im Backend oder im Browser eingesetzt wird, ziehe `$backend-dev-sqlite-data` für Speicherort, Datenhoheit, Migrationen, Offline-Verhalten und Synchronisierung heran.
 14. Wenn die Umsetzung von lokaler Laufzeit, CLI, Konfiguration oder Zielumgebung abhängt, nutze `$verify-setup` für eine sichere Readiness-Prüfung.
 
 Ergebnis: eine überprüfbare Spec und klar markierte offene Punkte. Beginne Implementierung erst, wenn sie zum Auftrag passt und notwendige Entscheidungen geklärt sind.

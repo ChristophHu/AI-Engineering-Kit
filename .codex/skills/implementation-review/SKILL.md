@@ -19,7 +19,7 @@ Nutze diesen Skill, wenn ein Spec-Driven-Plan umgesetzt oder eine Umsetzung anha
 10. Bei Supabase-Änderungen nutze `$backend-dev-supabase`, um Migrationen, Grants/RLS, Auth, Storage oder Edge Functions entsprechend dem betroffenen Umfang zu prüfen.
 11. Bei NestJS-/PostgreSQL-Änderungen nutze `$backend-dev-nestjs-postgres`, um API-Sicherheit, Schema/Migrationen, Authentifizierung/Autorisierung und den Schutz der Swagger UI entsprechend dem betroffenen Umfang zu prüfen.
 12. Bei C#-/ASP.NET-Core- und SQL-Server-Änderungen nutze `$backend-dev-csharp-sqlserver`, um API-Sicherheit, Migrationen, SQL-Zugriff, geschützte Swagger/OpenAPI-Endpunkte und Windows-Server-Konfiguration zu prüfen.
-13. Bei SQLite-Änderungen nutze `$backend-sqlite-data-development`, um Migrationen, lokale/serverseitige/browserbasierte Speicherung, Persistenz und gegebenenfalls Offline-Synchronisierung und Konflikte zu prüfen.
+13. Bei SQLite-Änderungen nutze `$backend-dev-sqlite-data`, um Migrationen, lokale/serverseitige/browserbasierte Speicherung, Persistenz und gegebenenfalls Offline-Synchronisierung und Konflikte zu prüfen.
 14. Wenn die Umsetzung von lokaler Laufzeit, CLI, Konfiguration oder Umgebungsvariablen abhängt, nutze `$verify-setup` für die Readiness-Prüfung, ohne geheime Werte offenzulegen.
 15. Wenn die Aufgabe einen Commit umfasst oder ein abgeschlossener, geprüfter Arbeitsschritt committet werden soll, nutze `$git` für Staging, Diff-Prüfung und Commit.
 
