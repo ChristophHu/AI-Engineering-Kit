@@ -44,6 +44,7 @@ Nutze die Profile unter `.codex/agents/` nach Aufgabenart:
 - `spec-plan-reviewer.toml` für Abdeckung, Prüfbarkeit, Abhängigkeiten und Planlücken.
 - `implementation-worker.toml` für eng begrenzte, ausdrücklich zugewiesene Änderungen.
 - `code-reviewer.toml` für unabhängige, lesende Fehler- und Sicherheitsprüfung.
-- `supabase-specialist.toml` oder `nestjs-postgres-specialist.toml` für Backend-Arbeit im jeweils ausgewählten Stack.
+- `supabase-specialist.toml`, `nestjs-postgres-specialist.toml` oder `csharp-sqlserver-specialist.toml` für Backend-Arbeit im jeweils ausgewählten Stack.
+- `sqlite-data-specialist.toml` für lokale, serverseitige oder browserbasierte SQLite-Persistenz und vereinbarte Synchronisierung.
 
 Profile legen Rolle und Arbeitsanweisungen fest. Sie können die Sitzungsberechtigungen der Hauptinstanz nicht verändern. Verwende Backend-Profile zusammen mit dem passenden Backend-Skill und der abgestimmten Spec/Planung.
