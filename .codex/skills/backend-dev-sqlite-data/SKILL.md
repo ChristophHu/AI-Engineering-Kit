@@ -5,6 +5,8 @@ description: Plan, implement, or review SQLite persistence for native Apple apps
 
 # SQLite Data Development
 
+When creating an API backend that uses server-side SQLite, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Recommend visual Swagger UI where feasible, record any decision to omit it or technical limitation and an alternative, and protect any provided UI and OpenAPI document from public and unauthorized access. Local SQLite alone does not imply an API backend.
+
 Use this skill when a project stores data in SQLite on iOS, iPadOS, macOS, a server, or in a browser. First identify which runtime owns each database and whether it is a source of truth, a cache, a local working copy, or a server database. SQLite in one runtime is not automatically shared or synchronized with SQLite in another runtime.
 
 Follow the approved Spec and Plan for substantial changes. Use `$spec-driven-development` and `$feature-planning` when behavior or architecture is unclear. Preserve the selected backend: local SQLite can complement Supabase, NestJS/PostgreSQL, or C#/SQL Server as an offline store or cache; do not silently replace the project's server backend with SQLite.

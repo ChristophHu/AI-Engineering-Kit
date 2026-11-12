@@ -39,7 +39,7 @@ Use this skill when the project description or established codebase selects a Ne
 
 ## Protected Swagger / OpenAPI
 
-- Provide OpenAPI documentation and Swagger UI when API documentation is in scope. Describe DTO schemas, authentication schemes, relevant success/error responses, and versioning accurately; keep the generated document aligned with the actual API.
+- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Recommend a visual Swagger UI when feasible; honor a previously agreed decision, and document any decision to omit it or technical limitation and an alternative. Do not proceed with creation while a material decision is unresolved. Describe DTO schemas, authentication schemes, relevant success/error responses, and versioning accurately when documentation is provided.
 - **Swagger UI and any served OpenAPI JSON/document endpoint must not be publicly reachable.** Protect them with an explicit server-side authentication/authorization mechanism appropriate to the project (for example, an authenticated operator/admin guard or deployment-level access control). Do not rely on an obscure URL, CORS, frontend routing, or an undocumented query token.
 - Default documentation endpoints to disabled or access-restricted in production unless the approved deployment design explicitly provides protected access. Production routes must remain inaccessible to anonymous and ordinary unauthorized users; test both allowed and denied access.
 - Avoid embedding secrets, real credentials, internal hostnames, or sensitive example data in the OpenAPI document. Use non-sensitive examples and declare bearer/API authentication schemes without including actual tokens.

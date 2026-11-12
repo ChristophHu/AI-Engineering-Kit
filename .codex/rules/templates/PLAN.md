@@ -6,6 +6,10 @@ Pfad/Link zur Spec und wichtige Entscheidungen.
 ## Plattform und Architekturentscheidungen
 Plattform(en), betroffene Komponenten und begründete technische Entscheidungen. Nur relevante Punkte ausfüllen.
 
+- Backend-Art und Hosting (einschließlich Serverbetriebssystem):
+- Bei abweichenden oder widersprüchlichen Vorgaben: Entscheidung des Entwicklers und Begründung:
+- Swagger/OpenAPI und visuelle Swagger UI: Entwicklerentscheidung, gegebenenfalls Grund für Verzicht oder fehlende technische Möglichkeit und Alternative; bei Bereitstellung geschützter Zugang zu UI und Dokument:
+
 ### Native Apple-App
 - UI-Technologie und Deployment-Ziel:
 - Navigation und Zustandsverwaltung:

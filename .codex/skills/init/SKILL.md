@@ -64,6 +64,8 @@ Resolve the following branches before prioritizing features. First inspect the p
 
 For a new app or an unresolved backend choice, ask whether it needs a hosted/shared backend, an existing backend, or can work entirely on-device/in the browser. Recommend based on the product: local-only storage for a genuinely single-user offline tool; the project's existing backend when one is established; Supabase, NestJS with PostgreSQL, or C# with Microsoft SQL Server when user accounts, shared data, or the project's architecture call for a server backend. The project description is authoritative for the selected backend. If it does not name one and the codebase does not establish it, ask the user directly to choose before finalizing the architecture or implementation plan. Do not infer a backend from the reference diagrams.
 
+Before creating a backend, establish its type and hosting conditions; ask the developer about missing server OS, hosting, database or other material constraints before recommending a stack. NestJS can run on supported platforms with Node.js. Prefer Windows Server, preferably IIS, for C#; ASP.NET Core can also run on Linux, but explicitly ask the developer to confirm an intended C#/Linux combination or resolve other conflicting requirements before creation. Preserve an already explicit, consistent decision. For every new backend with an API, ask for an explicit decision on Swagger/OpenAPI and a visual Swagger UI unless already agreed; recommend it where feasible. Record the choice, a reason for declining or infeasibility, and any alternative. Protect any served UI and OpenAPI document from public and unauthorized access. For managed services, establish the supported options and access controls rather than assuming an implementation.
+
 If Supabase is selected:
 
 - Do not add “Supabase infrastructure setup” as a product feature. Project initialization, local services, client wiring, and environment configuration are setup work, not user-facing behavior. Record them as setup dependencies for `$verify-setup`; keep them out of the user-facing feature map.
@@ -79,7 +81,7 @@ If NestJS with PostgreSQL is selected:
 
 - Do not add “NestJS/PostgreSQL infrastructure setup” as a user-facing product feature. Record API/database provisioning, local services, configuration, and migrations as setup dependencies for `$verify-setup` and `$backend-dev-nestjs-postgres`.
 - Hand off API modules, DTO validation, authentication/authorization, database schema/migrations, and backend verification to `$backend-dev-nestjs-postgres`.
-- Include Swagger/OpenAPI when API documentation is in scope. Swagger UI and its OpenAPI document endpoint must be protected and not publicly reachable; record the authorized access method and production behavior in the technical handoff.
+- Apply the agreed Swagger/OpenAPI decision. When provided, Swagger UI and its OpenAPI document endpoint must be protected and not publicly reachable; record the authorized access method and production behavior in the technical handoff.
 - Record the selected local/development/staging/production database environment strategy in the project brief or technical handoff. Never assume a production target or expose database credentials.
 
 If C# with Microsoft SQL Server is selected:
