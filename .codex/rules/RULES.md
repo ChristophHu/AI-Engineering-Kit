@@ -11,4 +11,4 @@
 9. **Keine stillen Seiteneffekte.** Externe Kommunikation, Veröffentlichung, destruktive Aktionen oder Änderungen außerhalb des Projekts nur bei entsprechender Autorisierung.
 10. **Abschluss ist kriteriumsbezogen.** Fasse Änderungen, Verifikationsnachweise und offene Punkte zusammen.
 11. **Delegiere klar abgegrenzte Arbeit.** Wenn Subagenten eingesetzt werden, gelten `.codex/rules/DELEGATION.md` und die passenden Profile unter `.codex/agents/`; die Hauptinstanz bleibt für Entscheidungen, Integration und Abschluss verantwortlich.
-12. **Committe abgeschlossene Arbeit nachvollziehbar.** Nutze `.codex/skills/git-workflow/SKILL.md` für Git-Initialisierung, Staging und Commit-Zeitpunkt. Der erste Agent nach einer Kit-Installation führt den Git-Bootstrap und bei einem frischen Repository den Initial-Commit durch.
+12. **Committe abgeschlossene Arbeit nachvollziehbar.** Nutze `.codex/skills/git/SKILL.md` für Git-Initialisierung, Staging und Commit-Zeitpunkt. Der erste Agent nach einer Kit-Installation führt den Git-Bootstrap und bei einem frischen Repository den Initial-Commit durch.

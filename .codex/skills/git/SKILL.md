@@ -1,5 +1,5 @@
 ---
-name: git-workflow
+name: git
 description: Initialize Git for a newly installed project, prepare safe commits, and decide when coherent work is ready to commit.
 ---
 

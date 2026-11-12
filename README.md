@@ -22,7 +22,7 @@ Das Skript legt eine Sicherung vorhandener `AGENTS.md` an, fügt einen markierte
 
 Nach der Installation fragt das Skript interaktiv nach einer ersten Projektbeschreibung und speichert sie unter `.codex/PROJECT.md`. Als Orientierung nennt es mögliche Inhalte wie Projektziel, Plattform und Frontend-Technologie (z. B. Next.js oder Angular), Anwendungsstruktur, Systemdesign, Referenzprodukt, Nutzer, Monetarisierung, Integrationen und Datenbankstrukturen. Bei nicht-interaktiver Ausführung wird dort eine ausfüllbare Vorlage mit diesen Hinweisen angelegt.
 
-Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git-workflow`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
+Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
 
 ## Ablauf
 
@@ -42,7 +42,7 @@ Für kleine, eindeutige Aufgaben kann Codex Spec und Plan knapp halten. Bei Änd
 - `.codex/rules/DELEGATION.md` – Delegationskriterien, Auftragsübergabe, Berechtigungsgrenzen und Ergebniskontrolle
 - `.codex/rules/ARCHITECTURE.md` und die beiden Architekturdiagramme – Referenzarchitekturen für native Apple-Apps und Web-Apps
 - `.codex/rules/templates/` – Spec-, Plan- und Verifikationsvorlagen
-- `.codex/skills/` – Projektinitialisierung, Setup-Verifikation, Git-Workflow, Spec-/Planungs-, Supabase-, NestJS/PostgreSQL-, C#/SQL-Server- und SQLite-Datenspeicher-Skills, DSGVO- und Deploy-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
+- `.codex/skills/` – Projektinitialisierung, Setup-Verifikation, Git-Skill, Spec-/Planungs-, Supabase-, NestJS/PostgreSQL-, C#/SQL-Server- und SQLite-Datenspeicher-Skills, DSGVO- und Deploy-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
 - `$init` – Discovery-Interview, Produktvision, priorisierte Feature-Map und Design-System vor der Implementierung
 - `install.sh` – idempotente, konfliktbewusste Integration
 
