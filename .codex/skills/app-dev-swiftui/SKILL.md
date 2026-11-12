@@ -39,4 +39,4 @@ Keep UI, application behavior, persistence, and service access aligned with exis
 
 ## Hand off UI verification
 
-For changed UI, use `$frontend-design-accessibility` for a focused quality review and `$ui-verification` to select and report the relevant checks. Include the actual deployment target and simulator/device availability in the verification plan; never claim a device or simulator check that was not run.
+For changed UI, use `$frontend-design-accessibility` for a focused quality review and `$verify-ui` to select and report the relevant checks. Include the actual deployment target and simulator/device availability in the verification plan; never claim a device or simulator check that was not run.

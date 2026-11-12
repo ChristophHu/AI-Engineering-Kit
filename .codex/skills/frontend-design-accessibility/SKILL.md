@@ -28,4 +28,4 @@ For the affected screens and flows, check the relevant areas:
 
 Report concrete findings by screen or component and connect them to user impact. Make focused changes that fit the existing design system; avoid unsolicited restyling or introducing a new component library.
 
-Use `$ui-verification` to choose and record hands-on UI checks when the task includes verification.
+Use `$verify-ui` to choose and record hands-on UI checks when the task includes verification.

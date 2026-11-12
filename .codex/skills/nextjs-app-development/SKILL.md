@@ -31,4 +31,4 @@ Keep privileged access and secrets server-side. Preserve the project's current r
 
 ## Hand off UI verification
 
-For changed UI, use `$frontend-design-accessibility` for a focused quality review and `$ui-verification` to select and report the relevant checks. Base build and test commands on the repository scripts; verify central flows in the supported browsers and viewports when available.
+For changed UI, use `$frontend-design-accessibility` for a focused quality review and `$verify-ui` to select and report the relevant checks. Base build and test commands on the repository scripts; verify central flows in the supported browsers and viewports when available.

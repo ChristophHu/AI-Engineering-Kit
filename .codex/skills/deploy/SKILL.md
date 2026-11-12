@@ -71,4 +71,4 @@ After an authorized deployment:
 4. Compare results to release criteria. If checks fail, follow the planned rollback/recovery path when authorized; otherwise stop and report the failure and required action.
 5. Report what was built, deployed or submitted, where it went, which checks ran, their results, and any open risks or follow-up work.
 
-Use `$ui-verification` for user-facing flows when appropriate and `$dsgvo` when the release changes personal-data processing or its operational handling. Never claim a release or deployment succeeded unless the resulting environment or store state was verified.
+Use `$verify-ui` for user-facing flows when appropriate and `$dsgvo` when the release changes personal-data processing or its operational handling. Never claim a release or deployment succeeded unless the resulting environment or store state was verified.

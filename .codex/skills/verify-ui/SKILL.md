@@ -1,5 +1,5 @@
 ---
-name: ui-verification
+name: verify-ui
 description: Select and perform UI and feature checks for native Apple, Next.js, or Angular projects, then report evidence against acceptance criteria and disclose checks that were not run.
 ---
 

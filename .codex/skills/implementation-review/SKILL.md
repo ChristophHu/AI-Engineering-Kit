@@ -13,7 +13,7 @@ Nutze diesen Skill, wenn ein Spec-Driven-Plan umgesetzt oder eine Umsetzung anha
 4. Führe passende Verifikationsschritte aus, sofern sie zum Auftrag gehören oder zur belastbaren Beurteilung nötig sind. Unterscheide ausgeführte Checks von empfohlenen, nicht ausgeführten Checks.
 5. Prüfe neben den Spec-Kriterien die passenden Plattformchecks aus `.codex/rules/ARCHITECTURE.md`. Weise nicht ausgeführte Checks und bekannte Einschränkungen ausdrücklich aus.
 6. Berichte Abweichungen, Risiken und nicht erfüllte Kriterien. Nutze `.codex/rules/templates/VERIFICATION.md`, wenn ein dauerhafter Nachweis sinnvoll ist.
-7. Bei UI-Änderungen nutze `$frontend-design-accessibility` für die Qualitätsprüfung und `$ui-verification` für die plattformgerechte Auswahl und Dokumentation von Checks.
+7. Bei UI-Änderungen nutze `$frontend-design-accessibility` für die Qualitätsprüfung und `$verify-ui` für die plattformgerechte Auswahl und Dokumentation von Checks.
 8. Bei Änderungen an personenbezogener Datenverarbeitung nutze `$dsgvo`, um Datenschutzkriterien, Datenzugriffe, Löschung und ausgewiesene offene Entscheidungen zu prüfen.
 9. Bei Release- oder Deployment-Arbeiten nutze `$deploy` für Preflight, autorisierte Veröffentlichung und Nachkontrolle.
 10. Bei Supabase-Änderungen nutze `$backend-dev-supabase`, um Migrationen, Grants/RLS, Auth, Storage oder Edge Functions entsprechend dem betroffenen Umfang zu prüfen.
