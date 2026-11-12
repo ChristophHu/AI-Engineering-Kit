@@ -1,5 +1,5 @@
 ---
-name: swiftui-app-development
+name: app-dev-swiftui
 description: Plan, implement, or review features in an existing native Apple app built with SwiftUI, following its supported platforms, deployment targets, and project conventions.
 ---
 
