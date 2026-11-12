@@ -1,5 +1,5 @@
 ---
-name: angular-app-development
+name: app-dev-angular
 description: Plan, implement, or review features in an existing Angular application while preserving its Angular version and project conventions.
 ---
 

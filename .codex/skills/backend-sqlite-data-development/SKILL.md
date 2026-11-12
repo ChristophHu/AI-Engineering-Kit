@@ -83,7 +83,7 @@ Select checks matching the platform and the approved Plan. Relevant checks may i
 - verify server durability, backup/restore procedure, and migrations against a local/test copy; do not point setup checks at production
 - confirm backups and exports are consistent and contain no unintended secrets
 
-Do not run destructive resets, production migrations, or hosted data changes without explicit authorization for that environment and action. Use `$verify-setup` for runtime/environment readiness, `$app-dev-swiftui`, `$app-dev-nextjs`, or `$angular-app-development` for platform conventions, and the selected backend skill for remote integration. Report executed checks, unrun checks, open decisions, and known storage limits.
+Do not run destructive resets, production migrations, or hosted data changes without explicit authorization for that environment and action. Use `$verify-setup` for runtime/environment readiness, `$app-dev-swiftui`, `$app-dev-nextjs`, or `$app-dev-angular` for platform conventions, and the selected backend skill for remote integration. Report executed checks, unrun checks, open decisions, and known storage limits.
 
 ## Official documentation
 
