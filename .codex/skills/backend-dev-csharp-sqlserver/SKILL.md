@@ -1,5 +1,5 @@
 ---
-name: backend-csharp-sqlserver-development
+name: backend-dev-csharp-sqlserver
 description: Plan, implement, or review a C# ASP.NET Core Web API with Microsoft SQL Server, Entity Framework Core or the project's established data layer, and protected Swagger/OpenAPI documentation.
 ---
 
