@@ -18,7 +18,7 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 9. Richte plattformspezifische Planung an `$swiftui-app-development`, `$nextjs-app-development` oder `$angular-app-development` aus. Die Skills identifizieren zuerst Version, Zielplattform und vorhandene Muster; sie geben kein neues Architekturmodell vor.
 10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
 11. Bei Release- oder Deployment-Arbeiten plane nach `$deploy`; erkenne dafür zuerst bestehende Umgebung, Provider, CI/CD und Rollback-Möglichkeiten.
-12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$supabase-backend-development`.
+12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$backend-dev-supabase`.
 13. Bei NestJS-/PostgreSQL-Änderungen plane API-Module, Validierung, Authentifizierung/Autorisierung, Datenbankschema und Migrationen, Geheimnisverwaltung sowie die geschützte Swagger UI mit `$backend-nestjs-postgres-development`.
 14. Bei C#-/ASP.NET-Core- und SQL-Server-Änderungen plane API-Struktur, Authentifizierung/Autorisierung, Datenzugriff und Migrationen, geschützte Swagger/OpenAPI-Endpunkte sowie den Windows-Server-/IIS-Betrieb mit `$backend-csharp-sqlserver-development`.
 15. Bei SQLite-Änderungen plane Datenbankort, Schema-/Migrationsworkflow, Haltbarkeit, konkurrierende Schreibzugriffe und — falls offlinefähig oder backendgekoppelt — Sync-Vertrag und Konfliktverhalten mit `$backend-sqlite-data-development`.

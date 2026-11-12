@@ -1,5 +1,5 @@
 ---
-name: supabase-backend-development
+name: backend-dev-supabase
 description: Plan, implement, or review Supabase database, authentication, authorization, storage, and Edge Function changes using the project's existing schema and deployment workflow.
 ---
 
