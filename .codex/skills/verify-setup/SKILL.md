@@ -62,7 +62,7 @@ When the strategy is missing or production may be confused with development, mar
 - Do not create, link, migrate, reset, seed, or modify a hosted project during verification.
 - Do not run remote-target commands or destructive reset commands. Confirm command target and environment before any later authorized mutation.
 - Do not rotate or create credentials as a setup fix unless explicitly requested.
-- Do not assume that a successful CLI check means database policies, application authorization, or GDPR compliance are correct. Use `$supabase-backend-development`, `$nestjs-postgres-backend-development`, or `$backend-csharp-sqlserver-development` according to the selected backend for backend security/schema checks, and `$dsgvo` for personal-data requirements.
+- Do not assume that a successful CLI check means database policies, application authorization, or GDPR compliance are correct. Use `$supabase-backend-development`, `$backend-nestjs-postgres-development`, or `$backend-csharp-sqlserver-development` according to the selected backend for backend security/schema checks, and `$dsgvo` for personal-data requirements.
 - If verification uncovers a fix, describe the exact gap and proposed change first. Apply changes only when the user requested setup/repair, then verify the resulting state.
 
 ## Report

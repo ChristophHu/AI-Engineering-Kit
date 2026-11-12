@@ -77,8 +77,8 @@ For these choices, consult the current [Supabase local development guide](https:
 
 If NestJS with PostgreSQL is selected:
 
-- Do not add “NestJS/PostgreSQL infrastructure setup” as a user-facing product feature. Record API/database provisioning, local services, configuration, and migrations as setup dependencies for `$verify-setup` and `$nestjs-postgres-backend-development`.
-- Hand off API modules, DTO validation, authentication/authorization, database schema/migrations, and backend verification to `$nestjs-postgres-backend-development`.
+- Do not add “NestJS/PostgreSQL infrastructure setup” as a user-facing product feature. Record API/database provisioning, local services, configuration, and migrations as setup dependencies for `$verify-setup` and `$backend-nestjs-postgres-development`.
+- Hand off API modules, DTO validation, authentication/authorization, database schema/migrations, and backend verification to `$backend-nestjs-postgres-development`.
 - Include Swagger/OpenAPI when API documentation is in scope. Swagger UI and its OpenAPI document endpoint must be protected and not publicly reachable; record the authorized access method and production behavior in the technical handoff.
 - Record the selected local/development/staging/production database environment strategy in the project brief or technical handoff. Never assume a production target or expose database credentials.
 

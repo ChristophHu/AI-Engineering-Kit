@@ -1,5 +1,5 @@
 ---
-name: nestjs-postgres-backend-development
+name: backend-nestjs-postgres-development
 description: Plan, implement, or review a NestJS API with PostgreSQL, including authentication, authorization, schema migrations, and protected Swagger/OpenAPI documentation.
 ---
 
