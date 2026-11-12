@@ -1,42 +1,42 @@
 ---
 name: app-dev-swiftui
-description: Plan, implement, or review features in an existing native Apple app built with SwiftUI, following its supported platforms, deployment targets, and project conventions.
+description: Plant, implementiert oder prüft Funktionen einer bestehenden nativen Apple-App mit SwiftUI unter Beachtung ihrer unterstützten Plattformen, Bereitstellungsziele und Projektkonventionen.
 ---
 
-# SwiftUI App Development
+# SwiftUI-App-Entwicklung
 
-Use this skill for native Apple app work when the project uses SwiftUI, including iOS, iPadOS, and macOS. Start with the approved Spec and Plan when available; for substantial work, use `$spec-driven-development` and `$feature-planning` first.
+Nutze diesen Skill für native Apple-Apps mit SwiftUI, einschließlich iOS, iPadOS und macOS. Beginne mit der abgestimmten Spec und dem Plan, sofern vorhanden; nutze bei größeren Aufgaben zuerst `$spec-driven-development` und `$feature-planning`.
 
-## Discover the project before changing it
+## Projekt vor Änderungen untersuchen
 
-1. Read project instructions, `.codex/PROJECT.md`, and `docs/design-system.md` if present.
-2. Inspect the Xcode project or workspace, build configuration, package manifest, and relevant source and test files.
-3. Identify supported Apple platforms (iOS, iPadOS, macOS, and any others in the project), deployment targets, Swift and SDK versions, app lifecycle, current navigation and state patterns, persistence, and existing Apple frameworks. Do not assume the app targets every Apple platform just because it uses SwiftUI.
-4. Follow the codebase's conventions. Do not introduce a new architecture, dependency, framework, or minimum OS target merely because it is a common SwiftUI pattern.
+1. Lies die Projektanweisungen, `.codex/PROJECT.md` und, falls vorhanden, `docs/design-system.md`.
+2. Untersuche das Xcode-Projekt oder den Workspace, Build-Konfiguration, Paketmanifest sowie relevante Quell- und Testdateien.
+3. Ermittle unterstützte Apple-Plattformen, Bereitstellungsziele, Swift- und SDK-Versionen, App-Lebenszyklus, Navigation, Zustandsverwaltung, Persistenz und vorhandene Apple-Frameworks. Schließe aus SwiftUI nicht auf die Unterstützung sämtlicher Apple-Plattformen.
+4. Beachte die Konventionen der Codebasis. Führe keine neue Architektur, Abhängigkeit, kein Framework und keine neue Betriebssystemmindestversion allein wegen verbreiteter SwiftUI-Muster ein.
 
-## Plan and implement
+## Planen und umsetzen
 
-For the feature at hand, consider the relevant areas:
+Berücksichtige für die jeweilige Funktion die relevanten Bereiche:
 
-- SwiftUI view composition, reusable components, and platform-appropriate interactions
-- navigation, state ownership, and data flow using patterns already present in the app
-- asynchronous work with Swift Concurrency, including actor isolation, cancellation, and lifecycle
-- persistence and backend access
-- local SQLite persistence, schema migrations, data protection, and offline synchronization when required; use `$backend-dev-sqlite-data` for those concerns
-- permissions, their user-facing purpose, and required usage descriptions
-- app lifecycle, background behavior, and platform-specific system integration
-- accessibility labels, focus, Dynamic Type, contrast, and relevant input modalities
+- Zusammensetzung von SwiftUI-Views, wiederverwendbare Komponenten und plattformgerechte Interaktionen
+- Navigation, Zustandsverantwortung und Datenfluss nach vorhandenen Mustern
+- asynchrone Arbeit mit Swift Concurrency einschließlich Actor-Isolation, Abbruch und Lebenszyklus
+- Persistenz und Backend-Zugriff
+- bei Bedarf lokale SQLite-Persistenz, Schemamigrationen, Datenschutz und Offline-Synchronisierung mit `$backend-dev-sqlite-data`
+- Berechtigungen, ihr nutzerseitiger Zweck und erforderliche Nutzungsbeschreibungen
+- App-Lebenszyklus, Hintergrundverhalten und plattformspezifische Systemintegration
+- Accessibility-Beschriftungen, Fokus, Dynamic Type, Kontrast und relevante Eingabearten
 
-Apply platform-specific behavior where relevant:
+Berücksichtige plattformspezifisches Verhalten, soweit relevant:
 
-- **iPhone:** account for compact layouts, touch interaction, and the app's established navigation patterns.
-- **iPad:** account for adaptive layouts, multitasking and resizing, keyboard and pointer input, and navigation suited to larger displays.
-- **Mac:** account for window sizing and restoration, menus and commands, keyboard shortcuts, pointer interaction, and macOS navigation conventions.
+- **iPhone:** kompakte Layouts, Touch-Bedienung und bestehende Navigationsmuster.
+- **iPad:** adaptive Layouts, Multitasking und Größenänderung, Tastatur- und Zeigereingabe sowie Navigation für größere Displays.
+- **Mac:** Fenstergröße und Wiederherstellung, Menüs und Befehle, Tastaturkürzel, Zeigereingabe und macOS-Navigationskonventionen.
 
-These are review prompts, not mandatory features. Follow the product requirements and existing app conventions; do not add menus, multiwindow behavior, or platform support unless the project needs them.
+Dies sind Prüfpunkte und keine Pflichtfunktionen. Folge den Produktanforderungen und bestehenden Konventionen; ergänze Menüs, Mehrfensterverhalten oder Plattformunterstützung nur bei entsprechendem Projektbedarf.
 
-Keep UI, application behavior, persistence, and service access aligned with existing boundaries. Update the Spec or Plan if implementation reveals a necessary behavior or architecture change.
+Halte die bestehenden Grenzen zwischen UI, Anwendungsverhalten, Persistenz und Servicezugriff ein. Aktualisiere Spec oder Plan, wenn die Umsetzung eine notwendige Verhaltens- oder Architekturänderung ergibt.
 
-## Hand off UI verification
+## UI-Verifikation übergeben
 
-For changed UI, use `$frontend-design-accessibility` for a focused quality review and `$verify-ui` to select and report the relevant checks. Include the actual deployment target and simulator/device availability in the verification plan; never claim a device or simulator check that was not run.
+Nutze bei UI-Änderungen `$frontend-design-accessibility` für eine gezielte Qualitätsprüfung und `$verify-ui` zur Auswahl und Dokumentation relevanter Prüfungen. Halte das tatsächliche Bereitstellungsziel und die Verfügbarkeit von Simulator oder Gerät im Prüfplan fest; behaupte keine nicht ausgeführte Prüfung.
