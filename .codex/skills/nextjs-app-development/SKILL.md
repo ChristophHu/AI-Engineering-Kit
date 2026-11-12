@@ -24,6 +24,7 @@ For the feature at hand, consider the relevant areas:
 - loading, error, empty, and not-found states
 - authentication and authorization across browser, server, API, and backend boundaries
 - runtime compatibility and treatment of secrets and server-only dependencies
+- if SQLite is required, distinguish server-side SQLite behind an API from browser-local SQLite/WASM; plan OPFS/worker/browser constraints and any sync contract with `$sqlite-data-development`
 - responsive behavior and accessibility of the affected routes and components
 
 Keep privileged access and secrets server-side. Preserve the project's current router, rendering, and data-flow patterns unless the Spec requires a change. Update the Spec or Plan if implementation reveals a necessary behavior or architecture change.

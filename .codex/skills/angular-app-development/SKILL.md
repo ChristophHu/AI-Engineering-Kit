@@ -23,6 +23,7 @@ For the feature at hand, consider the relevant areas:
 - routing, guards, forms, validation, and navigation
 - RxJS or Signals according to existing code and the needs of the feature
 - HTTP calls, loading and error states, authentication, and authorization
+- if SQLite is required, distinguish server-side SQLite behind an API from browser-local SQLite/WASM; plan OPFS/worker/browser constraints and any sync contract with `$sqlite-data-development`
 - accessibility in templates, including semantic elements, labels, focus, and keyboard behavior
 - build configuration, environments, and browser support
 

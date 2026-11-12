@@ -22,6 +22,7 @@ For the feature at hand, consider the relevant areas:
 - navigation, state ownership, and data flow using patterns already present in the app
 - asynchronous work with Swift Concurrency, including actor isolation, cancellation, and lifecycle
 - persistence and backend access
+- local SQLite persistence, schema migrations, data protection, and offline synchronization when required; use `$sqlite-data-development` for those concerns
 - permissions, their user-facing purpose, and required usage descriptions
 - app lifecycle, background behavior, and platform-specific system integration
 - accessibility labels, focus, Dynamic Type, contrast, and relevant input modalities

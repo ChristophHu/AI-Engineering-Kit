@@ -64,6 +64,8 @@ BLOCK="$MARKER_START
 ## AI Engineering Kit
 
 Für Entwicklungsaufgaben beachte \`.codex/rules/RULES.md\` und den passenden Ablauf in \`.codex/rules/WORKFLOW.md\`. Spec-Driven Development ist der Standard für mehrteilige oder unklare Anforderungen; halte einfache Änderungen leichtgewichtig. Skills liegen unter \`.codex/skills/\` und \`.agents/skills/\`.
+
+Beim ersten Arbeitsauftrag nach dieser Installation prüfe zuerst den Repository-Status und folge \`.codex/skills/git-workflow/SKILL.md\`: Nutze ein vorhandenes Repository ohne verschachteltes \`.git\`; initialisiere mit \`git init\` nur dann am Projektstamm, wenn noch kein Repository zuständig ist. Erstelle bei einem frischen Repository nach Prüfung der Dateien direkt den ersten Commit.
 $MARKER_END"
 
 mkdir -p "$KIT_DEST"

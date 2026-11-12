@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Prepare or execute a release and deployment for an existing SwiftUI, Next.js, or Angular project by following its configured targets, provider, and CI/CD conventions.
+description: Prepare or execute a release and deployment for an existing SwiftUI, Next.js, Angular, or ASP.NET Core project by following its configured targets, provider, and CI/CD conventions.
 ---
 
 # Deploy
@@ -50,6 +50,14 @@ Do not invent deployment infrastructure or add a new provider when an existing p
 - Detect Angular version, production configuration in `angular.json`, output mode, SSR setup if present, and hosting configuration.
 - Verify build output, base path, client-side route fallback, cache behavior, and runtime configuration for the selected host.
 - Do not assume Angular is static-only or add SSR without an explicit requirement and an implementation plan.
+
+### C# / ASP.NET Core backend deployment
+
+- Detect the target framework, pinned SDK/runtime, publish mode, hosting model, Windows Server/IIS configuration if selected, SQL Server target, secret mechanism, migration workflow, and existing CI/CD conventions.
+- For IIS, verify the required Hosting Bundle/runtime, app pool identity and permissions, HTTPS bindings, routing/forwarded headers, health checks, and whether deployment is in-process or out-of-process according to the existing configuration.
+- Keep SQL Server connection details in the approved server-side configuration or secret store. Verify the deployed API can reach only the intended database; do not expose connection strings in logs or reports.
+- Review SQL Server migration scripts/bundles and backup/rollback requirements before deployment. Keep application deployment and schema migration order compatible with active application versions.
+- Confirm Swagger UI and OpenAPI document endpoints remain protected in the deployed topology; verify anonymous and unauthorized requests are denied.
 
 ## Deploy and verify
 

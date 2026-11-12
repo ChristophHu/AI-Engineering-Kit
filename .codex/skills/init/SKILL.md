@@ -62,7 +62,7 @@ Resolve the following branches before prioritizing features. First inspect the p
 
 ### Backend and data environment
 
-For a new app or an unresolved backend choice, ask whether it needs a hosted/shared backend, an existing backend, or can work entirely on-device/in the browser. Recommend based on the product: local-only storage for a genuinely single-user offline tool; the project's existing backend when one is established; Supabase or NestJS with PostgreSQL when user accounts, shared data, or the project's architecture call for a server backend. The project description is authoritative for the selected backend. If it does not name one and the codebase does not establish it, ask the user directly to choose before finalizing the architecture or implementation plan. Do not infer Supabase or NestJS from the reference diagrams.
+For a new app or an unresolved backend choice, ask whether it needs a hosted/shared backend, an existing backend, or can work entirely on-device/in the browser. Recommend based on the product: local-only storage for a genuinely single-user offline tool; the project's existing backend when one is established; Supabase, NestJS with PostgreSQL, or C# with Microsoft SQL Server when user accounts, shared data, or the project's architecture call for a server backend. The project description is authoritative for the selected backend. If it does not name one and the codebase does not establish it, ask the user directly to choose before finalizing the architecture or implementation plan. Do not infer a backend from the reference diagrams.
 
 If Supabase is selected:
 
@@ -81,6 +81,21 @@ If NestJS with PostgreSQL is selected:
 - Hand off API modules, DTO validation, authentication/authorization, database schema/migrations, and backend verification to `$nestjs-postgres-backend-development`.
 - Include Swagger/OpenAPI when API documentation is in scope. Swagger UI and its OpenAPI document endpoint must be protected and not publicly reachable; record the authorized access method and production behavior in the technical handoff.
 - Record the selected local/development/staging/production database environment strategy in the project brief or technical handoff. Never assume a production target or expose database credentials.
+
+If C# with Microsoft SQL Server is selected:
+
+- Do not add “C# backend/SQL Server setup” as a user-facing product feature. Record the .NET API, SQL Server, local configuration, and migration workflow as setup dependencies for `$verify-setup` and `$csharp-sqlserver-backend-development`.
+- Hand off API structure, SQL Server schema/data access, migrations, authentication/authorization, protected Swagger/OpenAPI, and backend verification to `$csharp-sqlserver-backend-development`.
+- Record the target .NET version, SQL Server environment, and hosting model (for example Windows Server/IIS) in the technical handoff. Do not assume Windows authentication, Azure hosting, or production credentials.
+
+### Local and offline data
+
+When offline use, local copies, or local-first behavior is a product requirement, clarify the storage location and ownership instead of assuming that local storage syncs automatically:
+
+- For native Apple apps, consider an app-internal SQLite store when the app needs durable device-local data or continued work without connectivity.
+- For web apps, distinguish SQLite on the server behind an API from SQLite/WASM stored in the browser. Server storage can serve shared records through the API; browser storage is local to that browser origin/profile.
+- Ask whether local data is a cache, an offline working copy, or the source of truth; whether edits sync to a server or other devices; and what users should experience during conflicts, sign-out, storage loss, or quota failure.
+- Hand off SQLite schemas, migrations, persistence, and sync design to `$sqlite-data-development`. Do not add bidirectional sync unless the product requires it and its data ownership and conflict behavior are agreed.
 
 If the app is genuinely frontend-only/local-only, record `No backend — local-only storage` in the project constraints, do not add an infrastructure feature, and skip backend environment-strategy questions.
 

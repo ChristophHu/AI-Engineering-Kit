@@ -20,6 +20,8 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 11. Bei Release- oder Deployment-Arbeiten plane nach `$deploy`; erkenne dafür zuerst bestehende Umgebung, Provider, CI/CD und Rollback-Möglichkeiten.
 12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$supabase-backend-development`.
 13. Bei NestJS-/PostgreSQL-Änderungen plane API-Module, Validierung, Authentifizierung/Autorisierung, Datenbankschema und Migrationen, Geheimnisverwaltung sowie die geschützte Swagger UI mit `$nestjs-postgres-backend-development`.
-14. Wenn lokale Laufzeit, CLI, Konfiguration oder Zielumgebung Voraussetzung sind, plane einen Setup-Readiness-Check mit `$verify-setup` ein.
+14. Bei C#-/ASP.NET-Core- und SQL-Server-Änderungen plane API-Struktur, Authentifizierung/Autorisierung, Datenzugriff und Migrationen, geschützte Swagger/OpenAPI-Endpunkte sowie den Windows-Server-/IIS-Betrieb mit `$csharp-sqlserver-backend-development`.
+15. Bei SQLite-Änderungen plane Datenbankort, Schema-/Migrationsworkflow, Haltbarkeit, konkurrierende Schreibzugriffe und — falls offlinefähig oder backendgekoppelt — Sync-Vertrag und Konfliktverhalten mit `$sqlite-data-development`.
+16. Wenn lokale Laufzeit, CLI, Konfiguration oder Zielumgebung Voraussetzung sind, plane einen Setup-Readiness-Check mit `$verify-setup` ein.
 
 Ergebnis: ein ausführbarer Plan, der die Spec abdeckt und die Verifikation mitplant.
