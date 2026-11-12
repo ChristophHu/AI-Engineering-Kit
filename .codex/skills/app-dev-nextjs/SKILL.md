@@ -1,5 +1,5 @@
 ---
-name: nextjs-app-development
+name: app-dev-nextjs
 description: Plan, implement, or review features in an existing Next.js application while preserving its version, router, runtime, and project conventions.
 ---
 

@@ -15,7 +15,7 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 6. Bei nativen Apple-Apps und Web-Apps plane die zutreffenden technischen Entscheidungen und Plattformchecks aus `.codex/rules/ARCHITECTURE.md` ein.
 7. Gib die Umsetzung erst frei, wenn die Startkriterien aus `.codex/rules/ARCHITECTURE.md` erfüllt oder begründet als Annahmen dokumentiert sind.
 8. Prüfe rückwärts, ob alle Abnahmekriterien durch mindestens einen Schritt und einen Nachweis abgedeckt sind.
-9. Richte plattformspezifische Planung an `$app-dev-swiftui`, `$nextjs-app-development` oder `$angular-app-development` aus. Die Skills identifizieren zuerst Version, Zielplattform und vorhandene Muster; sie geben kein neues Architekturmodell vor.
+9. Richte plattformspezifische Planung an `$app-dev-swiftui`, `$app-dev-nextjs` oder `$angular-app-development` aus. Die Skills identifizieren zuerst Version, Zielplattform und vorhandene Muster; sie geben kein neues Architekturmodell vor.
 10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
 11. Bei Release- oder Deployment-Arbeiten plane nach `$deploy`; erkenne dafür zuerst bestehende Umgebung, Provider, CI/CD und Rollback-Möglichkeiten.
 12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$backend-dev-supabase`.
