@@ -2,6 +2,8 @@
 
 Diese Regeln gelten, wenn Codex Projektarbeit an Subagenten delegiert. Delegation dient der gezielten Aufteilung unabhängiger Arbeit; sie ersetzt weder Produktentscheidungen noch die Verantwortung der Hauptinstanz.
 
+Ergänzende Beispiele und Entscheidungshilfen stehen in [Orchestrierungsmuster für Codex](references/orchestration-patterns.md). Maßgeblich bleiben die hier beschriebenen Regeln sowie die Berechtigungen und Werkzeuge der jeweiligen Sitzung.
+
 ## Wann delegiert wird
 
 - Delegiere, wenn mehrere klar trennbare Teilaufgaben parallel untersucht, umgesetzt oder geprüft werden können und das Ergebnis den zusätzlichen Koordinationsaufwand wert ist.
