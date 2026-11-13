@@ -21,12 +21,12 @@ Choose checks based on supported Apple platforms and deployment targets. For iPa
 
 - build the app or affected target for the configured destination
 - run relevant unit or UI tests that already exist
-- exercise the central flow in an appropriate simulator or on a device, when available
+- exercise the central flow for iOS/iPadOS in an appropriate simulator or on a physical device, when available; for macOS, use the native macOS test environment or a Mac
 - inspect permission prompts and denial/retry behavior when affected
 - inspect lifecycle, background/foreground, interruption, or restoration behavior when affected
 - check VoiceOver, Dynamic Type, focus/input behavior, and other relevant accessibility behavior
 
-Report the exact target and whether simulator/device checks were unavailable or not run.
+Use the project's Xcode build and test environment and configured unit/UI test tools. Native Apple interfaces are not browser interfaces and must not be verified using Chrome DevTools. Report the exact target and whether simulator, device, or macOS checks were unavailable or not run.
 
 ## Web profile: Next.js or Angular
 
@@ -34,6 +34,7 @@ Choose checks based on the framework version, router, runtime, browser support, 
 
 - run the configured production build and relevant existing tests
 - exercise central user flows in supported browsers and representative viewports when available
+- use `$browser-testing-with-devtools` when Chrome DevTools MCP is configured and available; otherwise use another available, authorized browser-testing tool or report browser checks as not run
 - cover loading, empty, validation, error, and recovery states affected by the change
 - inspect keyboard interaction, focus, semantic structure, screen-reader names, contrast, and zoom/reflow as relevant
 - inspect authentication, authorization, API boundaries, and handling of untrusted input when affected

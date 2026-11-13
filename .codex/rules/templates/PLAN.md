@@ -32,8 +32,10 @@ Plattform(en), betroffene Komponenten und begründete technische Entscheidungen.
 - [ ] Abnahmekriterien sind prüfbar und durch Plan-Schritte sowie Nachweise abgedeckt.
 
 ## Schritte
-1. [ ] <Änderung> — Kriterien: <IDs> — Verifikation: <Nachweis>
-2. [ ] <Änderung> — Kriterien: <IDs> — Verifikation: <Nachweis>
+Aufgaben und Status können hier stehen. Wenn ein vorhandenes Aufgabensystem maßgeblich ist, verlinke die Aufgaben und ihren Status dort; führe keinen zweiten Aufgabenstatus.
+
+1. [ ] <Ergebnis/Änderung> — Kriterien: <IDs> — Verifikation: <Nachweis> — Abhängigkeiten (falls relevant): <Aufgaben/keine>
+2. [ ] <Ergebnis/Änderung> — Kriterien: <IDs> — Verifikation: <Nachweis> — Abhängigkeiten (falls relevant): <Aufgaben/keine>
 
 ## Abhängigkeiten und Risiken
 -

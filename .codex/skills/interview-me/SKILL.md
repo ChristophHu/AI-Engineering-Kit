@@ -15,7 +15,7 @@ This skill closes the gap before it costs anything. The other Define-phase skill
 
 ## When to Use
 
-During project initialization, `$init` is the entry point and coordinates this interview only when the user's intent or material requirements remain unclear. Use the original `.codex/IDEA.md` and information already given in the conversation, ask one question at a time, and avoid repeating settled decisions. Do not read `.codex/PROJECT.md` before `$idea-refine` has completed its refinement under `$init`. Return the clarified intent to `$init`, which coordinates `$idea-refine` and the creation of `.codex/PROJECT.md`.
+During project initialization, `$init` is the entry point and coordinates this interview only when the user's intent or material requirements remain unclear. Use the original `.codex/IDEA.md`, any existing `.codex/PROJECT.md`, and information already given in the conversation; ask one question at a time and avoid repeating settled decisions. Return the clarified intent to `$init`, which coordinates `$idea-refine` when refinement has not already been completed.
 
 Apply this skill when:
 
@@ -118,10 +118,10 @@ Present the concrete understanding and accept the user's clear confirmation or c
 
 ### Step 6: Übergabe nach bestätigter Absicht
 
-When the user confirms the statement of intent with an explicit "yes":
+When the user clearly confirms the statement of intent in context:
 
 1. **Deliver the confirmed Statement of Intent.**
-2. During `$init`, return the confirmed intent to the initializer and continue with `$idea-refine` as already requested by the initialization workflow; respect any explicit request to stop or unresolved decision. Do not repeat confirmed answers.
+2. During `$init`, return the confirmed intent to the initializer; use `$idea-refine` only if refinement has not already been completed. Respect any explicit request to stop or unresolved decision and do not repeat confirmed answers.
 3. When invoked independently, follow the user's existing instructions for the next step; ask only if the next action or an essential decision is unclear.
 
 ### The 95% Confidence Stop
@@ -182,9 +182,9 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 
 ## Interaction with Other Skills
 
-- **`init` / `idea-refine`**: During project initialization, `$init` coordinates the optional interview and then `$idea-refine`, which develops `.codex/IDEA.md` into `.codex/PROJECT.md`.
+- **`init` / `idea-refine`**: During project initialization, `$init` coordinates an optional interview and, only if refinement remains unfinished, `$idea-refine`, which develops `.codex/IDEA.md` into `.codex/PROJECT.md`.
 - **`spec-driven-development`**: downstream. If the confirmed intent is concrete ("I want X for Y users with Z success criteria"), hand off to `spec-driven-development` to write it down.
-- **`planning-and-task-breakdown`**: two hops downstream of this skill (after the spec).
+- **`feature-planning` / `planning-and-task-breakdown`**: After the spec, `$feature-planning` leads planning; use `$planning-and-task-breakdown` when detailed task breakdown is useful in the same authoritative plan.
 - **`doubt-driven-development`**: opposite end of the timeline. Interview-me is pre-decision intent extraction; doubt-driven is post-decision artifact review. Both catch divergence, but at different moments.
 - **`source-driven-development`**: orthogonal. Interview-me clarifies what the user wants; SDD verifies framework facts. They don't compete.
 
@@ -195,17 +195,17 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 | "The ask is clear enough" | If you can't write the user's desired outcome in one sentence right now, the ask isn't clear. Run Step 1 before deciding. |
 | "Asking too many questions wastes their time" | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost. |
 | "I'll figure it out as I build" | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework. |
-| "They said 'whatever you think,' so I should just decide" | "Whatever you think" is delegation, not decision. Re-ask with two concrete options as a choice. |
+| "They said 'whatever you think,' so I should just decide" | Respect delegated routine decisions; clarify only a material unresolved decision. |
 | "I should give them several options to pick from" | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
 | "If I attach my guess, I'm leading them" | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong. |
 | "We've talked enough, I get it" | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet. |
-| "The user said yes, we're done" | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm. |
+| "The user confirmed, we're done" | Check that the intent is concrete and the confirmation clear in context; do not require a particular wording. |
 
 ## Red Flags
 
 - Three or more questions in a single message: that's batching, not interviewing
 - A question without your hypothesis attached: that's surveying, not committing
-- Accepting "whatever you think is best" as a terminal answer
+- Treating an unclear response as confirmation of an unresolved material decision
 - Producing a spec, plan, or task list before the user has explicitly confirmed your restate
 - Reopening confirmed questions or proceeding despite an unresolved essential decision or an explicit request to stop
 - Questions framed as "what would be best practice?" instead of "what do you actually want?"

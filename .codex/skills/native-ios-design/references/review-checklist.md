@@ -38,7 +38,7 @@ would see, and the fix. Only change code when asked to.
 
 ## Interaction
 
-- [ ] Hit targets ≥ 44 × 44 pt.
+- [ ] iOS/iPadOS hit targets aim for 44 × 44 pt; any smaller controls respect Apple's 28 × 28 pt minimum and adequate spacing. For macOS, use its platform-specific guidance.
 - [ ] Destructive actions confirm and say what's lost.
 - [ ] Gestures have a visible or menu alternative and an accessibility action.
 - [ ] Keyboard: tapping content dismisses it, scrolling doesn't, focusing doesn't jump the scroll.

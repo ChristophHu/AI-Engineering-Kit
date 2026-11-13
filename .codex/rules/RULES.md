@@ -12,3 +12,4 @@
 10. **Abschluss ist kriteriumsbezogen.** Fasse Änderungen, Verifikationsnachweise und offene Punkte zusammen.
 11. **Delegiere klar abgegrenzte Arbeit.** Wenn Subagenten eingesetzt werden, gelten `.codex/rules/DELEGATION.md` und die passenden Profile unter `.codex/agents/`; die Hauptinstanz bleibt für Entscheidungen, Integration und Abschluss verantwortlich.
 12. **Committe abgeschlossene Arbeit nachvollziehbar.** Nutze `.codex/skills/git/SKILL.md` für Git-Initialisierung, Staging und Commit-Zeitpunkt. Der erste Agent nach einer Kit-Installation führt den Git-Bootstrap und bei einem frischen Repository den Initial-Commit durch.
+13. **Wähle Skills passend zur Aufgabe.** Nutze bei Bedarf `.codex/rules/references/skill-auswahl.md`; initialisiere ein bereits eingerichtetes Projekt nicht allein für spätere Entwicklungsaufgaben erneut.

@@ -32,7 +32,7 @@ Gib dem Agenten anschließend beispielsweise diesen Auftrag:
 
 > Beginne mit `$init` die Arbeit an diesem Projekt und prüfe zuerst Git gemäß dem installierten Git-Workflow. Nutze `.codex/IDEA.md` als ursprüngliche Projektidee.
 
-Der erste Agent prüft Git wie oben beschrieben. `$init` liest `.codex/IDEA.md`, klärt bei Bedarf die Absicht mit `$interview-me` und schärft die Idee mit `$idea-refine`. Dieser erstellt nach der Abstimmung die konkrete Ausarbeitung in `.codex/PROJECT.md` und verweist auf die erhaltene ursprüngliche Idee. Besteht bereits eine Projektdatei, wird sie nach der Ideenschärfung vor Änderungen gelesen und abgeglichen. Anschließend arbeitet `$init` Produktvision, Designrichtung und Prioritäten aus und legt sie dem Nutzer zur Bestätigung vor. Für die vereinbarte Aufgabe folgen `$spec-driven-development` und `$feature-planning`; danach die vereinbarte Umsetzung und passende Verifikation.
+Der erste Agent prüft Git wie oben beschrieben. `$init` liest `.codex/IDEA.md`, klärt bei Bedarf die Absicht mit `$interview-me` und nutzt für eine noch offene Ideenschärfung `$idea-refine`. Dieser erstellt nach der Abstimmung die konkrete Ausarbeitung in `.codex/PROJECT.md` und verweist auf die erhaltene ursprüngliche Idee. Ist die Ideenschärfung bereits abgeschlossen, übernimmt `$init` das Ergebnis ohne Wiederholung. Eine vorhandene Projektdatei wird vor Änderungen gelesen und abgeglichen. Anschließend ergänzt `$init` nur noch fehlende Angaben für Produktvision, Designrichtung und Prioritäten und legt die Ergebnisse dem Nutzer zur Bestätigung vor. Für die vereinbarte Aufgabe folgen `$spec-driven-development` und `$feature-planning`; danach die vereinbarte Umsetzung und passende Verifikation. Die [Skill-Auswahl](.codex/rules/references/skill-auswahl.md) hilft auch bei späteren Aufgaben, ohne das Projekt erneut zu initialisieren.
 
 ## Ablauf
 
@@ -53,6 +53,7 @@ Für kleine, eindeutige Aufgaben kann Codex Spec und Plan knapp halten. Bei Änd
 - `.codex/rules/DELEGATION.md` – Delegationskriterien, Auftragsübergabe, Berechtigungsgrenzen und Ergebniskontrolle
 - `.codex/rules/ARCHITECTURE.md` und die beiden Architekturdiagramme – Referenzarchitekturen für native Apple-Apps und Web-Apps
 - `.codex/rules/templates/` – Spec-, Plan-, Verifikations- und Backend-Entscheidungsvorlagen
+- `.codex/ai-engineering/references/` – gemeinsame Checklisten und Referenzen, deren Pfade vom Projektstamm ausgehen
 - `.codex/skills/` – Projektinitialisierung, Setup-Verifikation, Git-Skill, Spec-/Planungs-, Supabase-, NestJS/PostgreSQL-, C#/SQL-Server- und SQLite-Datenspeicher-Skills, DSGVO- und Deploy-Skills, Entwicklungs-Skills für SwiftUI, Next.js und Angular sowie gemeinsame UI-Accessibility- und UI-Verifikations-Skills
 - `$init` – Discovery-Interview, Produktvision, priorisierte Feature-Map und Design-System vor der Implementierung
 - `install.sh` – idempotente, konfliktbewusste Integration

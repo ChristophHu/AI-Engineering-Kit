@@ -72,8 +72,12 @@ Full guide: [references/layout-and-components.md](references/layout-and-componen
 
 - **iPad gets a sidebar.** `NavigationSplitView` with selection in a router, collapsing to a stack on iPhone.
   Readable widths on wide screens (about 560 pt for chat bubbles).
-- **44 × 44 pt minimum hit targets.** Draw a 20 pt badge if you like, but frame it in 36–44 pt and give it a
-  `contentShape`.
+- **Hit targets:** For iOS and iPadOS, aim for the 44 × 44 pt default target. A 20 pt visual can sit in an
+  interactive region of at least 44 × 44 pt using `contentShape`. Apple's accessibility guidance lists 28 × 28 pt
+  as the minimum control size for iOS/iPadOS; use smaller controls only when appropriate and account for spacing.
+  For macOS, Apple's accessibility guidance lists a 28 × 28 pt default and 20 × 20 pt minimum; use macOS conventions.
+  See [Apple's accessibility guidance](https://developer.apple.com/design/human-interface-guidelines/accessibility)
+  and [button guidance](https://developer.apple.com/design/human-interface-guidelines/buttons).
 - **Menus over custom popups.** `Menu`, `contextMenu` (with a palette `ControlGroup` for reactions),
   `confirmationDialog` for destructive confirmation, `.sheet` with `presentationDetents` for secondary tasks.
 - **Keyboard behaves like Messages.** Tapping content hides the keyboard; scrolling doesn't

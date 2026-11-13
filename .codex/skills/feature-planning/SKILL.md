@@ -9,9 +9,9 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 
 1. Lies Projektanweisungen, die Spec, `.codex/rules/WORKFLOW.md` und `.codex/rules/RULES.md`. Bei nativen Apple-Apps oder Web-Apps berücksichtige zusätzlich `.codex/rules/ARCHITECTURE.md`.
 2. Prüfe die relevanten Module, Tests, Architektur und vorhandenen Konventionen. Stütze Datei- und Technikvorschläge auf diese Prüfung.
-3. Zerlege die Arbeit in kleine Schritte mit klaren Ergebnissen. Verknüpfe jeden Schritt mit Spec-Kriterien und geeigneter Verifikation.
+3. Zerlege die Arbeit in kleine Schritte mit klaren Ergebnissen. Verknüpfe jeden Schritt mit Spec-Kriterien und geeigneter Verifikation. Nutze bei größeren oder komplexen Vorhaben `$planning-and-task-breakdown`, um denselben maßgeblichen Plan detaillierter zu zerlegen und Abhängigkeiten zu ordnen.
 4. Notiere Abhängigkeiten, Risiken und noch offene Entscheidungen. Schlage keine unnötige Generalisierung vor.
-5. Nutze `.codex/rules/templates/PLAN.md`, wenn das Projekt keine eigene Planstruktur hat.
+5. Nutze für das Vorhaben einen maßgeblichen Plan am vorhandenen Planungsort. Nutze `.codex/rules/templates/PLAN.md`, wenn das Projekt keine eigene Planstruktur hat. Halte Aufgaben und Status im Plan fest oder verlinke das vorhandene Aufgabensystem, ohne parallele Statuslisten zu führen. Schütze vorhandene Pläne und Aufgaben anderer Vorhaben; lege bei Bedarf einen eigenen Plan am bestehenden Planungsort an.
    Bei einer relevanten Backend- oder Speicherentscheidung nutze `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` oder vorhandene gleichwertige Architekturunterlagen und verlinke die Entscheidung im Plan. Kläre wesentliche offene Entscheidungen nach `.codex/rules/ARCHITECTURE.md` vor der Backend-Erstellung.
 6. Bei nativen Apple-Apps und Web-Apps plane die zutreffenden technischen Entscheidungen und Plattformchecks aus `.codex/rules/ARCHITECTURE.md` ein.
 7. Gib die Umsetzung erst frei, wenn die Startkriterien aus `.codex/rules/ARCHITECTURE.md` erfüllt oder begründet als Annahmen dokumentiert sind.

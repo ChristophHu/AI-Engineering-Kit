@@ -26,7 +26,7 @@ Trenne belegte Fakten von Annahmen. Kläre nur Fragen, deren Antwort die Lösung
 
 Untersuche die vorhandene Architektur und Konventionen. Leite aus jedem Abnahmekriterium relevante Änderungen und Verifikationsschritte ab. Teile die Arbeit in kleine, logisch geordnete Schritte; notiere Abhängigkeiten, Risiken und betroffene Dateien, soweit bekannt. Plane keine unnötige Infrastruktur.
 
-**Ausgabe:** `PLAN.md` mit Schritten, Verifikation und Rückverfolgbarkeit zu den Kriterien.
+**Ausgabe:** Ein maßgeblicher Plan pro Vorhaben mit Schritten, Verifikation und Rückverfolgbarkeit zu den Kriterien, beispielsweise `PLAN.md` am bestehenden Planungsort. Aufgaben und Status können im Plan stehen; ein vorhandenes Aufgabensystem wird stattdessen verlinkt, ohne einen zweiten Aufgabenstatus zu pflegen. Nutze `$feature-planning` als Einstieg und bei Bedarf `$planning-and-task-breakdown` zur detaillierten Zerlegung desselben Plans. Fremde Pläne und offene Aufgaben werden nicht überschrieben oder gelöscht; für ein neues Vorhaben kann ein eigener Plan am bestehenden Ort entstehen.
 
 ### 3. Implement
 

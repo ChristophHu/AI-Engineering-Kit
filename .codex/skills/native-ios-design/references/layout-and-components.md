@@ -15,14 +15,14 @@
 ## Spacing and sizes
 
 - System padding (`.padding()`, 16 pt) for screen edges; 8–12 pt between related items; 16–24 pt between groups.
-- 44 × 44 pt minimum for anything tappable. Small visuals get a larger invisible frame:
+- For iOS and iPadOS, aim for a 44 × 44 pt interactive region; Apple's accessibility guidance lists 28 × 28 pt as the minimum control size. Small visuals can have a larger invisible frame:
 
 ```swift
 Image(systemName: "xmark")
     .font(.caption2.weight(.heavy))
     .frame(width: 20, height: 20)
     .background(.regularMaterial, in: .circle)
-    .frame(width: 36, height: 36)   // the target
+    .frame(width: 44, height: 44)   // interactive region
     .contentShape(.rect)
 ```
 

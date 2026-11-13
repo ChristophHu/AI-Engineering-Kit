@@ -27,6 +27,11 @@ if [[ ! -d "$KIT_SOURCE" ]]; then
   exit 1
 fi
 
+if [[ ! -d "$KIT_SOURCE/ai-engineering/references" ]]; then
+  printf 'Fehler: Gemeinsame Referenzen fehlen in %s\n' "$KIT_SOURCE/ai-engineering/references" >&2
+  exit 1
+fi
+
 if [[ "$TARGET_DIR" == "$SOURCE_DIR" ]]; then
   printf 'Fehler: Das Kit kann nicht in seinen eigenen Paketordner installiert werden.\n' >&2
   printf 'Gib den Pfad zu einem anderen Projektordner an.\n' >&2
@@ -45,6 +50,10 @@ for category in agents rules skills; do
     exit 1
   fi
 done
+if [[ -e "$KIT_DEST/ai-engineering/references" ]]; then
+  printf 'Fehler: %s existiert bereits; Referenzen werden nicht überschrieben.\n' "$KIT_DEST/ai-engineering/references" >&2
+  exit 1
+fi
 if [[ -e "$KIT_DEST/PROJECT.md" ]]; then
   printf 'Fehler: %s existiert bereits; die Projektbeschreibung wird nicht überschrieben.\n' "$KIT_DEST/PROJECT.md" >&2
   exit 1
@@ -76,6 +85,8 @@ mkdir -p "$KIT_DEST"
 for category in agents rules skills; do
   cp -R "$KIT_SOURCE/$category" "$KIT_DEST/"
 done
+mkdir -p "$KIT_DEST/ai-engineering"
+cp -R "$KIT_SOURCE/ai-engineering/references" "$KIT_DEST/ai-engineering/"
 
 if [[ -f "$AGENTS" ]]; then
   printf '\n\n%s\n' "$BLOCK" >> "$AGENTS"
