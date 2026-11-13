@@ -36,11 +36,11 @@ Diese Vorlage dient zur Dokumentation einer anstehenden oder bestehenden Archite
 
 ## Swagger / OpenAPI
 
-- **Entscheidung des Entwicklers:** <Swagger/OpenAPI mit visueller UI / Verzicht / technisch nicht möglich / nicht relevant, z. B. kein API-Backend; Quelle der Entscheidung>
-- **Bei Verzicht oder technischer Einschränkung:** <Grund und gegebenenfalls Alternative; bei verwalteten Diensten verfügbare Funktionen und Zugriffsmöglichkeiten prüfen>
+- **Entscheidung des Entwicklers:** <bei NestJS-/C#-API: Swagger/OpenAPI mit visueller UI als empfohlene Standardauswahl oder ausdrücklicher Verzicht; Quelle der Entscheidung. Supabase und SQLite allein: keine Entscheidung erforderlich>
+- **Bei Verzicht:** <Grund und gegebenenfalls Alternative; sonst nicht relevant>
 - **Berechtigter Zugang:** <Personen/Rollen, Authentifizierung und Autorisierung; Zugriffspfad für berechtigte Personen>
 - **Schutz von UI und OpenAPI-Dokument:** <Schutzmechanismus und Vertrauensgrenze für beide Endpunkte; öffentlich und für Unbefugte nicht erreichbar>
-- **Produktionsverhalten und Nachweis:** <deaktiviert oder geschützt; Prüfung für erlaubten und abgelehnten Zugriff auf UI und Dokument>
+- **Produktionsverhalten und Nachweis:** <bei Bereitstellung: aktiviert und geschützt oder deaktiviert; aktivierte Endpunkte auf zulässigen, unzulässigen und öffentlichen Zugriff, deaktivierte auf Nichterreichbarkeit prüfen; sonst nicht relevant>
 
 ## Offene Punkte und Übergabe
 
@@ -48,4 +48,4 @@ Diese Vorlage dient zur Dokumentation einer anstehenden oder bestehenden Archite
 |---|---|---|---|
 | <Punkt> | <Auswirkung> | <Person oder Aufgabe> | <offen / geklärt> |
 
-Vor Erstellung eines API-Backends müssen Backend-Art, wesentliche Hostingvorgaben und die Swagger-Entscheidung geklärt sein. Widersprüche werden mit dem Entwickler geklärt; dokumentiere vereinbarte Entscheidungen und verlinke dieses Dokument im Plan. Bei relevanter SQLite-Synchronisierung den Sync-Vertrag im Plan oder in den vorhandenen Architekturunterlagen konkretisieren.
+Vor Erstellung eines Backends müssen Backend-Art und wesentliche Hostingvorgaben geklärt sein; für NestJS- und C#-APIs zusätzlich die ausdrückliche Swagger-Entscheidung, auch wenn SQLite als Datenbank dient. Widersprüche werden mit dem Entwickler geklärt; dokumentiere vereinbarte Entscheidungen und verlinke dieses Dokument im Plan. Bei relevanter SQLite-Synchronisierung den Sync-Vertrag im Plan oder in den vorhandenen Architekturunterlagen konkretisieren.

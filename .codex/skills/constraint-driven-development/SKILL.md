@@ -24,7 +24,7 @@ Apply this skill when:
 - An agent is producing volume nobody is reading line by line
 - CI has checks but nobody can say which ones block a merge and which ones are decoration
 - Coverage, performance, or accessibility numbers get argued about per-PR instead of decided once
-- You're about to run `/build auto` or any autonomous loop, and the only thing standing between it and main is a test suite the agent also wrote
+- You're about to run an autonomous implementation loop, and the only thing standing between it and main is a test suite the agent also wrote
 
 **When NOT to use:**
 
@@ -194,12 +194,14 @@ The commands now live in two places — the `Checked by` column in `CONSTRAINTS.
 
 The single biggest mistake is running everything everywhere. A check that stalls the agent gets switched off, and a gate people switched off is worse than no gate, because the bar still looks like it exists.
 
-| Phase | Command | What runs | Budget |
+Use the project's actual configured commands and CI jobs; the phases below are conceptual, not built-in Codex slash commands. Adapt budgets to the project.
+
+| Phase | Example checks | What runs | Example budget |
 |-------|---------|-----------|--------|
-| BUILD | `/build` | Types, lint, secrets, the floor | under 5s, changed file only |
-| VERIFY | `/test` | Related tests, coverage on changed lines | under 90s |
-| REVIEW | `/review` | Everything, plus the guards below | minutes |
-| SHIP | `/ship` | Direction checks, no regressions | CI |
+| BUILD | Configured fast checks | Types, lint, secrets, the floor | under 5s, changed file only |
+| VERIFY | Project test commands | Related tests, coverage on changed lines | under 90s |
+| REVIEW | Project review checks | Applicable checks and guards below | minutes |
+| SHIP | Configured CI/release checks | Direction checks, no regressions | CI |
 
 Two rules that keep this tolerable:
 

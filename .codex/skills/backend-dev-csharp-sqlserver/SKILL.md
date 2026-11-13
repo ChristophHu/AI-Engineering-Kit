@@ -34,11 +34,11 @@ Use this skill when the project description or established codebase selects a C#
 
 ## Swagger / OpenAPI protection
 
-- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Prefer Windows Server with IIS; ASP.NET Core also supports Linux, so ask the developer to confirm an intended Linux target or resolve conflicting hosting requirements before creation. Recommend visual Swagger UI when feasible; honor a previously agreed decision, and document a decision to omit it or technical limitation and an alternative. Do not proceed with creation while a material decision is unresolved. Match the implementation to the target framework and existing OpenAPI/Swagger tooling; do not upgrade packages or framework versions solely to change documentation setup.
-- Document DTO schemas, authentication schemes, relevant responses/errors, and API versioning accurately. Keep generated documentation aligned with the actual endpoints and avoid secrets, internal credentials, or sensitive example values.
-- **Swagger UI and every served OpenAPI JSON/document endpoint must be protected and unavailable to anonymous or unauthorized users.** Apply explicit ASP.NET Core authorization or an approved access-control layer at the server/hosting boundary; protect both UI assets and document endpoints. An obscure URL, CORS, or an authentication declaration inside the OpenAPI schema does not protect the documentation route.
+- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Prefer Windows Server with IIS; ASP.NET Core also supports Linux, so ask the developer to confirm an intended Linux target or resolve conflicting hosting requirements before creation. Recommend Swagger/OpenAPI with visual Swagger UI as the default; honor a previously agreed decision and document any decision to omit it, its reason and any alternative. Do not proceed with creation while this decision is unresolved. Match the implementation to the target framework and existing tooling; do not upgrade packages or framework versions solely to change documentation setup.
+- When documentation is provided, document DTO schemas, authentication schemes, relevant responses/errors, and API versioning accurately. Keep generated documentation aligned with the actual endpoints and avoid secrets, internal credentials, or sensitive example values.
+- **Swagger UI and every served OpenAPI JSON/document endpoint must be protected and unavailable to anonymous or unauthorized users.** Enforce a non-public network access path (for example VPN or private ingress) and explicit authorization at the application or hosting boundary for both UI and document endpoints. Authentication alone does not make a public URL private. An obscure URL, CORS, or an authentication declaration inside the OpenAPI schema does not protect the documentation route.
 - Verify the protection through the actual Windows Server/IIS or reverse-proxy topology so the application cannot be reached around an outer access-control rule. Choose and document who may access the documentation and how they authenticate.
-- Keep documentation enabled only in the environments where intended. If it is available in production, require an authorized operator role or equivalent protected access and verify denied as well as allowed requests.
+- Keep documentation enabled only in the intended environments. Where enabled, require non-public, authorized access and verify denied and allowed requests; where disabled, verify both UI and document endpoints are unreachable.
 
 ## Windows Server hosting and operations
 
@@ -54,8 +54,8 @@ Choose checks matching the change and existing repository setup. Relevant checks
 - run the repository's pinned `dotnet` build and targeted unit/integration tests
 - apply/review migrations against a local or test SQL Server and confirm schema compatibility from clean and supported prior versions
 - exercise valid/invalid input, authentication, authorization, tenant isolation, validation errors, and database failure behavior
-- verify Swagger UI and OpenAPI document endpoints reject anonymous and unauthorized requests and allow only the intended operator identity
-- validate generated OpenAPI output and frontend/client compatibility against the API contract
+- if Swagger is provided, verify both endpoints allow only intended operators where enabled, reject unauthorized access and are not publicly reachable; where disabled verify both endpoints are unreachable
+- if provided, validate generated OpenAPI output and frontend/client compatibility against the API contract
 - verify the publish output and the documented deployment target; on Windows Server, check IIS/runtime configuration and app-pool access without revealing secrets
 - confirm local/dev/test/prod endpoint separation using redacted identifiers or boolean comparisons
 

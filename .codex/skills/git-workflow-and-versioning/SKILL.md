@@ -13,6 +13,20 @@ Git is your safety net. Treat commits as save points, branches as sandboxes, and
 
 Always. Every code change flows through git.
 
+## Git-Bootstrap nach der Installation
+
+Der erste Agent prüft vor der Umsetzung den Git-Status und das zuständige Repository. Liegt das Projekt bereits in einem Repository, nutze dieses und lege kein verschachteltes `.git` an. Andernfalls initialisiere Git am Projektstamm mit `git init`.
+
+Prüfe `.gitignore`, die vorgesehenen Dateien und die Git-Identität. Schließe Geheimnisse, private Schlüssel, persönliche oder produktive Daten, lokale Datenbanken, Build-Ausgaben und Caches aus; sichere Beispieldateien können enthalten sein. Fehlt eine Identität, bitte den Nutzer um deren Einrichtung und ändere keine globale Identität. Ergänze nötige Ignore-Regeln behutsam.
+
+Hat das neu initialisierte oder vorhandene Repository noch keine Historie, stage nach dieser Prüfung nur die vorgesehene Projektbasis, prüfe den Staging-Diff und erstelle unmittelbar den Initial-Commit. Diese Handlung ist durch den Installationsablauf autorisiert. In einem Repository mit Historie bleiben fremde Änderungen unberührt; erstelle keinen Bootstrap-Commit mit ihnen. Berichte Commit und verbleibenden Status. Ein Push ist dadurch nicht autorisiert.
+
+## Sicherheitsgrenzen und Commit-Zeitpunkt
+
+Committe zusammenhängende, überprüfte Arbeitseinheiten nach den geltenden Auftrags- und Projektvorgaben. Prüfe vor dem Staging `git status` und vor dem Commit die gestagten Dateien und `git diff --cached`; übernimm nur zum Auftrag gehörende Änderungen. Erhalte bestehende gestagte und ungestagte Nutzerarbeit. Ein vollständig sauberer Arbeitsbaum ist nicht erforderlich, wenn fremde Änderungen bestehen.
+
+Führe `reset`, `rebase`, `amend`, Force-Push, Löschen von Branches, Änderung von Remotes oder Verwerfen von Arbeit nur auf ausdrücklichen Auftrag aus. Push, Veröffentlichung und externe Repository-Aktionen erfordern die entsprechende Autorisierung. Umgehe keine Hooks oder Signaturvorgaben; melde Blockaden.
+
 ## Core Principles
 
 ### Trunk-Based Development (Recommended)
@@ -33,7 +47,7 @@ This is the recommended default. Teams using gitflow or long-lived branches can 
 
 ### 1. Commit Early, Commit Often
 
-Each successful increment gets its own commit. Don't accumulate large uncommitted changes.
+Prefer focused commits for coherent, verified units when committing is authorized. Related increments can be grouped; preserve unrelated changes.
 
 ```
 Work pattern:
@@ -43,7 +57,7 @@ Not this:
   Implement everything → Hope it works → Giant commit
 ```
 
-Commits are save points. If the next change breaks something, you can revert to the last known-good state instantly.
+Commits are save points. If a later change breaks something, investigate and preserve existing work; perform any reset or discard only when explicitly authorized.
 
 ### 2. Atomic Commits
 
@@ -167,26 +181,28 @@ git worktree remove ../project-feature-a
 Benefits:
 - Multiple agents can work on different features simultaneously
 - No branch switching needed (each directory has its own branch)
-- If one experiment fails, delete the worktree — nothing is lost
+- If an experiment fails, inspect and preserve its changes; remove a worktree only when explicitly authorized and after checking for uncommitted work
 - Changes are isolated until explicitly merged
 
 ## The Save Point Pattern
+
+Das folgende Ablaufdiagramm ist ein unverbindliches Beispiel. Commits erfolgen gemäß den Projektvorgaben für geeignete, geprüfte Arbeitseinheiten; mehrere zusammenhängende Schritte können gemeinsam committet werden.
 
 ```
 Agent starts work
     │
     ├── Makes a change
     │   ├── Test passes? → Commit → Continue
-    │   └── Test fails? → Revert to last commit → Investigate
+    │   └── Test fails? → Preserve changes and investigate
     │
     ├── Makes another change
     │   ├── Test passes? → Commit → Continue
-    │   └── Test fails? → Revert to last commit → Investigate
+    │   └── Test fails? → Preserve changes and investigate
     │
     └── Feature complete → All commits form a clean history
 ```
 
-This pattern means you never lose more than one increment of work. If an agent goes off the rails, `git reset --hard HEAD` takes you back to the last successful state.
+If an increment fails, inspect the diff and identify affected changes before choosing a recovery. Never discard existing or user-authored work; reset or discard only with explicit authorization.
 
 ## Change Summaries
 
@@ -314,7 +330,7 @@ Write the entry in the same change that makes the change, while the impact is fr
 
 | Rationalization | Reality |
 |---|---|
-| "I'll commit when the feature is done" | One giant commit is impossible to review, debug, or revert. Commit each slice. |
+| "I'll commit when the feature is done" | Prefer coherent, reviewable commits when appropriate; related slices can be grouped. |
 | "The message doesn't matter" | Messages are documentation. Future you (and future agents) will need to understand what changed and why. |
 | "I'll squash it all later" | Squashing destroys the development narrative. Prefer clean incremental commits from the start. |
 | "Branches add overhead" | Short-lived branches are free and prevent conflicting work from colliding. Long-lived branches are the problem — merge within 1-3 days. |

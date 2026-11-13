@@ -170,14 +170,14 @@ Read `examples.md` in this skill directory for examples of what great ideation s
 |---|---|
 | I'll generate 20+ ideas to cover all bases | A few relevant alternatives are more useful than many shallow ones. |
 | The user just needs encouragement, not critique | A yes-machine produces weak ideas. Push back with specificity and kindness. |
-| Who this is for is obvious — no need to ask | Every good idea starts with a person and their problem. Skipping it means designing for nobody. |
+| Who this is for is already known | Use the established target group and problem; ask only when the answer is missing or unclear. |
 | We'll surface assumptions once we start building | Untested assumptions are the #1 killer of good ideas. Surface them before committing. |
 | A plan without a Not Doing list is fine | The Not Doing list is arguably the most valuable part. Make trade-offs explicit. |
 
 ## Red Flags
 
 - Generating many shallow variations instead of considering only useful alternatives
-- Skipping the "who is this for" question
+- Proceeding without understanding the target group and problem; repeat no question already answered clearly
 - No assumptions surfaced before committing to a direction
 - Yes-machining weak ideas instead of pushing back with specificity
 - Producing a plan without a "Not Doing" list

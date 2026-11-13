@@ -25,7 +25,7 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 │                                      │
 │   Implement ──→ Test ──→ Verify ──┐  │
 │       ▲                           │  │
-│       └───── Commit ◄─────────────┘  │
+│       └─ Optionaler Commit ◄──────┘  │
 │              │                       │
 │              ▼                       │
 │          Next slice                  │
@@ -36,9 +36,9 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 For each slice:
 
 1. **Implement** the smallest complete piece of functionality
-2. **Test** — run the test suite (or write a test if none exists)
-3. **Verify** — confirm the slice works as expected (tests pass, build succeeds, manual check)
-4. **Commit** -- save your progress with a descriptive message (see `git-workflow-and-versioning` for atomic commit guidance)
+2. **Test** — select meaningful tests relevant to the affected behavior and project
+3. **Verify** — use appropriate available checks and report failures or checks not run
+4. **Commit when appropriate** -- group coherent verified work according to `$git-workflow-and-versioning`, preserving unrelated changes
 5. **Move to the next slice** — carry forward, don't restart
 
 ## Slicing Strategies
@@ -142,7 +142,7 @@ Each increment changes one logical thing. Don't mix concerns:
 
 ### Rule 2: Keep It Compilable
 
-After each increment, the project must build and existing tests must pass. Don't leave the codebase in a broken state between slices.
+Keep each increment coherent and suitable for verification. Run checks affected by the change at an appropriate point; do not repeat an unchanged check without cause. Report pre-existing failures and checks that cannot run rather than claiming success.
 
 ### Rule 3: Feature Flags for Incomplete Features
 
@@ -177,8 +177,8 @@ Each increment should be independently revertable:
 
 - Additive changes (new files, new functions) are easy to revert
 - Modifications to existing code should be minimal and focused
-- Database migrations should have corresponding rollback migrations
-- Avoid deleting something in one commit and replacing it in the same commit — separate them
+- Plan an appropriate rollback or forward recovery for database migrations according to project and data constraints
+- Split deletion and replacement only when each intermediate commit remains coherent and verifiable; otherwise keep them together
 
 ## Working with Agents
 
@@ -201,12 +201,9 @@ Be explicit about what's in scope and what's NOT in scope for each increment.
 After each increment, verify with the repository's own commands (see the test-driven-development skill's Discover the Stack First section):
 
 - [ ] The change does one thing and does it completely
-- [ ] All existing tests still pass (the repository's test command: `npm test`, `./gradlew test`, `pytest`, ...)
-- [ ] The build succeeds (the repository's build command)
-- [ ] Type checking passes, where the stack has one (`npx tsc --noEmit`, `mypy`, ...)
-- [ ] Linting passes (the repository's lint command)
+- [ ] Relevant tests, build, type checking and linting are selected based on the change and available project commands; results and unavailable checks are reported
 - [ ] The new functionality works as expected
-- [ ] The change is committed with a descriptive message
+- [ ] Any commit follows the authorized Git workflow and has a descriptive message
 
 **Note:** Run each verification command after a change that could affect it. After a successful run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no information.
 
@@ -238,11 +235,9 @@ After each increment, verify with the repository's own commands (see the test-dr
 
 After completing all increments for a task:
 
-- [ ] Each increment was individually tested and committed
-- [ ] The full test suite passes
-- [ ] The build is clean
-- [ ] The feature works end-to-end as specified
-- [ ] No uncommitted changes remain
+- [ ] Each increment received suitable verification; coherent work was committed as appropriate
+- [ ] Required and applicable tests, build and end-to-end checks have results or are explicitly reported as open
+- [ ] Remaining task-related and pre-existing uncommitted changes are identified and preserved
 
 ## See Also
 

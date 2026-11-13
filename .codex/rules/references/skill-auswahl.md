@@ -21,7 +21,7 @@ Wähle Skills anhand von Auftrag, Projektzustand und Plattform. Lies die jeweili
 | Tests und Prüfung | `$test-driven-development` für passende Verhaltensänderungen; `$verify-ui` für plattformbezogene UI-Prüfung. `$browser-testing-with-devtools` gilt für Web-Inhalte und setzt einen verfügbaren Server voraus. Native iOS-/iPadOS-Apps mit Simulator oder Gerät, macOS-Apps in der nativen Testumgebung prüfen. |
 | Sicherheit, Datenschutz und Leistung | Bei Bedarf `$security-and-hardening`, `$dsgvo` oder `$performance-optimization` |
 | Überprüfung und Vereinfachung | `$code-review-and-quality`, bei Bedarf `$doubt-driven-development` oder `$code-simplification` |
-| Git und Versionierung | `$git` für Git-Bootstrap, sicheres Staging und Commits; `$git-workflow-and-versioning` ergänzend für Branches, Historie, Pull Requests und Versionierung. Projektkonventionen, vorhandene Änderungen und Autorisierung beachten. |
+| Git und Versionierung | `$git-workflow-and-versioning` für Git-Bootstrap, sicheres Staging, Commits, Branches, Historie, Pull Requests und Versionierung. Projektkonventionen, vorhandene Änderungen und Autorisierung beachten. |
 | Auslieferung und Betrieb | Nach Bedarf `$ci-cd-and-automation`, `$observability-and-instrumentation`, `$documentation-and-adrs`, `$deprecation-and-migration`, `$shipping-and-launch` oder `$deploy` |
 
 ## Arbeitsweise

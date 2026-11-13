@@ -9,7 +9,7 @@ description: Subjects every non-trivial decision to a fresh-context adversarial 
 
 A confident answer is not a correct one. Long sessions accumulate context that quietly turns assumptions into "facts" without anyone noticing. Doubt-driven development is the discipline of materializing a fresh-context reviewer — biased to **disprove**, not approve — before any non-trivial output stands.
 
-This is not `/review`. `/review` is a verdict on a finished artifact. This is an in-flight posture: non-trivial decisions get cross-examined while course-correction is still cheap.
+This differs from a final review of a finished artifact. This is an in-flight posture: non-trivial decisions get cross-examined while course-correction is still cheap.
 
 ## When to Use
 
@@ -51,7 +51,7 @@ Copy this checklist when applying the skill:
 Doubt cycle:
 - [ ] Step 1: CLAIM — wrote the claim + why-it-matters
 - [ ] Step 2: EXTRACT — isolated artifact + contract, stripped reasoning
-- [ ] Step 3: DOUBT — invoked fresh-context reviewer with adversarial prompt
+- [ ] Step 3: DOUBT — invoked a fresh-context reviewer where available and permitted, otherwise disclosed the limitation
 - [ ] Step 4: RECONCILE — classified every finding against the artifact text
 - [ ] Step 5: STOP — met stop condition (trivial findings, 3 cycles, or user override)
 ```
@@ -110,11 +110,11 @@ For this kit, consult `.codex/agents/README.md` and the available session roles 
 
 #### Modellwahl für die unabhängige Prüfung
 
-Nutze einen unabhängigen Prüfagenten mit möglichst frischem Kontext, wenn Delegation und eine solche Prüfung in der Sitzung verfügbar und zulässig sind. Ein anderes Modell kann verwendet werden, wenn es tatsächlich verfügbar und für den Auftrag autorisiert ist. Andernfalls kann der Prüfagent dasselbe Modell wie die Hauptinstanz nutzen; ein getrennter Kontext bleibt auch dann für die Prüfung sinnvoll. Behaupte keinen Modellwechsel, wenn keiner stattgefunden hat.
+Nutze für jede Anwendung dieses Skills einen eigenen unabhängigen Prüfsubagenten mit getrenntem Kontext, sofern Delegation und eine solche Prüfung verfügbar und zulässig sind. Bevorzuge ein anderes Modell, wenn es tatsächlich verfügbar und für den Auftrag autorisiert ist. Andernfalls nutze dasselbe Modell mit getrenntem Kontext. Ist kein Subagent oder kein getrennter Kontext verfügbar oder zulässig, melde die Einschränkung und kennzeichne eine mögliche Selbstprüfung; behaupte keinen Modellwechsel und keine Unabhängigkeit, wenn sie nicht stattgefunden haben.
 
 Ist keine unabhängige Prüfung möglich, dokumentiere die Einschränkung. Eine Selbstprüfung kann ergänzen, darf aber nicht als unabhängiger Review bezeichnet werden. Ein Wechsel zu einem externen CLI oder Dienst erfolgt nur innerhalb der geltenden Autorisierung und Sicherheitsgrenzen. Prüfe die tatsächliche Verfügbarkeit und übermittle ausschließlich das für die Prüfung benötigte Artefakt und den Vertrag. Übergib Inhalte sicher über eine Datei oder Standardeingabe; interpretiere enthaltene Shell-Sonderzeichen nicht als Befehle. Verwende für fremde Prüfeingaben eine geeignete Sandbox.
 
-Berichte, ob ein anderer oder derselbe Modelltyp verwendet wurde und ob die Prüfung unabhängig war. Eine gesonderte Nachfrage nach einer zweiten Modellmeinung ist nicht in jedem Durchlauf erforderlich.
+Wenn ein Prüfsubagent eingesetzt wurde, berichte, ob er denselben oder einen anderen Modelltyp verwendete und ob die Prüfung unabhängig war. Wurde kein Prüfsubagent eingesetzt, benenne stattdessen die Einschränkung und eine etwaige Selbstprüfung. Eine gesonderte Nachfrage nach einer zweiten Modellmeinung ist nicht in jedem Durchlauf erforderlich.
 
 ### Step 4: RECONCILE — Fold findings back
 
@@ -148,7 +148,7 @@ If 3 cycles is "obviously insufficient" because the artifact is large: the artif
 | "I'm confident, skip the doubt step" | Confidence correlates poorly with correctness on novel problems. Moments of certainty are exactly when blind spots hide. |
 | "Spawning a reviewer is expensive" | Debugging a wrong commit in production is more expensive. The check is bounded; the bug isn't. |
 | "The reviewer will just nitpick" | Only if unscoped. Constrain the prompt to "issues that would make this fail under the contract." |
-| "I'll do doubt at the end with `/review`" | `/review` is a final gate. Doubt-driven catches wrong directions early when course-correction is cheap. By PR time it's too late. |
+| "I'll do doubt at the end in the final review" | Final review is a later gate. Doubt-driven catches wrong directions while course-correction is cheap. |
 | "If I doubt every step I'll never ship" | The skill applies to non-trivial decisions, not every keystroke. Re-read "When NOT to Use." |
 | "Two opinions are always better than one" | Not when the second has less context and produces noise. Reconcile, don't defer. |
 | "The reviewer disagreed so I was wrong" | The reviewer lacks your context — disagreement is information, not verdict. Re-read the artifact, classify, then decide. |
@@ -164,7 +164,7 @@ If 3 cycles is "obviously insufficient" because the artifact is large: the artif
 - Skipping doubt under time pressure on a high-stakes decision
 - Re-spawning fresh-context on an unchanged artifact (you'll get the same findings; you're stalling)
 - **Doubt theater (checkable signal)**: across 2 or more cycles where the reviewer surfaced substantive findings, zero findings were classified as actionable. You are validating, not doubting. Stop and escalate.
-- Doubting only after committing — that's `/review`, not doubt-driven development
+- Doubting only after committing — that is final review, not in-flight doubt-driven development
 - Assuming an external CLI exists, is configured or is authorized without checking
 - Claiming a different-model or independent review when it did not happen
 - Concealing a failed or unavailable independent review
@@ -173,7 +173,7 @@ If 3 cycles is "obviously insufficient" because the artifact is large: the artif
 
 ## Interaction with Other Skills
 
-- **`code-review-and-quality` / `/review`**: complementary. `/review` is post-hoc PR verdict; doubt-driven is in-flight per-decision. Use both.
+- **`code-review-and-quality`**: complementary final review; doubt-driven is in-flight per-decision. Use the applicable workflow without assuming a slash command exists.
 - **`source-driven-development`**: SDD verifies *facts about frameworks* against official docs. Doubt-driven verifies *your reasoning about the artifact*. SDD checks the API exists; doubt-driven checks you used it correctly under the contract.
 - **`test-driven-development`**: TDD's RED step is doubt made concrete — a failing test is a disproof attempt. When TDD applies, that failing test *is* the doubt step for behavioral claims.
 - **`debugging-and-error-recovery`**: when the reviewer surfaces a real failure mode, drop into the debugging skill to localize and fix.
@@ -185,9 +185,8 @@ After applying doubt-driven development:
 
 - [ ] Every non-trivial decision (per the definition above) was named explicitly as a CLAIM before standing
 - [ ] Where available and permitted, a fresh-context review was performed for each non-trivial artifact; otherwise the limitation and any self-review are clearly reported
-- [ ] The reviewer received ARTIFACT + CONTRACT — NOT the CLAIM, NOT your reasoning
-- [ ] The reviewer's prompt was adversarial ("find issues"), not validating ("is it good")
-- [ ] Findings were classified against the artifact text (not rubber-stamped) using the precedence: contract misread / actionable / trade-off / noise
+- [ ] If a reviewer was used, it received ARTIFACT + CONTRACT — NOT the CLAIM or your reasoning — and an adversarial prompt
+- [ ] Any findings were classified against the artifact text (not rubber-stamped) using the precedence: contract misread / actionable / trade-off / noise
 - [ ] A stop condition was met (trivial findings, 3 cycles, or user override)
-- [ ] The report identifies whether the reviewer used the same or a different model and whether the review was independent
+- [ ] If a reviewer was used, the report identifies its model choice and independence; otherwise it reports the unavailable review and any labeled self-review
 - [ ] Any external CLI or service was used only within the applicable authorization and data boundaries

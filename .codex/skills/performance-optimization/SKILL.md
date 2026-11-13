@@ -21,6 +21,8 @@ Measure before optimizing. Performance work without measurement is guessing — 
 
 ## Core Web Vitals Targets
 
+These metrics apply only to web experiences, not native Apple apps, backend services, or databases. Select metrics and targets from the project's requirements and platform; use the table as a web reference, not a universal acceptance gate.
+
 | Metric | Good | Needs Improvement | Poor |
 |--------|------|-------------------|------|
 | **LCP** (Largest Contentful Paint) | ≤ 2.5s | ≤ 4.0s | > 4.0s |
@@ -30,7 +32,7 @@ Measure before optimizing. Performance work without measurement is guessing — 
 ## The Optimization Workflow
 
 ```
-1. MEASURE  → Establish baseline with real data
+1. MEASURE  → Establish a representative baseline with available data
 2. IDENTIFY → Find the actual bottleneck (not assumed)
 3. FIX      → Address the specific bottleneck
 4. VERIFY   → Measure again; keep or revert
@@ -39,10 +41,10 @@ Measure before optimizing. Performance work without measurement is guessing — 
 
 ### Step 1: Measure
 
-Two complementary approaches — use both:
+Choose measurements appropriate to the surface and available data. For web applications, the following approaches complement each other when available:
 
 - **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.
-- **RUM (web-vitals library, CrUX):** Real user data in real conditions. Required to validate that a fix actually improved user experience.
+- **RUM (web-vitals library, CrUX):** Real user data in real conditions, when available and appropriate. If field data is unavailable, report the limitation and use representative synthetic measurements without claiming field validation. For native Apple apps use appropriate platform profiling; for backend and database work measure relevant latency, throughput, resource use and query plans.
 
 **Frontend:**
 ```javascript
@@ -126,9 +128,9 @@ Fix the one thing Step 2 identified, nothing else. The anti-patterns below are t
 
 - **N+1 queries.** One query per row is the most common backend bottleneck. Fetch the relation in the same query (join/include) instead of in the loop. [Pattern](references/optimization-patterns.md#n1-queries-backend).
 - **Unbounded data fetching.** Every list endpoint paginates with a limit and a stable order. [Pattern](references/optimization-patterns.md#unbounded-data-fetching).
-- **Queries that ignore their index.** "Add an index" is the guess; `EXPLAIN ANALYZE` is the measurement. A `Seq Scan` where you expected an index, a `rows=` estimate off by an order of magnitude, and a `Sort` node above the scan each call for a different fix; a bad `rows=` estimate means stale statistics, so run `ANALYZE` rather than adding an index. Index for the shape of the query (equality columns first, then the range or sort column). A plain index will not help a query on a low-selectivity dominant value (a partial index serves the rare value), a leading wildcard (needs trigram or full-text), or a function applied to the column (index the expression, as in `WHERE lower(email) = ?`), and every index taxes every write. Re-run the plan afterwards; an index that did not change it is a revert. [Pattern](references/optimization-patterns.md#queries-that-ignore-their-index).
+- **Queries that ignore their index.** "Add an index" is the guess; `EXPLAIN ANALYZE` is the measurement. A `Seq Scan` where you expected an index, a `rows=` estimate off by an order of magnitude, and a `Sort` node above the scan each call for a different fix; a bad `rows=` estimate can mean stale statistics, so consider `ANALYZE` rather than adding an index. Index for the shape of the query (equality columns first, then the range or sort column). A plain index will not help a query on a low-selectivity dominant value (a partial index serves the rare value), a leading wildcard (needs trigram or full-text), or a function applied to the column (index the expression, as in `WHERE lower(email) = ?`), and every index taxes every write. Re-run the plan afterwards; if an index has no measured benefit, assess other agreed benefits and propose a safe rollback where appropriate, preserving existing work and obtaining required authorization. [Pattern](references/optimization-patterns.md#queries-that-ignore-their-index).
 - **Connection pool exhaustion.** Signature: *every* endpoint slows at once, time is spent waiting for a connection rather than executing, and the database shows mostly idle sessions. One pool per process, sized so `instances × max` stays under the database's connection ceiling. Bigger is not faster; it relocates the queue to the database where it is harder to see. With unbounded instance counts (serverless, autoscaling), multiplex through a proxy (pgbouncer, RDS Proxy) instead of raising `max`. [Pattern](references/optimization-patterns.md#connection-pool-exhaustion).
-- **Missing caching.** Cache what is expensive to produce and read far more often than it changes; caching an already-fast query adds a network hop and a staleness bug in exchange for nothing. Pick the layer deliberately (in-process, shared, CDN). Every input that changes the response belongs in the key (tenant, locale, permissions, feature flags): a key that omits the viewer is how one user's data gets served to another. Choose one invalidation strategy (TTL, event or tag based, versioned keys) and state the acceptable staleness window explicitly. Guard hot keys against the stampede: serve stale while one request recomputes, or coalesce concurrent misses behind a single in-flight promise. Never cache what must be fresh (balances, permissions, inventory at checkout). [Pattern](references/optimization-patterns.md#missing-caching-backend); request coalescing, write strategies, and negative caching in `../../references/performance-checklist.md`.
+- **Missing caching.** Cache what is expensive to produce and read far more often than it changes; caching an already-fast query adds a network hop and a staleness bug in exchange for nothing. Pick the layer deliberately (in-process, shared, CDN). Every input that changes the response belongs in the key (tenant, locale, permissions, feature flags): a key that omits the viewer is how one user's data gets served to another. Choose one invalidation strategy (TTL, event or tag based, versioned keys) and state the acceptable staleness window explicitly. Guard hot keys against the stampede: serve stale while one request recomputes, or coalesce concurrent misses behind a single in-flight promise. Never cache what must be fresh (balances, permissions, inventory at checkout). [Pattern](references/optimization-patterns.md#missing-caching-backend); request coalescing, write strategies, and negative caching in `.codex/ai-engineering/references/performance-checklist.md` from the project root.
 
 **Frontend**
 
@@ -150,12 +152,12 @@ Then decide, strictly:
 
 | Result vs. baseline | Action |
 |---|---|
-| Past the threshold, tests green | **Keep.** Commit with the before/after numbers in the message. |
-| Within noise (no measurable change) | **Revert.** |
-| Worse | **Revert.** |
-| Improved, but a test went red | **Revert.** A regression wearing a win's clothing. |
+| Past the threshold, tests green | **Keep.** Record before/after numbers; commit according to the authorized project Git workflow. |
+| Within noise (no measurable change) | Do not claim an improvement; assess whether the change has another agreed benefit. |
+| Worse | Do not accept as an optimization; investigate or propose a safe rollback. |
+| Improved, but a test went red | Investigate and fix the regression or propose a safe rollback. |
 
-**"Neutral" is a revert, not a keep.** This is the step teams skip: the change is already written, throwing it away feels wasteful, so it lands unmeasured, and the codebase accretes complexity that never bought anything. Code you keep, you maintain forever. Make it pay for itself.
+**"Neutral" should not be presented as a performance gain.** Assess whether the change has another agreed benefit. Preserve pre-existing or user-authored work; discard or reset changes only with the required authorization and follow `$git-workflow-and-versioning`.
 
 **Correctness gates the metric.** The suite stays green *and* the number moves. An "optimization" that wins by dropping work the product needed (skipping a validation, caching something that must be fresh, removing an `await` that was load-bearing) is a regression, not a win.
 
@@ -176,7 +178,7 @@ A section in the PR description or a `PERF.md` in the repo both work. What matte
 Guard the metric the user actually feels, not every available number. Use the
 same LCP, INP, p95 latency, or other primary metric that justified the fix.
 
-Use two complementary layers when the surface is user-facing:
+Choose applicable regression guards when justified and available; the following are web examples, not requirements for every platform:
 
 - **Synthetic CI gate:** Catch reproducible regressions before merge with a
   performance budget. Repeat noisy measurements or compare a median/trend so
@@ -188,7 +190,7 @@ Use two complementary layers when the surface is user-facing:
 When either guard fires, return to Step 1 and establish a fresh baseline before
 proposing another fix.
 
-**Set budgets and enforce them:**
+**Example web and API budgets:** agree relevant thresholds with the project; do not impose these values universally.
 
 ```
 JavaScript bundle: < 200KB gzipped (initial load)
@@ -211,7 +213,7 @@ npx --package=@lhci/cli lhci autorun
 
 ## See Also
 
-For detailed performance checklists, optimization commands, and anti-pattern reference, see `../../references/performance-checklist.md`.
+For detailed web performance checklists, optimization commands, and anti-pattern reference, see `.codex/ai-engineering/references/performance-checklist.md` from the project root.
 
 
 ## Common Rationalizations
@@ -226,7 +228,7 @@ For detailed performance checklists, optimization commands, and anti-pattern ref
 | "The query is slow, add an index" | Read the plan first. The index may already exist and be unusable, and every index taxes writes forever. |
 | "Just cache it" | Caching an already-cheap call buys nothing and adds a staleness bug. Cache what is expensive *and* re-read far more than written. |
 | "Raise the pool size, we're running out of connections" | A pool bigger than the database can serve moves the queue somewhere less visible. Find what holds connections. |
-| "It didn't help much, but it doesn't hurt" | Neutral changes are a revert. You pay maintenance on them forever and got nothing back. |
+| "It didn't help much, but it doesn't hurt" | An unmeasurable gain does not justify complexity by itself; assess other agreed benefits. |
 | "We already wrote it, may as well keep it" | Sunk cost. The measurement doesn't care how long the change took to write. |
 | "The improvement is obvious, no need to re-measure" | Then re-measuring is cheap and proves it. Unmeasured wins are how neutral complexity lands. |
 
@@ -241,7 +243,7 @@ For detailed performance checklists, optimization commands, and anti-pattern ref
 - List endpoints without pagination
 - Images without dimensions, lazy loading, or responsive sizes
 - Bundle size growing without review
-- No performance monitoring in production
+- Missing performance monitoring where the operating model and risk justify it
 - `React.memo` and `useMemo` everywhere (overusing is as bad as underusing)
 - Optimizations kept without a re-measurement that justifies them
 - Several optimizations bundled into one measurement, so no single change can be attributed
@@ -255,13 +257,12 @@ After any performance-related change:
 - [ ] Before and after measurements exist (specific numbers)
 - [ ] The result was re-measured the same way as the baseline (same command, same conditions)
 - [ ] The improvement exceeds run-to-run variance, not just the mean
-- [ ] Changes that didn't beat the baseline were reverted, not kept as neutral
+- [ ] Changes that did not beat the baseline were not claimed as improvements; any retention or safe rollback is justified
 - [ ] Attempts are logged, kept and reverted alike, so a dead idea isn't re-run
 - [ ] The specific bottleneck is identified and addressed
-- [ ] Core Web Vitals are within "Good" thresholds
-- [ ] Bundle size hasn't increased significantly
-- [ ] No N+1 queries in new data fetching code
+- [ ] Relevant platform-specific metrics and agreed targets are assessed; web vitals and bundle size only when applicable
+- [ ] Relevant new data fetching has been assessed for N+1 queries
 - [ ] Any new index is justified by a query plan before and after, and its write cost was considered
 - [ ] Any new cache states what it keys on and how it goes stale
-- [ ] The measured user-facing metric has a synthetic budget or field monitor that can detect regression
+- [ ] Appropriate regression checks or monitoring are considered for the measured metric, with unavailable checks reported
 - [ ] Existing tests still pass (optimization didn't break behavior)

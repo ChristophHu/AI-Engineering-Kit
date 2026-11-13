@@ -208,13 +208,15 @@ Check the author's verification story:
 
 ## Multi-Model Review Pattern
 
-Use different models for different review perspectives:
+Delegiere die Prüfung bei Anwendung dieses Skills an einen eigenen, unabhängigen Subagenten mit getrenntem Kontext, sofern Delegation in der Sitzung verfügbar und zulässig ist. Bevorzuge ein anderes Modell, wenn es verfügbar und für den Auftrag zugelassen ist; andernfalls nutze dasselbe Modell mit getrenntem Kontext. Die Hauptinstanz bewertet und integriert die Befunde. Ist kein Subagent oder kein getrennter Kontext verfügbar oder zulässig, melde die Einschränkung und kennzeichne eine gegebenenfalls durchgeführte Selbstprüfung ausdrücklich; behaupte keine unabhängige Prüfung. Beachte `.codex/rules/DELEGATION.md`.
+
+Ein mögliches Muster:
 
 ```
 Model A writes the code
     │
     ▼
-Model B reviews for correctness and architecture
+Independent subagent reviews for correctness and architecture (prefer Model B; otherwise Model A in a separate context)
     │
     ▼
 Model A addresses the feedback

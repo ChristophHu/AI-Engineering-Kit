@@ -20,8 +20,8 @@ Nutze diesen Skill, wenn eine Spec in konkrete Umsetzungsschritte überführt we
 10. Wenn die Änderung personenbezogene Daten betrifft, berücksichtige `$dsgvo` für Datenflüsse, Zugriff, Aufbewahrung/Löschung und offene rechtliche oder organisatorische Entscheidungen.
 11. Bei Release- oder Deployment-Arbeiten plane nach `$deploy`; erkenne dafür zuerst bestehende Umgebung, Provider, CI/CD und Rollback-Möglichkeiten.
 12. Bei Supabase-Änderungen plane Datenmodell, Schema-Workflow, RLS/Grants und geeignete Datenbankchecks mit `$backend-dev-supabase`.
-13. Bei NestJS-/PostgreSQL-Änderungen plane API-Module, Validierung, Authentifizierung/Autorisierung, Datenbankschema und Migrationen, Geheimnisverwaltung sowie die geschützte Swagger UI mit `$backend-dev-nestjs-postgres`.
-14. Bei C#-/ASP.NET-Core- und SQL-Server-Änderungen plane API-Struktur, Authentifizierung/Autorisierung, Datenzugriff und Migrationen, geschützte Swagger/OpenAPI-Endpunkte sowie den Windows-Server-/IIS-Betrieb mit `$backend-dev-csharp-sqlserver`.
+13. Bei NestJS-/PostgreSQL-Änderungen plane API-Module, Validierung, Authentifizierung/Autorisierung, Datenbankschema und Migrationen, Geheimnisverwaltung sowie die vereinbarte Swagger-Entscheidung mit `$backend-dev-nestjs-postgres`; falls bereitgestellt, plane Schutz und Prüfung der UI und des Dokuments.
+14. Bei C#-/ASP.NET-Core- und SQL-Server-Änderungen plane API-Struktur, Authentifizierung/Autorisierung, Datenzugriff und Migrationen, die vereinbarte Swagger-Entscheidung sowie den gewählten Hostingbetrieb mit `$backend-dev-csharp-sqlserver`; falls bereitgestellt, plane Schutz und Prüfung der UI und des Dokuments.
 15. Bei SQLite-Änderungen plane Datenbankort, Schema-/Migrationsworkflow, Haltbarkeit, konkurrierende Schreibzugriffe und — falls offlinefähig oder backendgekoppelt — Sync-Vertrag und Konfliktverhalten mit `$backend-dev-sqlite-data`.
 16. Wenn lokale Laufzeit, CLI, Konfiguration oder Zielumgebung Voraussetzung sind, plane einen Setup-Readiness-Check mit `$verify-setup` ein.
 

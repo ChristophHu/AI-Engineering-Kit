@@ -39,9 +39,9 @@ Use this skill when the project description or established codebase selects a Ne
 
 ## Protected Swagger / OpenAPI
 
-- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Recommend a visual Swagger UI when feasible; honor a previously agreed decision, and document any decision to omit it or technical limitation and an alternative. Do not proceed with creation while a material decision is unresolved. Describe DTO schemas, authentication schemes, relevant success/error responses, and versioning accurately when documentation is provided.
-- **Swagger UI and any served OpenAPI JSON/document endpoint must not be publicly reachable.** Protect them with an explicit server-side authentication/authorization mechanism appropriate to the project (for example, an authenticated operator/admin guard or deployment-level access control). Do not rely on an obscure URL, CORS, frontend routing, or an undocumented query token.
-- Default documentation endpoints to disabled or access-restricted in production unless the approved deployment design explicitly provides protected access. Production routes must remain inaccessible to anonymous and ordinary unauthorized users; test both allowed and denied access.
+- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Recommend Swagger/OpenAPI with visual Swagger UI as the default; honor a previously agreed decision and document any decision to omit it, its reason and any alternative. Do not proceed with creation while this decision is unresolved. Describe DTO schemas, authentication schemes, relevant success/error responses, and versioning accurately when documentation is provided.
+- **Swagger UI and any served OpenAPI JSON/document endpoint must not be publicly reachable.** Enforce a non-public network access path (for example VPN or private ingress) and explicit server-side authentication/authorization for intended operators. Authentication alone does not make a public URL private. Do not rely on an obscure URL, CORS, frontend routing, or an undocumented query token.
+- Default documentation endpoints to disabled in production unless the approved deployment design explicitly provides protected, non-public access. Test allowed and denied access where enabled; where disabled, verify both endpoints are unreachable.
 - Avoid embedding secrets, real credentials, internal hostnames, or sensitive example data in the OpenAPI document. Use non-sensitive examples and declare bearer/API authentication schemes without including actual tokens.
 - Document how authorized developers/operators reach the UI. If access control is provided by an ingress or identity-aware proxy, record that dependency and verify the application cannot be reached around it in the intended deployment topology.
 
@@ -52,8 +52,8 @@ Choose checks that match the change and existing repository setup. Relevant chec
 - apply migrations to a clean local/test database and confirm the resulting schema; verify migration ordering and rollback strategy where supported
 - run unit/integration tests for changed services, controllers, validation, transactions, and error mapping
 - exercise authenticated and unauthenticated requests, ownership/tenant boundaries, and expected denied operations
-- verify Swagger UI and OpenAPI document access for authorized operators and confirm anonymous/unauthorized requests are denied, including in production-equivalent configuration
-- validate the generated OpenAPI document against current DTOs and authentication behavior
+- if Swagger is provided, verify authorized access and denied anonymous/unauthorized access to both UI and document where enabled, including non-public network access; verify both endpoints are unreachable where disabled
+- if provided, validate the generated OpenAPI document against current DTOs and authentication behavior
 - validate the backend build and frontend integration against the API contract
 - confirm environment configuration uses the intended database without revealing its URL or credentials
 

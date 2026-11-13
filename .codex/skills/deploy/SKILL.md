@@ -57,7 +57,7 @@ Do not invent deployment infrastructure or add a new provider when an existing p
 - For IIS, verify the required Hosting Bundle/runtime, app pool identity and permissions, HTTPS bindings, routing/forwarded headers, health checks, and whether deployment is in-process or out-of-process according to the existing configuration.
 - Keep SQL Server connection details in the approved server-side configuration or secret store. Verify the deployed API can reach only the intended database; do not expose connection strings in logs or reports.
 - Review SQL Server migration scripts/bundles and backup/rollback requirements before deployment. Keep application deployment and schema migration order compatible with active application versions.
-- Confirm Swagger UI and OpenAPI document endpoints remain protected in the deployed topology; verify anonymous and unauthorized requests are denied.
+- If Swagger is provided, confirm UI and OpenAPI document endpoints are protected and non-public in the deployed topology; verify allowed and denied access where enabled, and that both endpoints are unreachable where disabled.
 
 ## Deploy and verify
 

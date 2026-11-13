@@ -346,7 +346,9 @@ For detailed DevTools setup instructions and workflows, see `browser-testing-wit
 
 ## When to Use Subagents for Testing
 
-For complex bug fixes, spawn a subagent to write the reproduction test:
+Delegiere bei Anwendung dieses Skills die unabhängige Prüfung der Tests und ihrer Aussagekraft an einen eigenen Subagenten mit getrenntem Kontext, sofern Delegation verfügbar und zulässig ist. Bevorzuge ein anderes Modell, wenn verfügbar und für den Auftrag autorisiert; andernfalls nutze dasselbe Modell im getrennten Kontext. Die Hauptinstanz prüft und integriert die Ergebnisse. Ist kein Subagent oder getrennter Kontext verfügbar oder zulässig, melde die Einschränkung und kennzeichne eine mögliche Selbstprüfung; stelle sie nicht als unabhängig dar. Beachte `.codex/rules/DELEGATION.md`.
+
+For complex bug fixes, the subagent may also write the reproduction test:
 
 ```
 Main agent: "Spawn a subagent to write a test that reproduces this bug:

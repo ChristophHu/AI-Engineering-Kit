@@ -5,7 +5,7 @@ description: Plan, implement, or review Supabase database, authentication, autho
 
 # Supabase Backend Development
 
-Before creating a backend with an API, follow `.codex/rules/ARCHITECTURE.md` to resolve the backend type, hosting constraints and the developer's explicit Swagger/OpenAPI decision. Recommend a visual Swagger UI where feasible; establish the managed service's supported documentation and access controls before promising an integration. Record a decision to omit it or technical limitation and an alternative. Protect any provided UI and OpenAPI document from public and unauthorized access.
+Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type and hosting constraints. Supabase alone requires neither a Swagger decision nor a Swagger implementation. If a separate NestJS or C# API is also selected, follow that API's Swagger decision and protection rules. Protect any Swagger UI or OpenAPI document actually provided from public and unauthorized access.
 
 Use this skill when a project uses Supabase for backend behavior. It supports SwiftUI, Next.js, and Angular clients. Follow the approved Spec and Plan for substantial changes; use `$spec-driven-development` and `$feature-planning` when requirements or scope need to be clarified first.
 

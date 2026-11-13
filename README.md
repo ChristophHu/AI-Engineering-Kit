@@ -22,7 +22,7 @@ Das Skript fügt einer vorhandenen `AGENTS.md` einen markierten Kit-Abschnitt hi
 
 Nach der Installation fragt das Skript interaktiv nach einer ersten Projektbeschreibung und speichert sie als ursprüngliche Idee unter `.codex/IDEA.md`. Als Orientierung nennt es mögliche Inhalte wie Projektziel, Plattform und Frontend-Technologie (z. B. Next.js oder Angular), Anwendungsstruktur, Systemdesign, Referenzprodukt, Nutzer, Monetarisierung, Integrationen und Datenbankstrukturen. Bei nicht-interaktiver Ausführung wird dort eine ausfüllbare Vorlage mit diesen Hinweisen angelegt.
 
-Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
+Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git-workflow-and-versioning`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
 
 ## Projektarbeit nach der Installation starten
 

@@ -8,7 +8,7 @@ Plattform(en), betroffene Komponenten und begründete technische Entscheidungen.
 
 - Backend-Art und Hosting (einschließlich Serverbetriebssystem):
 - Bei abweichenden oder widersprüchlichen Vorgaben: Entscheidung des Entwicklers und Begründung:
-- Swagger/OpenAPI und visuelle Swagger UI: Entwicklerentscheidung, gegebenenfalls Grund für Verzicht oder fehlende technische Möglichkeit und Alternative; bei Bereitstellung geschützter Zugang zu UI und Dokument:
+- Bei NestJS-/C#-API: ausdrückliche Swagger-Entscheidung (empfohlener Standard: Swagger/OpenAPI mit UI), gegebenenfalls Verzichtsgrund und Alternative; bei Bereitstellung Zugangsschutz, Umgebungen und Prüfung für UI und Dokument. Bei Supabase oder SQLite allein nicht erforderlich:
 
 ### Native Apple-App
 - UI-Technologie und Deployment-Ziel:

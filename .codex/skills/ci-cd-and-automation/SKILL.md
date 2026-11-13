@@ -7,7 +7,7 @@ description: Automates CI/CD pipeline setup. Use when setting up or modifying bu
 
 ## Overview
 
-Automate quality gates so that no change reaches production without passing tests, lint, type checking, and build. CI/CD is the enforcement mechanism for every other skill — it catches what humans and agents miss, and it does so consistently on every single change.
+Automate project-appropriate quality gates for the supported platforms, changes, and deployment targets. Preserve the project's established required checks and report unavailable or failing checks.
 
 **Shift Left:** Catch problems as early in the pipeline as possible. A bug caught in linting costs minutes; the same bug caught in production costs hours. Move checks upstream — static analysis before tests, tests before staging, staging before production.
 
@@ -23,7 +23,7 @@ Automate quality gates so that no change reaches production without passing test
 
 ## The Quality Gate Pipeline
 
-Every change goes through these gates before merge:
+The following is an illustrative JavaScript web pipeline, not a mandatory list for every project. Select applicable checks for the actual stack, supported Apple or web platforms, change and risk, and existing CI conventions:
 
 ```
 Pull Request Opened
@@ -51,7 +51,7 @@ Pull Request Opened
   Ready for review
 ```
 
-**No gate can be skipped.** If lint fails, fix lint — don't disable the rule. If a test fails, fix the code — don't skip the test.
+Do not silently bypass an applicable required gate or weaken a check to obtain a pass. Investigate failures and report blockers; any exception follows the project's authorized process. A gate that is not applicable is not a failed gate.
 
 ## GitHub Actions Configuration
 
@@ -303,6 +303,8 @@ updates:
 Designate someone responsible for keeping CI green. When the build breaks, the Build Cop's job is to fix or revert — not the person whose change caused the break. This prevents broken builds from accumulating while everyone assumes someone else will fix it.
 
 ### PR Checks
+
+The following are examples; apply the repository's established review, branch protection and merge rules. Do not enable auto-merge or change remote policy without authorization.
 
 - **Required reviews:** At least 1 approval before merge
 - **Required status checks:** CI must pass before merge

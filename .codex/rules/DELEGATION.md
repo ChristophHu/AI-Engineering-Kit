@@ -7,8 +7,9 @@ Projekt- und Sitzungsanweisungen, Nutzeraufträge sowie die tatsächlich verfüg
 ## Wann delegiert wird
 
 - Delegiere, wenn mehrere klar trennbare Teilaufgaben parallel untersucht, umgesetzt oder geprüft werden können und das Ergebnis den zusätzlichen Koordinationsaufwand wert ist.
+- Bei Anwendung von `$code-review-and-quality`, `$doubt-driven-development` oder `$test-driven-development` nutze einen eigenen Prüfsubagenten mit getrenntem Kontext, sofern verfügbar und zulässig. Bevorzuge ein anderes verfügbares und autorisiertes Modell; andernfalls verwende dasselbe Modell mit getrenntem Kontext. Wenn dies nicht möglich ist, berichte die Einschränkung und kennzeichne eine Selbstprüfung ausdrücklich.
 - Bevorzuge für die ersten Delegationen lesende Aufgaben wie Codebase-Erkundung, Recherche, Triage und Review.
-- Bearbeite kurze, stark voneinander abhängige oder triviale Aufgaben selbst.
+- Bearbeite kurze, stark voneinander abhängige oder triviale Aufgaben selbst, sofern nicht ein tatsächlich angewandter Skill eine unabhängige Prüfung vorsieht.
 - Delegiere keine wesentliche Produkt- oder Architekturentscheidung, die dem Nutzer vorbehalten ist. Sammle bei Bedarf Entscheidungsgrundlagen und frage den Nutzer.
 - Erzeuge keine Agenten nur zur Auslastung. Begrenze die Anzahl auf die unabhängigen Teilaufgaben.
 
