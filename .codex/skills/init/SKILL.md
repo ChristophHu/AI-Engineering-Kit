@@ -11,14 +11,18 @@ Help the user turn a raw idea into a clear product vision and a prioritized feat
 
 This skill is for new projects, early product concepts, or existing projects whose purpose and scope are still unclear. For a well-defined feature in an established project, use `$spec-driven-development` instead.
 
-## Before starting
+## Einstieg und Reihenfolge
 
-1. Read `AGENTS.md`, `.codex/PROJECT.md`, existing project documentation, and the relevant repository structure before asking questions.
-2. If present, inspect `docs/PRD.md` and `features/INDEX.md`; distinguish an empty scaffold from an already completed product brief and feature map. Also inspect existing `docs/data-model.md`, `docs/app-shell.md`, and `docs/design-system.md` rather than creating parallel artifacts.
-3. Detect the project's working language from its instructions and existing product documents. Conduct the interview and write artifacts in that language. When an English scaffold is being filled for a project using another language, translate headings and guiding prose while preserving filenames and HTML comments. Do not create or edit `CLAUDE.md` for a Codex project. If the working language is genuinely unclear, ask one question with a recommended language and record the choice in the project brief.
-4. If `docs/PRD.md` or the project's canonical product brief is already substantively complete, do not repeat initialization or overwrite it. Tell the user this project is initialized and recommend `$spec-driven-development` for a feature or a targeted update to a specific artifact. Stop and ask which direction they want to take. End that handoff turn with exactly one question on the final line and wait. Continue only if the user explicitly asks for a targeted missing artifact or update.
+`$init` ist der Einstieg für die Projektinitialisierung und koordiniert die folgenden Schritte. Beachte zunächst `AGENTS.md` und verbindliche Projektanweisungen sowie den Git-Workflow nach der Installation. Lies `.codex/PROJECT.md` erst nach Abschluss der Ideenschärfung; lies sie auch nicht indirekt über einen anderen Skill oder ein Hilfswerkzeug.
 
-The short description written by the installer in `.codex/PROJECT.md` is not by itself a completed product initialization.
+1. Lies `.codex/IDEA.md` als ursprüngliche Projektbeschreibung und berücksichtige zusätzliche Angaben aus dem Gespräch. Fehlt sie oder enthält sie nur die leere Installationsvorlage, bitte den Nutzer um die Idee und halte sie in `.codex/IDEA.md` fest. Bewahre eine bereits ausgefüllte ursprüngliche Idee unverändert; frage nur fehlende wesentliche Angaben nach. Stelle genau eine Frage pro Gesprächsrunde und warte auf die Antwort.
+2. Ziehe `$interview-me` heran, wenn Ziel, Zielgruppe, Erfolg oder wesentliche Grenzen noch unklar sind. Übernimm bekannte Antworten und Entscheidungen; wiederhole keine geklärten Fragen. Das Interview klärt die Absicht, `$init` bleibt für den Gesamtprozess zuständig.
+3. Schärfe `.codex/IDEA.md` mit `$idea-refine` zu Problem, Zielgruppe, sinnvoller Lösungsrichtung, Annahmen und erstem Umfang. Nutze vorhandene Entscheidungen, frage nur offene wesentliche Punkte und beachte die Gesprächsregeln von `$init`. Stimme die Richtung mit dem Nutzer ab. `$idea-refine` erstellt danach die konkrete Ausarbeitung in `.codex/PROJECT.md` mit einem Verweis auf `.codex/IDEA.md`; die ursprüngliche Idee bleibt erhalten.
+4. Erst nach der abgestimmten Ideenschärfung lies die erstellte `.codex/PROJECT.md`, vorhandene Projektdokumentation und relevante Repository-Struktur. Falls `.codex/PROJECT.md` bereits existiert, lies sie erst nach der Ideenschärfung und vor einem Schreibzugriff, vergleiche sie mit der geschärften Idee und kläre wesentliche Widersprüche mit dem Nutzer; überschreibe keine vorhandenen Inhalte stillschweigend.
+5. Untersuche gegebenenfalls `docs/PRD.md`, `features/INDEX.md`, `docs/data-model.md`, `docs/app-shell.md` und `docs/design-system.md`. Wenn der kanonische Produktbrief bereits substanziell vollständig ist, initialisiere ihn nicht erneut und überschreibe ihn nicht. Informiere den Nutzer und empfehle `$spec-driven-development` für eine Funktion oder eine gezielte Aktualisierung; frage nach der gewünschten Richtung und warte.
+6. Ermittle die Projektsprache aus den Anweisungen und Unterlagen und verwende sie für Gespräch und Artefakte. Übersetze bei Bedarf Überschriften und Anleitungstexte eines englischen Scaffolds, ohne Dateinamen oder HTML-Kommentare zu ändern. Erstelle oder bearbeite kein `CLAUDE.md`. Ist die Sprache unklar, stelle eine Frage mit Empfehlung.
+
+Die vom Installer in `.codex/IDEA.md` angelegte erste Beschreibung ist noch keine abgeschlossene Produktinitialisierung. Die durch `$idea-refine` erstellte `.codex/PROJECT.md` dokumentiert die konkretisierte Richtung und wird im weiteren Verlauf behutsam ergänzt.
 
 ## The Discovery Interview
 
@@ -36,11 +40,11 @@ This is the most important interaction rule of this skill. During the interview 
 - Ask exactly one question per turn. Never bundle questions or present a questionnaire.
 - Include a recommended answer with every question so the user can confirm or correct it. Make clear that it is a recommendation, not a presumed decision.
 - Follow the conversation. Choose each next question based on the user's answer and open relevant branches; do not follow a fixed script mechanically.
-- Explore before asking. Read existing project files, instructions, product notes, manifests, and relevant code to answer questions the repository can already resolve.
+- Explore before asking where possible, while observing the sequence above: do not read `.codex/PROJECT.md` before idea refinement; afterwards consult existing project files and code before asking again.
 - Do not impose a fixed question count. Continue while an unresolved decision could materially change the product vision, scope, or feature priorities.
 - Keep questions focused and avoid asking again for information already established. Mark facts, user decisions, and assumptions distinctly.
 - If the user does not know an answer, offer a concrete recommended default, explain its practical impact briefly, and record it as an assumption until confirmed.
-- If the user provides a full briefing, treat it as interview input: extract and retain decisions already provided, inspect the repository for more context, and do not ask the user to repeat resolved points. Ask only about material gaps, including the required backend/environment, privacy, and design-system decisions when they are still unresolved. If no material gaps remain, prepare the artifacts and move to the review checkpoint without filler questions.
+- If the user provides a full briefing, retain its decisions as input to idea refinement; inspect the repository for additional context after refinement. Do not ask the user to repeat resolved points. Ask only about material gaps, including backend/environment, privacy, and design-system decisions when unresolved. If no material gaps remain, prepare the artifacts and move to the review checkpoint without filler questions.
 
 Explore the areas that matter to this project, adapting the order and depth to the answers:
 

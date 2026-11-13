@@ -39,4 +39,4 @@ Halte die bestehenden Grenzen zwischen UI, Anwendungsverhalten, Persistenz und S
 
 ## UI-Verifikation übergeben
 
-Nutze bei UI-Änderungen `$frontend-design-accessibility` für eine gezielte Qualitätsprüfung und `$verify-ui` zur Auswahl und Dokumentation relevanter Prüfungen. Halte das tatsächliche Bereitstellungsziel und die Verfügbarkeit von Simulator oder Gerät im Prüfplan fest; behaupte keine nicht ausgeführte Prüfung.
+Nutze bei UI-Änderungen `$frontend-design-accessibility` für eine gezielte Qualitätsprüfung und `$verify-ui` zur Auswahl und Dokumentation relevanter Prüfungen. Ziehe für SwiftUI-Oberflächen auf iOS und iPadOS zusätzlich `$native-ios-design` heran; bei macOS nutze daraus nur plattformübergreifend passende Hinweise. Beachte jeweils die unterstützten Betriebssystemversionen und bestehenden Projektkonventionen, insbesondere bei Liquid Glass. Halte das tatsächliche Bereitstellungsziel und die Verfügbarkeit von Simulator oder Gerät im Prüfplan fest; behaupte keine nicht ausgeführte Prüfung.

@@ -7,6 +7,8 @@ description: Design or review user interfaces in native Apple and web apps for r
 
 Use this skill when creating or reviewing app UI, interaction patterns, or accessibility. It covers SwiftUI and browser-based interfaces; it does not prescribe a visual brand or replace the platform's native conventions.
 
+For native SwiftUI interfaces on iOS and iPadOS, also use `$native-ios-design`; for macOS, apply only its cross-platform guidance that fits macOS conventions. Respect the project's supported OS versions and existing design, especially before using Liquid Glass APIs.
+
 ## Inspect before designing
 
 1. Read project instructions, `.codex/PROJECT.md`, `docs/design-system.md` if present, relevant Specs, and existing design or accessibility guidance.

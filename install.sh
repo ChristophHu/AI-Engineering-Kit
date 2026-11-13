@@ -49,6 +49,10 @@ if [[ -e "$KIT_DEST/PROJECT.md" ]]; then
   printf 'Fehler: %s existiert bereits; die Projektbeschreibung wird nicht überschrieben.\n' "$KIT_DEST/PROJECT.md" >&2
   exit 1
 fi
+if [[ -e "$KIT_DEST/IDEA.md" ]]; then
+  printf 'Fehler: %s existiert bereits; die ursprüngliche Idee wird nicht überschrieben.\n' "$KIT_DEST/IDEA.md" >&2
+  exit 1
+fi
 
 mkdir -p "$TARGET_DIR/.agents/skills"
 for skill_dir in "$KIT_SOURCE"/skills/*; do
@@ -85,7 +89,7 @@ for skill_dir in "$KIT_DEST"/skills/*; do
   cp -R "$skill_dir" "$skill_dest"
 done
 
-PROJECT_FILE="$KIT_DEST/PROJECT.md"
+PROJECT_FILE="$KIT_DEST/IDEA.md"
 if [[ -t 0 ]]; then
   printf 'AI Engineering Kit installiert in %s\n\n' "$TARGET_DIR"
   printf 'Beschreibe jetzt das Projekt. Du kannst zum Beispiel Ziel, Plattform (native Apple-App oder Web-App), Frontend (z. B. Next.js oder Angular), Anwendungsstruktur, Systemdesign, Technologien, Referenzprodukt, Nutzer, Monetarisierung, Integrationen und Datenbankstrukturen beschreiben.\n'
