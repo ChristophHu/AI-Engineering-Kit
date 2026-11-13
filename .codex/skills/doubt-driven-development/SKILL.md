@@ -41,7 +41,7 @@ If you doubt every keystroke, you ship nothing. The skill applies only to non-tr
 
 ## Loading Constraints
 
-This skill is intended for the **main-session coordinator**. Follow `../../rules/DELEGATION.md` and `../../rules/references/orchestration-patterns.md`; check whether a suitably independent reviewer and delegation are actually available and permitted in the current session. A profile or read-only instruction is not a technical sandbox. Do not assume that nested delegation is technically impossible or authorized. If independent review is unavailable, report that limitation and, if useful, perform a clearly labeled self-review without presenting it as fresh-context review.
+This skill is intended for the **main-session coordinator**. Follow `../../rules/DELEGATION.md`; check whether a suitably independent reviewer and delegation are actually available and permitted in the current session. A profile or read-only instruction is not a technical sandbox. Do not assume that nested delegation is technically impossible or authorized. If independent review is unavailable, report that limitation and, if useful, perform a clearly labeled self-review without presenting it as fresh-context review.
 
 ## The Process
 
@@ -225,7 +225,7 @@ If 3 cycles is "obviously insufficient" because the artifact is large: the artif
 - **`source-driven-development`**: SDD verifies *facts about frameworks* against official docs. Doubt-driven verifies *your reasoning about the artifact*. SDD checks the API exists; doubt-driven checks you used it correctly under the contract.
 - **`test-driven-development`**: TDD's RED step is doubt made concrete — a failing test is a disproof attempt. When TDD applies, that failing test *is* the doubt step for behavioral claims.
 - **`debugging-and-error-recovery`**: when the reviewer surfaces a real failure mode, drop into the debugging skill to localize and fix.
-- **Orchestrierungsregeln** (`../../rules/references/orchestration-patterns.md`): Die Hauptinstanz koordiniert zulässige Prüfaufträge und beurteilt die Ergebnisse; vermeide unnötige Agentenebenen und unkontrollierte Verschachtelung.
+- **Orchestrierungsregeln** (`../../rules/DELEGATION.md`): Die Hauptinstanz koordiniert zulässige Prüfaufträge und beurteilt die Ergebnisse; vermeide unnötige Agentenebenen und unkontrollierte Verschachtelung.
 
 ## Verification
 

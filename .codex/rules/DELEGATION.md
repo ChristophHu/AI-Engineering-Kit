@@ -2,7 +2,7 @@
 
 Diese Regeln gelten, wenn Codex Projektarbeit an Subagenten delegiert. Delegation dient der gezielten Aufteilung unabhängiger Arbeit; sie ersetzt weder Produktentscheidungen noch die Verantwortung der Hauptinstanz.
 
-Ergänzende Beispiele und Entscheidungshilfen stehen in [Orchestrierungsmuster für Codex](references/orchestration-patterns.md). Maßgeblich bleiben die hier beschriebenen Regeln sowie die Berechtigungen und Werkzeuge der jeweiligen Sitzung.
+Projekt- und Sitzungsanweisungen, Nutzeraufträge sowie die tatsächlich verfügbaren Werkzeuge und Berechtigungen haben Vorrang. Codex-Oberflächen und Konfigurationen können sich unterscheiden; prüfe die verfügbaren Rollen und Werkzeuge in der jeweiligen Sitzung. Eine Profildatei garantiert weder ihre Registrierung noch eine technische Schreibsperre. Gleiche Einrichtungsfragen mit der [offiziellen Codex-Dokumentation zu Subagenten](https://developers.openai.com/codex/multi-agent) und der tatsächlichen Umgebung ab.
 
 ## Wann delegiert wird
 
@@ -37,6 +37,19 @@ Bei Schreibaufträgen gilt: Agenten teilen denselben Arbeitsbereich. Weise daher
 - Prüfe Agentenergebnisse auf Belege, Scope, Konflikte und offene Annahmen. Übernimm Vorschläge nicht ungeprüft.
 - Führe Ergebnisse zusammen, löse Überschneidungen und prüfe den integrierten Stand gegen die Abnahmekriterien. Bei Codeänderungen prüfe auch den resultierenden Diff und führe nur autorisierte, passende Verifikation aus.
 - Berichte im Abschluss knapp, welche Arbeit delegiert wurde, welche Ergebnisse übernommen wurden und welche Checks oder offenen Punkte verbleiben.
+
+## Orchestrierungsmuster
+
+Wähle das Muster passend zur Aufgabe und zu den geltenden Sitzungsanweisungen:
+
+1. **Direkte Bearbeitung:** Kurze, eindeutige oder stark voneinander abhängige Aufgaben bearbeitet die Hauptinstanz selbst, etwa eine einzelne Dokumentationskorrektur.
+2. **Abgegrenzter Einzelauftrag:** Ein passender Subagent untersucht oder bearbeitet einen klar umrissenen Teil und liefert belegte Ergebnisse an die Hauptinstanz. Beispielsweise eignet sich `codebase-explorer.toml` für eine Bestandsaufnahme und `code-reviewer.toml` für ein Review, sofern die Rolle verfügbar ist.
+3. **Parallele unabhängige Aufgaben:** Unabhängige Untersuchungen oder Änderungen können parallel erfolgen, wenn Delegation zulässig ist und der Nutzen den Koordinationsaufwand rechtfertigt. Weise bei Änderungen eindeutige Dateien oder Module zu und erhalte die Arbeit anderer. Die Hauptinstanz wartet auf benötigte Ergebnisse, prüft sie und führt sie zusammen.
+4. **Abhängige Arbeitsschritte:** Spec, Planung, Umsetzung und Verifikation folgen `.codex/rules/WORKFLOW.md`. Die Hauptinstanz koordiniert sie im Rahmen des Auftrags, übernimmt bestehende Entscheidungen und hält vereinbarte Rückfragen oder Freigaben ein. Nicht jede Phase benötigt einen eigenen Agenten oder Slash-Befehl.
+5. **Unabhängige Prüfung:** Eine möglichst unabhängige Prüfung untersucht einen abgegrenzten Stand anhand der Anforderungen und relevanten Kontextdateien. Verlange Befunde mit Belegen und Auswirkungen; die Hauptinstanz bewertet sie. Sind unabhängige Agenten, getrennte Kontexte oder Werkzeuge nicht verfügbar oder erlaubt, benenne die Einschränkung; eine Selbstprüfung ist kein unabhängiges Review.
+6. **Konkurrierende Ursachen:** Bei mehreren plausiblen Ursachen können zulässige, unabhängige Untersuchungen Hypothesen und unterscheidbare Belege prüfen. Vergleiche Ergebnisse anhand von Code, Logs und geeigneten Prüfungen; Übereinstimmung allein beweist keine Ursache.
+
+Vermeide zusätzliche Agentenebenen ohne konkreten Nutzen, unklare Dateiverantwortung und unkontrollierte Verschachtelung. Gib bei Übergaben Anforderungen, Gegenbelege, Abhängigkeiten und offene Entscheidungen weiter. Prüfe vor jeder Delegation, ob sie zulässig ist, die Aufgabe klar abgegrenzt ist, die Rolle und Werkzeuge verfügbar sind und die Hauptinstanz das Ergebnis prüfen und integrieren kann. Andernfalls bearbeite die Aufgabe selbst oder melde die konkrete Einschränkung.
 
 ## Agentenprofile
 
