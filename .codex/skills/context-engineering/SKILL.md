@@ -65,7 +65,7 @@ Create a rules file that persists across sessions. This is the highest-leverage 
 - Never commit .env files or secrets
 - Never add dependencies without checking bundle size impact
 - Ask before modifying database schema
-- Always run tests before committing
+- Run checks appropriate to the change and project before committing; report unresolved required checks
 
 ## Patterns
 [One short example of a well-written component in your style]
@@ -132,7 +132,7 @@ A fresh session is safe at a completed task boundary, not at an arbitrary token 
 
 Commit the completed task only when the user or repository workflow authorizes it. Otherwise, leave the working tree intact and record that the changes are uncommitted.
 
-In the fresh session, read the rules, spec, plan, task status, and actual `git status` before acting. Re-run verification when its recorded baseline is missing, the code has moved, or the next task depends on it. Do not infer approval from a previous conversation unless the durable artifact records it.
+In the fresh session, read the rules, spec, plan, task status, and actual `git status` before acting. Re-run verification when its recorded baseline is missing, the code has moved, or the next task depends on it. Honor earlier user decisions and authorizations when supported by available conversation context or durable records and still applicable. If essential context is missing or contradictory, ask for clarification rather than inventing approval. When the conversation is unavailable after a restart, durable records are important evidence; do not assume an unrecorded decision.
 
 An external harness may automate exit and restart between these boundaries. That loop must treat the artifacts and repository state as the source of truth, preserve human approval gates, and distinguish a completed task from a crashed process. The skill defines the handoff contract; process supervision and model selection belong to the harness.
 

@@ -359,7 +359,7 @@ For every commit:
 
 - [ ] Commit does one logical thing
 - [ ] Message explains the why, follows type conventions
-- [ ] Tests pass before committing
+- [ ] Zur Änderung und zum Projekt passende Prüfungen wurden durchgeführt; erforderliche fehlgeschlagene oder nicht ausführbare Prüfungen sind offen benannt und vor einem Commit entsprechend den Projektvorgaben geklärt
 - [ ] No secrets in the diff
 - [ ] No formatting-only changes mixed with behavior changes
 - [ ] `.gitignore` covers standard exclusions

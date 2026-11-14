@@ -159,7 +159,7 @@ Then decide, strictly:
 
 **"Neutral" should not be presented as a performance gain.** Assess whether the change has another agreed benefit. Preserve pre-existing or user-authored work; discard or reset changes only with the required authorization and follow `$git-workflow-and-versioning`.
 
-**Correctness gates the metric.** The suite stays green *and* the number moves. An "optimization" that wins by dropping work the product needed (skipping a validation, caching something that must be fresh, removing an `await` that was load-bearing) is a regression, not a win.
+**Correctness gates the metric.** Run tests relevant to the change and checks required by the project; report pre-existing failures and required checks not run as open. Do not claim a verified improvement if required correctness checks remain unresolved. An "optimization" that wins by dropping work the product needed (skipping a validation, caching something that must be fresh, removing an `await` that was load-bearing) is a regression, not a win.
 
 #### Log every attempt, including the reverted ones
 
@@ -265,4 +265,4 @@ After any performance-related change:
 - [ ] Any new index is justified by a query plan before and after, and its write cost was considered
 - [ ] Any new cache states what it keys on and how it goes stale
 - [ ] Appropriate regression checks or monitoring are considered for the measured metric, with unavailable checks reported
-- [ ] Existing tests still pass (optimization didn't break behavior)
+- [ ] Relevant and project-required tests were run; failures and required checks not run are reported as open

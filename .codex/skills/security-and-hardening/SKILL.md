@@ -52,7 +52,9 @@ If you can't name the trust boundaries for a feature, you're not ready to secure
 - **Use httpOnly, secure, sameSite cookies** for sessions
 - **Run the detected package manager's native audit** against the committed lockfile before every release
 
-### Ask First (Requires Human Approval)
+### Klärung und Autorisierung
+
+Prüfe bei den folgenden Änderungen zuerst den Auftrag und bereits erteilte, einschlägige Autorisierungen. Ist die konkrete Änderung bereits eindeutig beauftragt und zulässig, arbeite innerhalb dieses Umfangs weiter, ohne erneut um dieselbe Zustimmung zu bitten. Kläre wesentliche offene Entscheidungen und hole tatsächlich erforderliche Freigaben für nicht autorisierte oder zusätzlich freigabepflichtige Aktionen ein; bestehende Projekt- und Sitzungsgrenzen gelten weiterhin.
 
 - Adding new authentication flows or changing auth logic
 - Storing new categories of sensitive data (PII, payment info)
