@@ -1,15 +1,15 @@
 ---
 name: init
-description: Turn a raw app idea into an agreed product brief, design-system direction, and prioritized feature map through an adaptive one-question-at-a-time interview before coding.
+description: Entwickelt eine ursprüngliche App-Idee vor der Implementierung durch ein angepasstes Interview mit jeweils einer Frage zu einem abgestimmten Produktbrief, einer Designsystemrichtung und einer priorisierten Feature-Map.
 ---
 
 # Init
 
-## Goal
+## Ziel
 
-Help the user turn a raw idea into a clear product vision and a prioritized feature map before implementation code is written. Use a focused discovery interview to uncover decisions that would otherwise lead to the wrong product or features.
+Hilf dem Nutzer, eine ursprüngliche Idee vor dem Schreiben von Implementierungscode in eine klare Produktvision und eine priorisierte Feature-Map zu überführen. Decke in einem gezielten Interview Entscheidungen auf, deren Fehlen andernfalls zum falschen Produkt oder zu unpassenden Funktionen führen könnte.
 
-This skill is for new projects, early product concepts, or existing projects whose purpose and scope are still unclear. For a well-defined feature in an established project, use `$spec-driven-development` instead.
+Dieser Skill ist für neue Projekte, frühe Produktkonzepte oder bestehende Projekte mit noch unklarem Zweck und Umfang bestimmt. Nutze für eine klar definierte Funktion in einem etablierten Projekt stattdessen `$spec-driven-development`.
 
 ## Einstieg und Reihenfolge
 
@@ -21,163 +21,163 @@ Für die Auswahl passender Skills während und nach der Initialisierung beachte 
 2. Prüfe eine vorhandene `.codex/PROJECT.md` und die Angaben im Gespräch auf bereits abgeschlossene Ideenschärfung und bestätigte Entscheidungen. Ziehe `$interview-me` nur heran, wenn Ziel, Zielgruppe, Erfolg oder wesentliche Grenzen weiterhin unklar sind. Übernimm bekannte Antworten und Entscheidungen; wiederhole keine geklärten Fragen. Das Interview klärt die Absicht, `$init` bleibt für den Gesamtprozess zuständig.
 3. Wenn die Ideenschärfung noch nicht abgeschlossen ist, nutze `$idea-refine` für `.codex/IDEA.md`: Problem, Zielgruppe, Lösungsrichtung, Annahmen und erster Umfang werden abgestimmt. `$idea-refine` erstellt danach die Ausarbeitung in `.codex/PROJECT.md` mit Verweis auf `.codex/IDEA.md`. Ist eine abgeschlossene Ideenschärfung bereits im Gespräch oder in Projektunterlagen nachvollziehbar, übernimm ihr Ergebnis und starte `$idea-refine` nicht erneut.
 4. Lies nach der Ideenschärfung die `.codex/PROJECT.md`, vorhandene Projektdokumentation und relevante Repository-Struktur. Übernimm bereits geklärtes Problem, Zielgruppe und Lösungsrichtung; frage nur nach fehlenden Angaben für Produktvision, Designsystem, Backend und Feature-Map. Kläre konkrete Widersprüche, ohne eine erneute Ideenschärfung zu beginnen oder vorhandene Inhalte stillschweigend zu überschreiben.
-5. Untersuche gegebenenfalls `docs/PRD.md`, `features/INDEX.md`, `docs/data-model.md`, `docs/app-shell.md` und `docs/design-system.md`. Wenn der kanonische Produktbrief bereits substanziell vollständig ist, initialisiere ihn nicht erneut und überschreibe ihn nicht. Informiere den Nutzer und empfehle `$spec-driven-development` für eine Funktion oder eine gezielte Aktualisierung; frage nach der gewünschten Richtung und warte.
+5. Untersuche gegebenenfalls `docs/PRD.md`, `features/INDEX.md`, `docs/data-model.md`, `docs/app-shell.md` und `docs/design-system.md`. Wenn der kanonische Produktbrief bereits substanziell vollständig ist, initialisiere ihn nicht erneut und überschreibe ihn nicht. Liegt ein eindeutiger Folgeauftrag vor, informiere den Nutzer und fahre im autorisierten Umfang mit `$spec-driven-development` für die Funktion oder gezielte Aktualisierung fort. Ist die gewünschte Richtung tatsächlich unklar, frage nach und warte.
 6. Ermittle die Projektsprache aus den Anweisungen und Unterlagen und verwende sie für Gespräch und Artefakte. Übersetze bei Bedarf Überschriften und Anleitungstexte eines englischen Scaffolds, ohne Dateinamen oder HTML-Kommentare zu ändern. Erstelle oder bearbeite kein `CLAUDE.md`. Ist die Sprache unklar, stelle eine Frage mit Empfehlung.
 
 Die vom Installer in `.codex/IDEA.md` angelegte erste Beschreibung ist noch keine abgeschlossene Produktinitialisierung. Die durch `$idea-refine` erstellte `.codex/PROJECT.md` dokumentiert die konkretisierte Richtung und wird im weiteren Verlauf behutsam ergänzt.
 
-## The Discovery Interview
+## Das Erkundungsinterview
 
-Interview until there is a complete shared understanding of the product direction. Follow these rules:
+Führe das Interview, bis ein vollständiges gemeinsames Verständnis der Produktrichtung besteht. Beachte diese Regeln:
 
-### End every interview and review turn with exactly one question — critical
+### Beende jede Interview- und Prüfrunde mit genau einer Frage – entscheidend
 
-This is the most important interaction rule of this skill. During the interview and at every review checkpoint:
+Dies ist die wichtigste Interaktionsregel dieses Skills. Während des Interviews und an jedem Prüfpunkt:
 
-- Make the final line of the message exactly one clear question. Put all context, recommendations, and summaries before it. Never end on a statement or status note.
-- Ask one question only. Do not bundle subquestions into the final line.
-- After asking, stop and wait for the user's reply. Do not keep working, infer an answer, update artifacts, or move to another phase until the user responds.
-- If a work chunk is complete and the next action is unclear, ask the single question that best determines what should happen next.
+- Die letzte Zeile der Nachricht enthält genau eine klare Frage. Stelle Kontext, Empfehlungen und Zusammenfassungen davor. Ende nicht mit einer Aussage oder Statusmeldung.
+- Stelle nur eine Frage. Bündele keine Teilfragen in der letzten Zeile.
+- Stoppe nach der Frage und warte auf die Antwort des Nutzers. Arbeite nicht weiter, leite keine Antwort ab, aktualisiere keine Artefakte und beginne keine weitere Phase, bevor der Nutzer antwortet.
+- Ist ein Arbeitsschritt abgeschlossen und die nächste Aktion unklar, stelle die eine Frage, die das weitere Vorgehen am besten bestimmt.
 
-- Ask exactly one question per turn. Never bundle questions or present a questionnaire.
-- Include a recommended answer with every question so the user can confirm or correct it. Make clear that it is a recommendation, not a presumed decision.
-- Follow the conversation. Choose each next question based on the user's answer and open relevant branches; do not follow a fixed script mechanically.
-- Explore before asking where possible. Use the existing `.codex/PROJECT.md` to identify completed refinement and established decisions, and consult project files and code before asking again.
-- Do not impose a fixed question count. Continue while an unresolved decision could materially change the product vision, scope, or feature priorities.
-- Keep questions focused and avoid asking again for information already established. Mark facts, user decisions, and assumptions distinctly.
-- If the user does not know an answer, offer a concrete recommended default, explain its practical impact briefly, and record it as an assumption until confirmed.
-- If the user provides a full briefing or an already refined project description, retain its decisions and do not repeat completed refinement or resolved questions. Ask only about material gaps, including backend/environment, privacy, and design-system decisions when unresolved. If no material gaps remain, prepare the artifacts and move to the review checkpoint without filler questions.
+- Stelle genau eine Frage pro Gesprächsrunde. Bündele keine Fragen und lege keinen Fragebogen vor.
+- Ergänze jede Frage um eine empfohlene Antwort, die der Nutzer bestätigen oder korrigieren kann. Kennzeichne sie als Empfehlung, nicht als vorausgesetzte Entscheidung.
+- Folge dem Gespräch. Wähle die nächste Frage anhand der Antwort und relevanter offener Themen; arbeite kein festes Skript mechanisch ab.
+- Untersuche nach Möglichkeit zuerst den Kontext. Nutze eine vorhandene `.codex/PROJECT.md`, um abgeschlossene Schärfung und bestehende Entscheidungen zu erkennen, und lies Projektdateien und Code, bevor du erneut fragst.
+- Gib keine feste Fragenzahl vor. Fahre fort, solange eine offene Entscheidung Produktvision, Umfang oder Feature-Prioritäten wesentlich verändern könnte.
+- Halte Fragen gezielt und wiederhole keine geklärten Informationen. Kennzeichne Fakten, Nutzerentscheidungen und Annahmen getrennt.
+- Kennt der Nutzer eine Antwort nicht, biete eine konkrete empfohlene Vorgabe an, erläutere kurz ihre praktische Auswirkung und halte sie bis zur Bestätigung als Annahme fest.
+- Übernimm Entscheidungen aus einem vollständigen Briefing oder einer bereits geschärften Projektbeschreibung und wiederhole weder abgeschlossene Schärfung noch geklärte Fragen. Frage nur wesentliche Lücken ab, einschließlich offener Backend-, Umgebungs-, Datenschutz- und Designsystementscheidungen. Sind keine wesentlichen Lücken offen, bereite die Artefakte vor und gehe ohne Füllfragen zum Prüfpunkt über.
 
-Explore the areas that matter to this project, adapting the order and depth to the answers:
+Untersuche die für dieses Projekt relevanten Bereiche und passe Reihenfolge und Tiefe an die Antworten an:
 
-- problem, purpose, target users, and value
-- target platform and devices (for Apple apps, supported platforms and minimum OS versions; for web apps, browsers and viewports)
-- the primary user journey, initial experience, important states, and user actions
-- product boundaries, explicit exclusions, and likely MVP scope
-- existing alternatives or competitors and the product's intended difference
-- candidate features, relative priority, dependencies, and sequencing
-- relevant business model, integrations, data, privacy, accessibility, permissions, and quality goals
-- success measures and relevant constraints such as timeline, budget, and team capacity
-- important unknowns
+- Problem, Zweck, Zielnutzer und Nutzen
+- Zielplattform und Geräte; bei Apple-Apps unterstützte Plattformen und Mindestversionen, bei Web-Apps Browser und Ansichtsgrößen
+- Hauptnutzerablauf, erste Nutzungserfahrung, wichtige Zustände und Nutzeraktionen
+- Produktgrenzen, ausdrückliche Ausschlüsse und voraussichtlicher MVP-Umfang
+- Bestehende Alternativen oder Wettbewerber und die beabsichtigte Abgrenzung des Produkts
+- Mögliche Funktionen, relative Priorität, Abhängigkeiten und Reihenfolge
+- Relevantes Geschäftsmodell, Integrationen, Daten, Datenschutz, Barrierefreiheit, Berechtigungen und Qualitätsziele
+- Erfolgsmaße und relevante Grenzen wie Zeitplan, Budget und Teamkapazität
+- Wichtige offene Fragen
 
-Do not ask about technical implementation details until the product behavior and constraints are sufficiently clear. When a technical constraint materially affects feasibility or product direction, ask one focused question and record the answer or assumption without turning the interview into an architecture plan.
+Frage technische Implementierungsdetails erst ab, wenn Produktverhalten und Rahmenbedingungen ausreichend klar sind. Beeinflusst eine technische Bedingung Machbarkeit oder Produktrichtung wesentlich, stelle eine gezielte Frage und dokumentiere Antwort oder Annahme, ohne das Interview in einen Architekturplan umzuwandeln.
 
-## Decisions required before the feature map
+## Erforderliche Entscheidungen vor der Feature-Map
 
-Resolve the following branches before prioritizing features. First inspect the project and use what is already decided; ask only for decisions that remain open. Ask one question per turn, include a recommended answer, and wait for the reply before proceeding.
+Kläre die folgenden Bereiche vor der Priorisierung von Funktionen. Untersuche zuerst das Projekt und übernimm bereits Getroffenes; frage nur offene Entscheidungen ab. Stelle eine Frage pro Runde mit empfohlener Antwort und warte vor dem Fortfahren auf die Antwort.
 
-### Backend and data environment
+### Backend und Datenumgebung
 
-For a new app or an unresolved backend choice, ask whether it needs a hosted/shared backend, an existing backend, or can work entirely on-device/in the browser. Recommend based on the product: local-only storage for a genuinely single-user offline tool; the project's existing backend when one is established; Supabase, NestJS with PostgreSQL, or C# with Microsoft SQL Server when user accounts, shared data, or the project's architecture call for a server backend. The project description is authoritative for the selected backend. If it does not name one and the codebase does not establish it, ask the user directly to choose before finalizing the architecture or implementation plan. Do not infer a backend from the reference diagrams.
+Frage bei einer neuen App oder offener Backend-Wahl, ob ein gehostetes oder gemeinsames Backend, ein bestehendes Backend oder ausschließlich geräte- beziehungsweise browserlokaler Betrieb benötigt wird. Empfiehl passend zum Produkt: rein lokale Speicherung für ein tatsächliches Einzelnutzer-Offline-Werkzeug; das bestehende Projekt-Backend, sofern vorhanden; Supabase, NestJS mit PostgreSQL oder C# mit Microsoft SQL Server, wenn Nutzerkonten, gemeinsame Daten oder Projektarchitektur ein Server-Backend erfordern. Maßgeblich für das Backend ist die Projektbeschreibung. Nennt sie keines und ergibt es sich nicht aus der Codebasis, bitte den Nutzer vor Abschluss von Architektur oder Implementierungsplan ausdrücklich um die Auswahl. Leite kein Backend aus Referenzdiagrammen ab.
 
-Before creating a backend, establish its type and hosting conditions; ask the developer about missing server OS, hosting, database or other material constraints before recommending a stack. NestJS can run on supported platforms with Node.js. Prefer Windows Server, preferably IIS, for C#; ASP.NET Core can also run on Linux, but explicitly ask the developer to confirm an intended C#/Linux combination or resolve other conflicting requirements before creation. Preserve an already explicit, consistent decision. For a NestJS or C# API, recommend Swagger/OpenAPI with visual Swagger UI as the default and ask for an explicit decision unless already agreed. Record the decision and any reason for declining and alternative. Supabase or SQLite alone requires neither a Swagger decision nor an implementation; a NestJS or C# API using SQLite still requires the API's decision. Protect any served UI and OpenAPI document from public and unauthorized access.
+Kläre vor Erstellung eines Backends dessen Art und Hostingbedingungen. Frage den Entwickler vor einer Stack-Empfehlung nach fehlendem Serverbetriebssystem, Hosting, Datenbank oder anderen wesentlichen Bedingungen. NestJS kann auf unterstützten Plattformen mit Node.js laufen. Bevorzuge für C# Windows Server, vorzugsweise IIS; ASP.NET Core unterstützt auch Linux, bitte den Entwickler aber vor der Erstellung ausdrücklich um Bestätigung einer beabsichtigten C#/Linux-Kombination oder kläre andere widersprüchliche Vorgaben. Bewahre eine bereits ausdrückliche, konsistente Entscheidung. Empfiehl für eine NestJS- oder C#-API Swagger/OpenAPI mit visueller Swagger UI als Standard und frage nach einer ausdrücklichen Entscheidung, sofern noch nicht vereinbart. Dokumentiere Entscheidung, gegebenenfalls Verzichtsgrund und Alternative. Supabase oder SQLite allein benötigt weder eine Swagger-Entscheidung noch eine Implementierung; eine NestJS- oder C#-API mit SQLite benötigt weiterhin die API-Entscheidung. Schütze bereitgestellte UI und OpenAPI-Dokumente vor öffentlichem und unberechtigtem Zugriff.
 
-Use `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` or an existing equivalent decision record to capture the choices established during discovery and hand off unresolved technical details for planning. Preserve the one-question-at-a-time interview and do not invent technical decisions or implement infrastructure.
+Nutze `.codex/rules/templates/BACKEND-ENTSCHEIDUNG.md` oder eine vorhandene gleichwertige Entscheidungsdokumentation, um die ermittelten Entscheidungen festzuhalten und offene technische Details an die Planung zu übergeben. Stelle weiterhin jeweils nur eine Frage und erfinde keine technischen Entscheidungen oder implementiere Infrastruktur.
 
-If Supabase is selected:
+Wenn Supabase gewählt wird:
 
-- Do not add “Supabase infrastructure setup” as a product feature. Project initialization, local services, client wiring, and environment configuration are setup work, not user-facing behavior. Record them as setup dependencies for `$verify-setup`; keep them out of the user-facing feature map.
-- If accounts are required, include a real **User Accounts & Authentication** feature with user-facing signup/login behavior and its necessary user-data foundation. Record the profile data and per-user isolation pattern in `docs/data-model.md` when present, or in the technical handoff; plan profile provisioning using the project's established pattern. Features that rely on per-user data depend on this feature. Do not make authentication a prerequisite when the product does not need accounts.
-- Hand off Supabase schema, Auth, RLS, Storage, and Edge Function planning to `$backend-dev-supabase`; the initializer records product behavior and feature dependencies but does not design detailed SQL or implement backend setup.
-- Before finalizing the feature map, ask one question to choose the environment strategy: local development with Supabase CLI and a supported runtime; separate hosted development and production projects; a single hosted project; or Supabase branching/preview environments if currently available and suitable. Recommend local development when the user's machine and workflow support it; otherwise recommend separate dev/prod projects. Explain that a single hosted project makes test and live data the same. Do not quote plan requirements or prices without checking current official documentation.
-- Record the chosen strategy plainly in the project brief/PRD Constraints, for example `Environment strategy: local`, `two-projects`, `single`, or `branching`, including what the choice means for test and production data.
-- If a hosted project is planned, resolve its data region before feature-map approval. Ask one question if it is not already specified. Recommend an exact region based on the users and any contractual data-location requirements; Frankfurt (`eu-central-1`) is a suitable recommendation for a German/EU data-location preference. Do not claim GDPR requires that region or that region selection proves compliance. Record the user's actual choice. Treat changing the region as a consequential migration decision and verify current provider guidance before setup.
+- Führe „Einrichtung der Supabase-Infrastruktur“ nicht als Produktfunktion auf. Projektinitialisierung, lokale Dienste, Client-Anbindung und Umgebungskonfiguration sind Einrichtungsarbeit, kein sichtbares Nutzerverhalten. Halte sie als Setup-Abhängigkeiten für `$verify-setup` fest und nicht in der nutzerseitigen Feature-Map.
+- Sind Konten erforderlich, nimm eine tatsächliche Funktion **User Accounts & Authentication** mit nutzersichtbarer Registrierung und Anmeldung sowie der erforderlichen Grundlage für Nutzerdaten auf. Halte Profildaten und das Muster zur Trennung je Nutzer in `docs/data-model.md`, sofern vorhanden, oder in der technischen Übergabe fest; plane die Profilbereitstellung nach etabliertem Projektmuster. Funktionen mit nutzerbezogenen Daten hängen davon ab. Mache Authentifizierung nicht zur Voraussetzung, wenn das Produkt keine Konten benötigt.
+- Übergib Planung von Supabase-Schema, Auth, RLS, Storage und Edge Function an `$backend-dev-supabase`; die Initialisierung erfasst Produktverhalten und Feature-Abhängigkeiten, entwirft aber kein detailliertes SQL und implementiert kein Backend-Setup.
+- Stelle vor Abschluss der Feature-Map eine Frage zur Umgebungsstrategie: lokale Entwicklung mit Supabase CLI und unterstützter Laufzeit; getrennte gehostete Entwicklungs- und Produktionsprojekte; ein einzelnes gehostetes Projekt; oder Supabase Branching-/Preview-Umgebungen, sofern aktuell verfügbar und geeignet. Empfiehl lokale Entwicklung, wenn Rechner und Arbeitsweise sie unterstützen, andernfalls getrennte Entwicklungs- und Produktionsprojekte. Erkläre, dass bei einem einzelnen gehosteten Projekt Test- und Livedaten dasselbe Projekt nutzen. Nenne keine Tarifanforderungen oder Preise ohne Prüfung aktueller offizieller Dokumentation.
+- Dokumentiere die Strategie eindeutig in den Projektbrief-/PRD-Rahmenbedingungen, etwa `Environment strategy: local`, `two-projects`, `single` oder `branching`, einschließlich der Folgen für Test- und Produktionsdaten.
+- Ist ein gehostetes Projekt geplant, kläre dessen Datenregion vor Freigabe der Feature-Map. Frage einmal nach, wenn sie noch nicht festgelegt ist. Empfiehl eine genaue Region anhand der Nutzer und vertraglicher Anforderungen an den Datenstandort; Frankfurt (`eu-central-1`) ist bei gewünschtem deutschem oder EU-Datenstandort geeignet. Behaupte nicht, die DSGVO verlange diese Region oder ihre Wahl belege Konformität. Dokumentiere die tatsächliche Nutzerentscheidung. Behandle einen Regionswechsel als folgenreiche Migrationsentscheidung und prüfe vor der Einrichtung aktuelle Anbieterhinweise.
 
-For these choices, consult the current [Supabase local development guide](https://supabase.com/docs/guides/local-development), [deployment and branching guide](https://supabase.com/docs/guides/deployment), and [available regions](https://supabase.com/docs/guides/platform/regions). Supabase documents that a region change requires creating a new project and migrating; verify the current [region-change procedure](https://supabase.com/kb/troubleshooting/change-project-region-eWJo5Z) when explaining this decision. Region selection controls data location and is not, on its own, a GDPR compliance determination.
+Ziehe für diese Entscheidungen die aktuellen Hinweise zu [lokaler Entwicklung mit Supabase](https://supabase.com/docs/guides/local-development), [Deployment und Branching](https://supabase.com/docs/guides/deployment) und [verfügbaren Regionen](https://supabase.com/docs/guides/platform/regions) hinzu. Supabase dokumentiert, dass ein Regionswechsel ein neues Projekt und eine Migration erfordert; prüfe bei der Erläuterung dieser Entscheidung das aktuelle [Verfahren zum Regionswechsel](https://supabase.com/kb/troubleshooting/change-project-region-eWJo5Z). Die Regionswahl bestimmt den Datenstandort und belegt für sich genommen keine DSGVO-Konformität.
 
-If NestJS with PostgreSQL is selected:
+Wenn NestJS mit PostgreSQL gewählt wird:
 
-- Do not add “NestJS/PostgreSQL infrastructure setup” as a user-facing product feature. Record API/database provisioning, local services, configuration, and migrations as setup dependencies for `$verify-setup` and `$backend-dev-nestjs-postgres`.
-- Hand off API modules, DTO validation, authentication/authorization, database schema/migrations, and backend verification to `$backend-dev-nestjs-postgres`.
-- Apply the agreed Swagger/OpenAPI decision. When provided, Swagger UI and its OpenAPI document endpoint must be protected and not publicly reachable; record the authorized access method and production behavior in the technical handoff.
-- Record the selected local/development/staging/production database environment strategy in the project brief or technical handoff. Never assume a production target or expose database credentials.
+- Führe „Einrichtung der NestJS/PostgreSQL-Infrastruktur“ nicht als nutzerseitige Produktfunktion auf. Halte API- und Datenbankbereitstellung, lokale Dienste, Konfiguration und Migrationen als Setup-Abhängigkeiten für `$verify-setup` und `$backend-dev-nestjs-postgres` fest.
+- Übergib API-Module, DTO-Validierung, Authentifizierung und Autorisierung, Datenbankschema und Migrationen sowie Backend-Verifikation an `$backend-dev-nestjs-postgres`.
+- Wende die vereinbarte Swagger/OpenAPI-Entscheidung an. Werden Swagger UI und OpenAPI-Dokumentendpunkt bereitgestellt, müssen sie geschützt und nicht öffentlich erreichbar sein; halte autorisierten Zugangsweg und Produktionsverhalten in der technischen Übergabe fest.
+- Dokumentiere die gewählte Datenbankstrategie für lokale, Entwicklungs-, Staging- und Produktionsumgebungen im Projektbrief oder der technischen Übergabe. Setze kein Produktionsziel voraus und lege keine Datenbankzugangsdaten offen.
 
-If C# with Microsoft SQL Server is selected:
+Wenn C# mit Microsoft SQL Server gewählt wird:
 
-- Do not add “C# backend/SQL Server setup” as a user-facing product feature. Record the .NET API, SQL Server, local configuration, and migration workflow as setup dependencies for `$verify-setup` and `$backend-dev-csharp-sqlserver`.
-- Hand off API structure, SQL Server schema/data access, migrations, authentication/authorization, the agreed Swagger/OpenAPI choice and backend verification to `$backend-dev-csharp-sqlserver`.
-- Record the target .NET version, SQL Server environment, and hosting model (for example Windows Server/IIS) in the technical handoff. Do not assume Windows authentication, Azure hosting, or production credentials.
+- Führe „Einrichtung von C#-Backend/SQL Server“ nicht als nutzerseitige Produktfunktion auf. Halte .NET API, SQL Server, lokale Konfiguration und Migrations-Workflow als Setup-Abhängigkeiten für `$verify-setup` und `$backend-dev-csharp-sqlserver` fest.
+- Übergib API-Struktur, SQL-Server-Schema und Datenzugriff, Migrationen, Authentifizierung und Autorisierung, die vereinbarte Swagger/OpenAPI-Wahl und Backend-Verifikation an `$backend-dev-csharp-sqlserver`.
+- Dokumentiere Zielversion von .NET, SQL-Server-Umgebung und Hostingmodell, etwa Windows Server/IIS, in der technischen Übergabe. Setze keine Windows-Authentifizierung, kein Azure-Hosting und keine Produktionszugangsdaten voraus.
 
-### Local and offline data
+### Lokale und offline verfügbare Daten
 
-When offline use, local copies, or local-first behavior is a product requirement, clarify the storage location and ownership instead of assuming that local storage syncs automatically:
+Sind Offline-Nutzung, lokale Kopien oder Local-First-Verhalten eine Produktanforderung, kläre Speicherort und Datenhoheit, statt automatische Synchronisierung lokaler Speicherung anzunehmen:
 
-- For native Apple apps, consider an app-internal SQLite store when the app needs durable device-local data or continued work without connectivity.
-- For web apps, distinguish SQLite on the server behind an API from SQLite/WASM stored in the browser. Server storage can serve shared records through the API; browser storage is local to that browser origin/profile.
-- Ask whether local data is a cache, an offline working copy, or the source of truth; whether edits sync to a server or other devices; and what users should experience during conflicts, sign-out, storage loss, or quota failure.
-- Hand off SQLite schemas, migrations, persistence, and sync design to `$backend-dev-sqlite-data`. Do not add bidirectional sync unless the product requires it and its data ownership and conflict behavior are agreed.
+- Berücksichtige für native Apple-Apps einen app-internen SQLite-Speicher, wenn dauerhafte gerätelokale Daten oder Weiterarbeit ohne Verbindung benötigt werden.
+- Unterscheide bei Web-Apps SQLite auf dem Server hinter einer API von SQLite/WASM im Browser. Serverspeicher kann gemeinsame Datensätze über die API bereitstellen; Browserspeicher ist lokal zur Browser-Origin beziehungsweise zum Profil.
+- Frage, ob lokale Daten Cache, Offline-Arbeitskopie oder führender Bestand sind, ob Änderungen zu einem Server oder anderen Geräten synchronisiert werden und was Nutzer bei Konflikten, Abmeldung, Speicherverlust oder Kontingentfehlern erleben sollen.
+- Übergib SQLite-Schemata, Migrationen, Persistenz und Synchronisierungsdesign an `$backend-dev-sqlite-data`. Ergänze bidirektionale Synchronisierung nur, wenn das Produkt sie benötigt und Datenhoheit und Konfliktverhalten vereinbart sind.
 
-If the app is genuinely frontend-only/local-only, record `No backend — local-only storage` in the project constraints, do not add an infrastructure feature, and skip backend environment-strategy questions.
+Ist die App tatsächlich rein frontend- beziehungsweise lokalseitig, halte `No backend — local-only storage` in den Projektrahmenbedingungen fest, ergänze keine Infrastrukturfunktion und überspringe Fragen zur Backend-Umgebungsstrategie.
 
-### Data-protection stance
+### Datenschutzansatz
 
-If the product processes personal data, ask the user for a preferred level of implementation focus before building the feature map:
+Verarbeitet das Produkt personenbezogene Daten, frage vor Erstellung der Feature-Map nach dem bevorzugten Schwerpunkt der Umsetzung:
 
-- **Lean:** a small MVP with low-risk, limited personal data.
-- **Standard (recommended):** a public-facing product with accounts and ordinary personal data.
-- **Strict:** sensitive or children's data, employee data, regulated/enterprise contexts, or a request for heightened safeguards.
+- **Lean:** ein kleines MVP mit wenigen personenbezogenen Daten und geringem Risiko.
+- **Standard (empfohlen):** ein öffentlich zugängliches Produkt mit Konten und gewöhnlichen personenbezogenen Daten.
+- **Strict:** sensible Daten oder Daten von Kindern, Beschäftigtendaten, regulierte oder Unternehmenskontexte oder ein Wunsch nach erhöhten Schutzmaßnahmen.
 
-Explain that this choice scopes project attention and documentation; it never reduces legal obligations. Record `Data protection stance: lean | standard | strict` and flag special-category or children's data early, including health, biometric, ethnic, religious, or sexual-orientation data when applicable. Use `$dsgvo` for relevant requirements. Do not make legal determinations or infer a lawful basis.
+Erkläre, dass diese Wahl Aufmerksamkeit und Dokumentation im Projekt eingrenzt, jedoch niemals rechtliche Pflichten reduziert. Halte `Data protection stance: lean | standard | strict` fest und kennzeichne früh besondere Kategorien oder Daten von Kindern, gegebenenfalls einschließlich Gesundheits-, biometrischer, ethnischer, religiöser oder die sexuelle Orientierung betreffender Daten. Nutze `$dsgvo` für relevante Anforderungen. Triff keine rechtlichen Feststellungen und leite keine Rechtsgrundlage ab.
 
-If no personal data is involved, record that assessment briefly and skip the stance question.
+Sind keine personenbezogenen Daten betroffen, halte diese Einschätzung kurz fest und überspringe die Frage zum Datenschutzansatz.
 
-### Design system
+### Designsystem
 
-Inspect existing design tokens, brand guidance, component libraries, screenshots, and UI references first. If a usable design system exists, follow it and do not ask the user to repeat it. Otherwise, ask whether the user has a design system, brand guide, or UI reference; the user can share a file/link, describe it, or say there is none. Recommend sharing any existing reference, even if incomplete. If none exists, ask one focused follow-up about the visual character, with a recommendation based on the product and users.
+Prüfe zuerst bestehende Design-Tokens, Markenvorgaben, Komponentenbibliotheken, Screenshots und UI-Referenzen. Ist ein nutzbares Designsystem vorhanden, folge ihm und bitte den Nutzer nicht, es erneut zu beschreiben. Frage andernfalls, ob ein Designsystem, Markenleitfaden oder eine UI-Referenz vorliegt; der Nutzer kann eine Datei oder einen Link teilen, die Referenz beschreiben oder angeben, dass keine vorhanden ist. Empfiehl, vorhandene Referenzen auch unvollständig zu teilen. Existiert keine, stelle eine gezielte Anschlussfrage zum visuellen Charakter mit einer Empfehlung anhand von Produkt und Nutzern.
 
-Resolve the design-system direction and review its proposed artifact before building the feature map. If an existing system is being reused, record its source and relevant conventions; if proposing one, present it at a review checkpoint, end with exactly one question, and wait for approval before continuing.
+Kläre die Designsystemrichtung und prüfe das vorgeschlagene Artefakt vor Erstellung der Feature-Map. Wird ein bestehendes System wiederverwendet, dokumentiere dessen Quelle und relevante Konventionen; wird eines vorgeschlagen, stelle es an einem Prüfpunkt vor, ende mit genau einer Frage und warte vor dem Fortfahren auf Zustimmung.
 
-Create or update `docs/design-system.md` either way. Use concrete, implementable tokens rather than adjectives alone:
+Erstelle oder aktualisiere in beiden Fällen `docs/design-system.md`. Verwende konkrete, implementierbare Tokens statt bloßer Adjektive:
 
-- primary, secondary, accent, destructive, background, and foreground colors for light and dark themes
-- restrained brand-color variants for subtle backgrounds, hover, and active states rather than one flat color on large surfaces
-- typography family, scale, and heading/body weights
-- radius, spacing rhythm, and elevation/border conventions
-- component conventions such as button variants/sizes, form-field sizing, and loading/empty states
-- applicable hover, focus, pressed, and disabled states
+- Primär-, Sekundär-, Akzent-, destruktive, Hintergrund- und Vordergrundfarben für helle und dunkle Themes
+- Zurückhaltende Markenfarbvarianten für dezente Hintergründe sowie Hover- und aktive Zustände statt einer einzigen flachen Farbe auf großen Flächen
+- Schriftfamilie, Typografieskala und Schriftgewichte für Überschriften und Fließtext
+- Konventionen für Radius, Abstandsrhythmus und Erhebung beziehungsweise Rahmen
+- Komponentenregeln wie Schaltflächenvarianten und -größen, Formularfeldgrößen sowie Lade- und Leerzustände
+- Zutreffende Hover-, Fokus-, gedrückte und deaktivierte Zustände
 
-Use concrete values in the target stack's token format when known. Unless an existing system or explicit product requirement says otherwise, define both light and dark tokens, avoid pure black/white for large surfaces, use a consistent radius/spacing system, and provide visible focus states for keyboard input. Check text contrast against the applicable accessibility standard; do not apply one contrast threshold to every text size or UI component.
+Verwende, sofern bekannt, konkrete Werte im Token-Format des Ziel-Stacks. Sofern bestehendes System oder ausdrückliche Produktanforderung nichts anderes vorgeben, definiere helle und dunkle Tokens, vermeide reines Schwarz oder Weiß auf großen Flächen, verwende ein konsistentes Radius- und Abstandssystem und stelle sichtbare Fokuszustände für Tastatureingaben bereit. Prüfe Textkontrast anhand des zutreffenden Barrierefreiheitsstandards; wende nicht denselben Kontrastschwellenwert auf jede Textgröße oder UI-Komponente an.
 
-## Completion criteria
+## Abschlusskriterien
 
-The discovery is complete when the user and agent share a coherent account of:
+Die Erkundung ist abgeschlossen, wenn Nutzer und Agent ein übereinstimmendes Verständnis folgender Punkte haben:
 
-- who the product serves, what problem it addresses, and its intended value
-- target platforms and important constraints
-- the main user journey and expected outcomes
-- what belongs in the first useful release and what is explicitly deferred or excluded
-- a prioritized feature map with enough context to explain the ordering and dependencies
-- a backend and test/live environment direction, where relevant
-- a concrete design-system proposal, or an existing system identified for reuse
-- success signals and unresolved questions or assumptions with their impact
+- Wem das Produkt dient, welches Problem es löst und welchen Nutzen es bieten soll
+- Zielplattformen und wichtige Rahmenbedingungen
+- Hauptnutzerablauf und erwartete Ergebnisse
+- Umfang des ersten nutzbaren Releases und ausdrücklich verschobene oder ausgeschlossene Punkte
+- Priorisierte Feature-Map mit ausreichendem Kontext für Reihenfolge und Abhängigkeiten
+- Backend- und Test-/Live-Umgebungsrichtung, soweit relevant
+- Konkreter Designsystemvorschlag oder ein zur Wiederverwendung bestimmtes bestehendes System
+- Erfolgssignale sowie offene Fragen oder Annahmen und ihre Auswirkungen
 
-The PRD is a concise product-level decision document, not a transcript of discovery or a technical architecture document. Its purpose is to state what problem the product solves, for whom, what the first release should do, and how success can be recognized. Keep these four elements at its center:
+Das PRD ist ein knappes Entscheidungsdokument auf Produktebene, kein Interviewprotokoll und kein technisches Architekturdokument. Es beschreibt, welches Problem das Produkt für wen löst, was das erste Release leisten soll und wie Erfolg erkennbar ist. Vier Elemente stehen im Mittelpunkt:
 
-- **Vision:** the product's purpose, the problem it addresses, and the value it intends to create.
-- **Target users:** the primary audience and any distinct secondary audiences, with their relevant needs.
-- **Core functions:** the small set of capabilities essential to deliver the vision. Give product requirements clear priorities and observable acceptance criteria when useful. Keep the broader prioritization rationale, dependencies, and roadmap grouping in the separate feature map.
-- **Critical success factors:** the conditions that must hold for the product to succeed, including observable success measures where they can be defined. Distinguish measurable indicators from assumptions; do not present guesses as validated targets.
+- **Vision:** Produktzweck, behandeltes Problem und beabsichtigter Nutzen.
+- **Zielnutzer:** primäre Zielgruppe und gegebenenfalls unterschiedliche sekundäre Zielgruppen mit ihren relevanten Bedürfnissen.
+- **Kernfunktionen:** die wenigen Fähigkeiten, die für die Vision erforderlich sind. Gib Produktanforderungen klare Prioritäten und, soweit hilfreich, beobachtbare Abnahmekriterien. Halte umfassendere Priorisierungsbegründungen, Abhängigkeiten und Roadmap-Gruppierung in der separaten Feature-Map.
+- **Kritische Erfolgsfaktoren:** Bedingungen für den Produkterfolg einschließlich beobachtbarer Erfolgsmaße, soweit definierbar. Unterscheide messbare Indikatoren von Annahmen; stelle Vermutungen nicht als validierte Ziele dar.
 
-Add concise supporting sections when they materially clarify product decisions or help judge the first release: summary/status and product owner, problem details, target-user needs, alternatives and product differentiation, business model or monetization, in/out scope, key user journeys, user-visible data and integration needs, functional requirements with IDs/priorities/acceptance criteria, and **non-functional requirements** such as accessibility, usability, performance, reliability, security, privacy, and supported devices or browsers. Make non-functional requirements observable or measurable where practical, and include acceptance criteria when useful. Also include assumptions and open questions, risks, and release or approval criteria as relevant. Adapt the sections to the product; do not fill a template mechanically or invent detail. Omit irrelevant sections explicitly or leave them out. Keep platform and constraints brief. When personal data is involved, capture only the product-level needs and constraints in the PRD, then use `$dsgvo` for deeper privacy analysis and requirements; link or cross-reference its relevant findings from the PRD when useful. Describe required product outcomes for data and integrations, but put technical architecture, implementation choices, database schemas, and engineering plans in a technical Spec and implementation plan. Avoid duplicating long requirement details across the PRD and feature map: the PRD states the user-facing requirements, while the feature map organizes feature priority, rationale, and dependencies.
+Ergänze knappe Abschnitte, wenn sie Produktentscheidungen wesentlich klären oder die Beurteilung des ersten Releases unterstützen: Zusammenfassung und Status, Produktverantwortung, Problemdetails, Zielnutzerbedürfnisse, Alternativen und Abgrenzung, Geschäftsmodell oder Monetarisierung, Ein- und Ausschlüsse, wichtige Nutzerabläufe, nutzersichtbare Daten- und Integrationsbedarfe, funktionale Anforderungen mit IDs, Prioritäten und Abnahmekriterien sowie **nichtfunktionale Anforderungen** wie Barrierefreiheit, Nutzbarkeit, Leistung, Zuverlässigkeit, Sicherheit, Datenschutz und unterstützte Geräte oder Browser. Formuliere nichtfunktionale Anforderungen möglichst beobachtbar oder messbar und ergänze bei Bedarf Abnahmekriterien. Nimm relevante Annahmen, offene Fragen, Risiken und Release- oder Freigabekriterien auf. Passe Abschnitte an das Produkt an; fülle Vorlagen nicht mechanisch und erfinde keine Details. Kennzeichne irrelevante Abschnitte ausdrücklich oder lasse sie weg. Halte Plattform und Bedingungen kurz. Bei personenbezogenen Daten erfasse im PRD nur Bedarf und Grenzen auf Produktebene; nutze `$dsgvo` für vertiefte Datenschutzanalyse und Anforderungen und verlinke relevante Ergebnisse, wenn hilfreich. Beschreibe benötigte Produktergebnisse für Daten und Integrationen; technische Architektur, Implementierungsentscheidungen, Datenbankschemata und Entwicklungspläne gehören in technische Spec und Implementierungsplan. Vermeide lange doppelte Anforderungen in PRD und Feature-Map: Das PRD beschreibt nutzersichtbare Anforderungen, die Feature-Map ordnet Priorität, Begründung und Abhängigkeiten.
 
-If a decision remains open but does not prevent a useful product direction, record it with its impact instead of extending the interview indefinitely. If a high-impact decision is unresolved, ask the next single question that best reduces that uncertainty.
+Bleibt eine Entscheidung offen, verhindert aber keine brauchbare Produktrichtung, dokumentiere sie und ihre Auswirkung, statt das Interview unbegrenzt zu verlängern. Ist eine Entscheidung mit hoher Auswirkung ungeklärt, stelle als Nächstes die einzelne Frage, die diese Unsicherheit am besten reduziert.
 
-## Artifacts
+## Artefakte
 
-After the interview, prepare or update these Markdown artifacts in the project's working language. Settle and review the design system before drafting the final feature map:
+Erstelle oder aktualisiere nach dem Interview diese Markdown-Artefakte in der Arbeitssprache des Projekts. Kläre und prüfe das Designsystem vor dem Entwurf der endgültigen Feature-Map:
 
-1. Product vision/PRD — use an existing `docs/PRD.md` when it is part of the project scaffold; otherwise update `.codex/PROJECT.md`. Keep it concise and centered on **Vision**, **Target users**, **Core functions**, and **Critical success factors**. Add applicable product-level sections for the problem, alternatives/differentiation, business model, first-release scope, user journeys, user-visible data/integration needs, prioritized functional requirements with observable acceptance criteria, and non-functional requirements (for example accessibility, usability, performance, reliability, security, privacy, and supported devices or browsers). State quality outcomes in testable terms where practical. If personal data is involved, use `$dsgvo` for the deeper privacy analysis and link or cross-reference relevant findings; keep the PRD focused on product-level needs and constraints. Include assumptions/open questions, risks, and release criteria when relevant. Adapt depth to the project and omit irrelevant sections rather than inventing content. The PRD describes product behavior and success, not technical architecture; put broader feature prioritization and dependencies in the separate feature map, and technical decisions and schemas in the technical Spec and implementation plan.
-2. `docs/design-system.md` — create or update a concrete design direction using the user's existing system or the proposal agreed during discovery. Present a new proposal for review before moving on to the feature map.
-3. Feature map — use an existing `features/INDEX.md` when it is part of the project scaffold; otherwise update `.codex/FEATURE-MAP.md`. Group features by priority, normally **MVP**, **Next**, and **Later / Out of scope**. For each feature, state the user outcome, priority rationale, and material dependencies or unresolved decisions. Do not add setup infrastructure as a user-facing feature.
+1. Produktvision/PRD – nutze eine vorhandene `docs/PRD.md`, wenn sie Teil des Projektgerüsts ist; aktualisiere andernfalls `.codex/PROJECT.md`. Halte das Dokument knapp und konzentriere es auf **Vision**, **Zielnutzer**, **Kernfunktionen** und **kritische Erfolgsfaktoren**. Ergänze zutreffende Abschnitte auf Produktebene zu Problem, Alternativen und Abgrenzung, Geschäftsmodell, Umfang des ersten Releases, Nutzerabläufen, nutzersichtbarem Daten- und Integrationsbedarf, priorisierten funktionalen Anforderungen mit beobachtbaren Abnahmekriterien sowie nichtfunktionalen Anforderungen, etwa Barrierefreiheit, Nutzbarkeit, Leistung, Zuverlässigkeit, Sicherheit, Datenschutz und unterstützten Geräten oder Browsern. Formuliere Qualitätsergebnisse möglichst prüfbar. Nutze bei personenbezogenen Daten `$dsgvo` für vertiefte Datenschutzanalyse und verlinke oder referenziere relevante Ergebnisse; halte das PRD auf Produktbedarf und -bedingungen ausgerichtet. Nimm gegebenenfalls Annahmen, offene Fragen, Risiken und Release-Kriterien auf. Passe die Tiefe dem Projekt an und lasse irrelevante Abschnitte weg, statt Inhalte zu erfinden. Das PRD beschreibt Produktverhalten und Erfolg, nicht technische Architektur; umfassendere Feature-Priorisierung und Abhängigkeiten gehören in die separate Feature-Map, technische Entscheidungen und Schemata in technische Spec und Implementierungsplan.
+2. `docs/design-system.md` – erstelle oder aktualisiere eine konkrete Designrichtung anhand des bestehenden Systems des Nutzers oder des während der Erkundung vereinbarten Vorschlags. Stelle einen neuen Vorschlag zur Prüfung vor, bevor du mit der Feature-Map fortfährst.
+3. Feature-Map – nutze eine vorhandene `features/INDEX.md`, wenn sie Teil des Projektgerüsts ist; aktualisiere andernfalls `.codex/FEATURE-MAP.md`. Gruppiere Funktionen nach Priorität, üblicherweise **MVP**, **Next** und **Later / Out of scope**. Nenne je Funktion das Nutzerergebnis, die Prioritätsbegründung und wesentliche Abhängigkeiten oder offene Entscheidungen. Nimm Setup-Infrastruktur nicht als nutzersichtbare Funktion auf.
 
-Explore existing files and conventions first. Preserve unrelated project content; if either target artifact already exists, read and update it without discarding established decisions. Do not overwrite user-authored material silently.
+Untersuche zuerst vorhandene Dateien und Konventionen. Bewahre nicht zugehörige Projektinhalte; lies und aktualisiere bereits vorhandene Zielartefakte, ohne bestehende Entscheidungen zu verwerfen. Überschreibe vom Nutzer erstellte Inhalte nicht stillschweigend.
 
-If the project scaffold includes `docs/data-model.md` or `docs/app-shell.md`, preserve the filenames and HTML comments. When filling an English scaffold for a project whose working language is different, translate its headings and guiding prose. Only write data-model or app-shell details that are supported by agreed requirements; do not invent schema or implementation decisions during product discovery.
+Enthält das Projektgerüst `docs/data-model.md` oder `docs/app-shell.md`, bewahre Dateinamen und HTML-Kommentare. Übersetze beim Ausfüllen eines englischen Gerüsts für ein Projekt mit anderer Arbeitssprache dessen Überschriften und Anleitungstexte. Schreibe nur Datenmodell- oder App-Shell-Details, die durch vereinbarte Anforderungen gedeckt sind; erfinde während der Produkterkundung keine Schema- oder Implementierungsentscheidungen.
 
-Present the resulting product vision, approved design system, and feature map for the user's review. These artifacts describe product intent and priorities; they are not an implementation spec or technical plan.
+Lege die entstandene Produktvision, das freigegebene Designsystem und die Feature-Map dem Nutzer zur Prüfung vor. Diese Artefakte beschreiben Produktabsicht und Prioritäten; sie sind keine Implementierungs-Spec und kein technischer Plan.
 
-At the final review checkpoint, summarize the product vision, design-system direction, and feature prioritization, then end with exactly one confirmation question, such as: “Stimmen Produktvision, Designrichtung und Feature-Priorisierung für dich?” Stop and wait. If the user requests changes, update the artifacts and present them for review again, ending with one question each time. Do not hand off to implementation planning until the user confirms the direction.
+Fasse am abschließenden Prüfpunkt Produktvision, Designsystemrichtung und Feature-Priorisierung zusammen und ende mit genau einer Bestätigungsfrage, etwa: „Stimmen Produktvision, Designrichtung und Feature-Priorisierung für dich?“ Stoppe und warte. Wünscht der Nutzer Änderungen, aktualisiere die Artefakte und lege sie erneut zur Prüfung vor; ende jedes Mal mit einer Frage. Übergib erst an die Implementierungsplanung, wenn der Nutzer die Richtung bestätigt.
 
-## Handoff
+## Übergabe
 
-Do not write application implementation code, create project scaffolding, or run code generators as part of this initializer. After the user accepts the product direction, hand off to `$spec-driven-development` for a concrete feature or milestone Spec, then `$feature-planning` for implementation planning. Platform skills can be selected after the target platform and stack are known.
+Schreibe im Rahmen dieser Initialisierung keinen Anwendungsimplementierungscode, erstelle kein Projektgerüst und führe keine Codegeneratoren aus. Nachdem der Nutzer die Produktrichtung bestätigt hat, übergib für eine konkrete Feature- oder Meilenstein-Spec an `$spec-driven-development` und anschließend zur Implementierungsplanung an `$feature-planning`. Plattform-Skills können ausgewählt werden, sobald Zielplattform und Stack bekannt sind.

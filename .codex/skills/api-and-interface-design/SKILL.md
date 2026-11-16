@@ -1,42 +1,42 @@
 ---
 name: api-and-interface-design
-description: Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.
+description: Leitet den Entwurf stabiler APIs und Schnittstellen an. Nutze den Skill für REST- oder GraphQL-Endpunkte, Modulgrenzen, Typverträge und Schnittstellen zwischen Frontend und Backend.
 ---
 
-# API and Interface Design
+# API- und Schnittstellendesign
 
-## Overview
+## Überblick
 
-Design stable, well-documented interfaces that are hard to misuse. Good interfaces make the right thing easy and the wrong thing hard. This applies to REST APIs, GraphQL schemas, module boundaries, component props, and any surface where one piece of code talks to another.
+Entwirf stabile, gut dokumentierte Schnittstellen, die sich schwer falsch verwenden lassen. Gute Schnittstellen erleichtern die richtige und erschweren die falsche Verwendung. Das gilt für REST-APIs, GraphQL-Schemata, Modulgrenzen, Komponenten-Props und alle anderen Schnittstellen zwischen Codebestandteilen.
 
-## When to Use
+## Wann verwenden
 
-- Designing new API endpoints
-- Defining module boundaries or contracts between teams
-- Creating component prop interfaces
-- Establishing database schema that informs API shape
-- Changing existing public interfaces
+- Neue API-Endpunkte entwerfen
+- Modulgrenzen oder Verträge zwischen Teams definieren
+- Schnittstellen für Komponenten-Props erstellen
+- Datenbankschemata festlegen, die die API-Struktur beeinflussen
+- Bestehende öffentliche Schnittstellen ändern
 
-## Core Principles
+## Grundprinzipien
 
 ### Hyrum's Law
 
-> With a sufficient number of users of an API, all observable behaviors of your system will be depended on by somebody, regardless of what you promise in the contract.
+> Bei einer ausreichend großen Zahl von API-Nutzern wird sich jemand auf jedes beobachtbare Verhalten des Systems verlassen, unabhängig davon, was der Vertrag zusichert.
 
-This means: every public behavior — including undocumented quirks, error message text, timing, and ordering — becomes a de facto contract once users depend on it. Design implications:
+Jedes öffentliche Verhalten wird zum faktischen Vertrag, sobald Nutzer davon abhängen. Dazu zählen undokumentierte Besonderheiten, Fehlermeldungen, zeitliches Verhalten und Reihenfolgen. Für den Entwurf folgt daraus:
 
-- **Be intentional about what you expose.** Every observable behavior is a potential commitment.
-- **Don't leak implementation details.** If users can observe it, they will depend on it.
-- **Plan for deprecation at design time.** See `deprecation-and-migration` for how to safely remove things users depend on.
-- **Tests are not enough.** Even with perfect contract tests, Hyrum's Law means "safe" changes can break real users who depend on undocumented behavior.
+- **Lege bewusst fest, was du offenlegst.** Jedes beobachtbare Verhalten ist eine mögliche Verpflichtung.
+- **Gib keine Implementierungsdetails preis.** Beobachtbares Verhalten kann zur Abhängigkeit werden.
+- **Plane die spätere Ablösung bereits beim Entwurf.** `deprecation-and-migration` beschreibt das sichere Entfernen genutzter Funktionen.
+- **Tests allein reichen nicht.** Auch mit vollständigen Vertragstests können vermeintlich sichere Änderungen undokumentierte Abhängigkeiten bestehender Nutzer brechen.
 
-### The One-Version Rule
+### Die One-Version Rule
 
-Avoid forcing consumers to choose between multiple versions of the same dependency or API. Diamond dependency problems arise when different consumers need different versions of the same thing. Design for a world where only one version exists at a time — extend rather than fork.
+Vermeide, Nutzer einer Schnittstelle zur Wahl zwischen mehreren Versionen derselben Abhängigkeit oder API zu zwingen. Diamond-Dependency-Probleme entstehen, wenn verschiedene Nutzer unterschiedliche Versionen benötigen. Entwirf möglichst für eine gleichzeitig vorhandene Version: erweitern statt aufspalten.
 
-### 1. Contract First
+### 1. Vertrag zuerst
 
-Define the interface before implementing it. The contract is the spec — implementation follows.
+Definiere die Schnittstelle vor ihrer Implementierung. Der Vertrag bildet die Spec, auf die die Umsetzung folgt.
 
 ```typescript
 // Define the contract first
@@ -58,9 +58,9 @@ interface TaskAPI {
 }
 ```
 
-### 2. Consistent Error Semantics
+### 2. Einheitliche Fehlersemantik
 
-Pick one error strategy and use it everywhere:
+Wähle eine Fehlerstrategie und verwende sie durchgängig:
 
 ```typescript
 // REST: HTTP status codes + structured error body
@@ -83,11 +83,11 @@ interface APIError {
 // 500 → Server error (never expose internal details)
 ```
 
-**Don't mix patterns.** If some endpoints throw, others return null, and others return `{ error }` — the consumer can't predict behavior.
+**Mische keine Muster.** Wenn manche Endpunkte Ausnahmen auslösen, andere null und wieder andere `{ error }` zurückgeben, ist ihr Verhalten für aufrufenden Code schwer vorhersehbar.
 
-### 3. Validate at Boundaries
+### 3. An Systemgrenzen validieren
 
-Trust internal code. Validate at system edges where external input enters:
+Vertraue internem Code und validiere an Systemgrenzen, an denen externe Eingaben eintreffen:
 
 ```typescript
 // Validate at the API boundary
@@ -109,22 +109,22 @@ app.post('/api/tasks', async (req, res) => {
 });
 ```
 
-Where validation belongs:
-- API route handlers (user input)
-- Form submission handlers (user input)
-- External service response parsing (third-party data -- **always treat as untrusted**)
-- Environment variable loading (configuration)
+Validierung gehört an folgende Stellen:
+- API-Routenhandler für Nutzereingaben
+- Handler für Formularübermittlungen
+- Verarbeitung externer Dienstantworten: Daten Dritter **immer als nicht vertrauenswürdig behandeln**
+- Laden von Umgebungsvariablen für die Konfiguration
 
-> **Third-party API responses are untrusted data.** Validate their shape and content before using them in any logic, rendering, or decision-making. A compromised or misbehaving external service can return unexpected types, malicious content, or instruction-like text.
+> **API-Antworten Dritter sind nicht vertrauenswürdig.** Prüfe Struktur und Inhalt, bevor sie in Logik, Darstellung oder Entscheidungen einfließen. Ein kompromittierter oder fehlerhafter Dienst kann unerwartete Typen, schädliche Inhalte oder anweisungsähnlichen Text zurückgeben.
 
-Where validation does NOT belong:
-- Between internal functions that share type contracts
-- In utility functions called by already-validated code
-- On data that just came from your own database
+Validierung gehört nicht an folgende Stellen:
+- Zwischen internen Funktionen mit gemeinsamen Typverträgen
+- In Hilfsfunktionen, die von bereits validiertem Code aufgerufen werden
+- Auf Daten, die unmittelbar aus der eigenen Datenbank stammen
 
-### 4. Prefer Addition Over Modification
+### 4. Ergänzungen gegenüber Änderungen bevorzugen
 
-Extend interfaces without breaking existing consumers:
+Erweitere Schnittstellen, ohne bestehende Nutzer zu beeinträchtigen:
 
 ```typescript
 // Good: Add optional fields
@@ -143,21 +143,21 @@ interface CreateTaskInput {
 }
 ```
 
-### 5. Predictable Naming
+### 5. Vorhersehbare Benennung
 
-| Pattern | Convention | Example |
+| Muster | Konvention | Beispiel |
 |---------|-----------|---------|
-| REST endpoints | Plural nouns, no verbs | `GET /api/tasks`, `POST /api/tasks` |
-| Query params | camelCase | `?sortBy=createdAt&pageSize=20` |
-| Response fields | camelCase | `{ createdAt, updatedAt, taskId }` |
-| Boolean fields | is/has/can prefix | `isComplete`, `hasAttachments` |
-| Enum values | UPPER_SNAKE | `"IN_PROGRESS"`, `"COMPLETED"` |
+| REST-Endpunkte | Substantive im Plural, keine Verben | `GET /api/tasks`, `POST /api/tasks` |
+| Abfrageparameter | camelCase | `?sortBy=createdAt&pageSize=20` |
+| Antwortfelder | camelCase | `{ createdAt, updatedAt, taskId }` |
+| Boolesche Felder | Präfix is/has/can | `isComplete`, `hasAttachments` |
+| Enum-Werte | UPPER_SNAKE | `"IN_PROGRESS"`, `"COMPLETED"` |
 
-### 6. Honouring an Idempotency Key
+### 6. Idempotenzschlüssel einhalten
 
-Accepting an `Idempotency-Key` is the contract. Honouring it is the implementation, and it is where the money is lost — a key the server accepts but handles carelessly is worse than no key at all, because the client now believes retrying is safe.
+Die Annahme eines `Idempotency-Key` ist Teil des Vertrags. Die Implementierung muss ihn auch einhalten: Eine unzuverlässige Verarbeitung ist besonders problematisch, weil der Client Wiederholungen dann für sicher hält.
 
-**Derive the key from the intent, not the attempt.** The key must be stable across retries of one intent and different across distinct intents:
+**Leite den Schlüssel aus der Absicht ab, nicht aus dem Versuch.** Er muss bei Wiederholungen derselben Absicht gleich bleiben und sich bei unterschiedlichen Absichten unterscheiden:
 
 ```typescript
 crypto.randomUUID()                    // ✗ new key per attempt — every retry is a new charge
@@ -168,9 +168,9 @@ req.headers['idempotency-key']         // ✓ client generates once, reuses on r
 `charge:v1:${orderId}`                 // ✓ derived from an immutable identifier
 ```
 
-The key comes from the client or the initiating event — never from the layer doing the retrying.
+Der Schlüssel stammt vom Client oder aus dem auslösenden Ereignis, nicht aus der Schicht, die Wiederholungen ausführt.
 
-**Claim atomically. A check followed by an act is a race:**
+**Beanspruche den Schlüssel atomar.** Eine Prüfung mit anschließender Aktion erzeugt eine Race Condition:
 
 ```typescript
 // ✗ TOCTOU: two concurrent retries both read "not seen", both charge
@@ -190,9 +190,9 @@ const result = await chargeCard(amount);
 await db.update({ key, state: 'succeeded', response: result });
 ```
 
-The unique constraint *is* the mechanism. A store that cannot enforce uniqueness in one operation cannot back this.
+Die Eindeutigkeitsbedingung *ist* der Mechanismus. Ein Speicher, der Eindeutigkeit nicht in einer Operation durchsetzen kann, eignet sich dafür nicht.
 
-**Guard the payload.** Same key with a different body is a client bug, and must fail loudly rather than serving the first response to a second request:
+**Prüfe die Nutzlast.** Derselbe Schlüssel mit anderem Inhalt ist ein Clientfehler und muss ausdrücklich zurückgewiesen werden, statt die erste Antwort für eine andere Anfrage auszugeben:
 
 ```typescript
 if (existing.requestHash !== hash(req.body)) {
@@ -202,23 +202,23 @@ if (existing.requestHash !== hash(req.body)) {
 }
 ```
 
-**Decide what an in-flight duplicate gets.** The first request is still running when the second arrives — the common case under retry storms:
+**Entscheide über die Antwort auf ein Duplikat während der Verarbeitung.** Die erste Anfrage kann noch laufen, wenn die zweite eintrifft, insbesondere bei vielen Wiederholungen:
 
-| Strategy | Response | Use when |
+| Strategie | Antwort | Einsatz |
 |---|---|---|
-| Reject | `409 Conflict` | Client can retry later; simplest and safest |
-| Wait | Block for the result, bounded | Caller needs it synchronously |
-| Return pending | `202` + status URL | Long-running effects |
+| Ablehnen | `409 Conflict` | Client kann später wiederholen; einfachste und sicherste Variante |
+| Warten | Begrenzt auf das Ergebnis warten | Der Aufrufer benötigt es synchron |
+| Ausstehend melden | `202` + Status-URL | Lang laufende Vorgänge |
 
-Never let the second caller through because the first "seems stuck". A stalled attempt whose fate is unknown is exactly when duplicating costs most.
+Lass den zweiten Aufruf nicht allein deshalb durch, weil der erste festzustecken scheint. Gerade bei unbekanntem Ausgang eines hängenden Versuchs kann eine doppelte Ausführung teuer werden.
 
-**Every call has three outcomes, not two: success, failure, and _unknown_.** A timeout tells you nothing about whether the effect applied. Record the intent *before* calling out, so a crash between the call and the response leaves evidence something must resolve later — rather than a silently retried charge.
+**Jeder Aufruf hat drei mögliche Ergebnisse: Erfolg, Fehlschlag und _unbekannt_.** Ein Timeout sagt nicht aus, ob die Wirkung eingetreten ist. Halte die Absicht *vor* dem externen Aufruf fest, damit ein Absturz vor der Antwort eine später auflösbare Spur hinterlässt und keine Zahlung stillschweigend wiederholt wird.
 
-**Set retention from the longest retry chain**, not from disk cost. Keys must outlive every path that can re-deliver the same intent, including a dead-letter queue replayed a week later and any provider dispute window. A 24-hour key TTL behind a 7-day DLQ is a duplicate waiting to happen.
+**Richte die Aufbewahrung an der längsten Wiederholungskette aus**, nicht an den Speicherkosten. Schlüssel müssen alle Wege überdauern, auf denen dieselbe Absicht erneut zugestellt werden kann, einschließlich einer eine Woche später erneut verarbeiteten Dead-Letter-Queue und etwaiger Fristen für Beanstandungen beim Anbieter. Eine Schlüssel-TTL von 24 Stunden bei einer DLQ von sieben Tagen begünstigt Duplikate.
 
-## REST API Patterns
+## REST-API-Muster
 
-### Resource Design
+### Ressourcenentwurf
 
 ```
 GET    /api/tasks              → List tasks (with query params for filtering)
@@ -231,9 +231,9 @@ GET    /api/tasks/:id/comments → List comments for a task (sub-resource)
 POST   /api/tasks/:id/comments → Add a comment to a task
 ```
 
-### Pagination
+### Paginierung
 
-Paginate list endpoints:
+Paginierte Listenendpunkte bereitstellen:
 
 ```typescript
 // Request
@@ -251,17 +251,17 @@ GET /api/tasks?page=1&pageSize=20&sortBy=createdAt&sortOrder=desc
 }
 ```
 
-### Filtering
+### Filterung
 
-Use query parameters for filters:
+Verwende Abfrageparameter für Filter:
 
 ```
 GET /api/tasks?status=in_progress&assignee=user123&createdAfter=2025-01-01
 ```
 
-### Partial Updates (PATCH)
+### Teilaktualisierungen (PATCH)
 
-Accept partial objects — only update what's provided:
+Akzeptiere Teilobjekte und aktualisiere nur übermittelte Felder:
 
 ```typescript
 // Only title changes, everything else preserved
@@ -269,9 +269,9 @@ PATCH /api/tasks/123
 { "title": "Updated title" }
 ```
 
-## TypeScript Interface Patterns
+## Schnittstellenmuster in TypeScript
 
-### Use Discriminated Unions for Variants
+### Discriminated Unions für Varianten verwenden
 
 ```typescript
 // Good: Each variant is explicit
@@ -292,7 +292,7 @@ function getStatusLabel(status: TaskStatus): string {
 }
 ```
 
-### Input/Output Separation
+### Ein- und Ausgabe trennen
 
 ```typescript
 // Input: what the caller provides
@@ -312,7 +312,7 @@ interface Task {
 }
 ```
 
-### Use Branded Types for IDs
+### Branded Types für IDs verwenden
 
 ```typescript
 type TaskId = string & { readonly __brand: 'TaskId' };
@@ -322,48 +322,48 @@ type UserId = string & { readonly __brand: 'UserId' };
 function getTask(id: TaskId): Promise<Task> { ... }
 ```
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "We'll document the API later" | The types ARE the documentation. Define them first. |
-| "We don't need pagination for now" | You will the moment someone has 100+ items. Add it from the start. |
-| "PATCH is complicated, let's just use PUT" | PUT requires the full object every time. PATCH is what clients actually want. |
-| "We'll version the API when we need to" | Breaking changes without versioning break consumers. Design for extension from the start. |
-| "Nobody uses that undocumented behavior" | Hyrum's Law: if it's observable, somebody depends on it. Treat every public behavior as a commitment. |
-| "We can just maintain two versions" | Multiple versions multiply maintenance cost and create diamond dependency problems. Prefer the One-Version Rule. |
-| "Internal APIs don't need contracts" | Internal consumers are still consumers. Contracts prevent coupling and enable parallel work. |
-| "Accepting the Idempotency-Key header is enough" | The header is the contract; storing the key against the result is the implementation. A key you accept but don't honour tells the client retrying is safe when it isn't. |
-| "Our queue guarantees exactly-once delivery" | No queue does across a consumer crash — the broker's ack and your side effect are not in one transaction. Design for at-least-once with idempotent processing. |
-| "Duplicate requests are rare" | They're *correlated*. Retries spike exactly when a dependency is degraded — the moment duplicates are most likely and most expensive. |
+| „Die API dokumentieren wir später.“ | Typen sind Teil der Dokumentation. Definiere sie zuerst. |
+| „Paginierung brauchen wir noch nicht.“ | Sie wird spätestens bei vielen Einträgen benötigt. Plane sie von Anfang an ein. |
+| „PATCH ist kompliziert, wir verwenden PUT.“ | PUT benötigt jedes Mal das vollständige Objekt; PATCH ermöglicht Teilaktualisierungen. |
+| „Wir versionieren die API bei Bedarf.“ | Inkompatible Änderungen ohne Versionierung beeinträchtigen Nutzer. Plane Erweiterbarkeit von Anfang an. |
+| „Das undokumentierte Verhalten nutzt niemand.“ | Nach Hyrum's Law kann jedes beobachtbare Verhalten eine Abhängigkeit sein. Behandle öffentliches Verhalten als Verpflichtung. |
+| „Wir können zwei Versionen pflegen.“ | Mehrere Versionen erhöhen den Wartungsaufwand und können Diamond-Dependency-Probleme verursachen. Bevorzuge die One-Version Rule. |
+| „Interne APIs brauchen keine Verträge.“ | Auch interner Code nutzt Schnittstellen. Verträge verringern Kopplung und ermöglichen parallele Arbeit. |
+| „Den Idempotency-Key-Header anzunehmen reicht.“ | Der Header ist der Vertrag; die Zuordnung von Schlüssel und Ergebnis gehört zur Implementierung. Ein nicht eingehaltener Schlüssel täuscht sichere Wiederholbarkeit vor. |
+| „Unsere Queue garantiert genau eine Zustellung.“ | Bei einem Absturz des Consumers sind Broker-Bestätigung und Seiteneffekt nicht in einer gemeinsamen Transaktion. Plane mindestens einmalige Zustellung mit idempotenter Verarbeitung. |
+| „Doppelte Anfragen sind selten.“ | Sie treten *gehäuft* auf, wenn Abhängigkeiten beeinträchtigt sind und Wiederholungen zunehmen. |
 
-## Red Flags
+## Warnzeichen
 
-- Endpoints that return different shapes depending on conditions
-- Inconsistent error formats across endpoints
-- Validation scattered throughout internal code instead of at boundaries
-- Breaking changes to existing fields (type changes, removals)
-- List endpoints without pagination
-- Verbs in REST URLs (`/api/createTask`, `/api/getUsers`)
-- Third-party API responses used without validation or sanitization
-- A `SELECT` for an idempotency key followed by an `INSERT` — that's a race, not a guard
-- An idempotency key derived from a UUID, timestamp, or anything else regenerated per attempt
-- The same key accepted with a different request body, silently returning the first response
-- A key retention window shorter than the longest path that can re-deliver the request
+- Endpunkte, deren Antwortstruktur von Bedingungen abhängt
+- Uneinheitliche Fehlerformate zwischen Endpunkten
+- Über internen Code verteilte Validierung statt Validierung an Grenzen
+- Inkompatible Änderungen bestehender Felder, etwa Typänderungen oder Entfernung
+- Listenendpunkte ohne Paginierung
+- Verben in REST-URLs (`/api/createTask`, `/api/getUsers`)
+- Ungeprüfte oder unbereinigte Nutzung von API-Antworten Dritter
+- Ein `SELECT` für einen Idempotenzschlüssel mit anschließendem `INSERT`: eine Race Condition statt einer Absicherung
+- Ein Idempotenzschlüssel aus einer UUID, einem Zeitstempel oder anderen pro Versuch neu erzeugten Werten
+- Derselbe Schlüssel wird mit anderem Anfrageinhalt akzeptiert und gibt stillschweigend die erste Antwort zurück
+- Die Aufbewahrung eines Schlüssels endet vor dem längsten möglichen erneuten Zustellweg
 
-## Verification
+## Überprüfung
 
-After designing an API:
+Nach dem Entwurf einer API:
 
-- [ ] Every endpoint has typed input and output schemas
-- [ ] Error responses follow a single consistent format
-- [ ] Validation happens at system boundaries only
-- [ ] List endpoints support pagination
-- [ ] New fields are additive and optional (backward compatible)
-- [ ] Naming follows consistent conventions across all endpoints
-- [ ] API documentation or types are committed alongside the implementation
-- [ ] State-changing endpoints either honour an idempotency key or are documented as unsafe to retry
-- [ ] The key is claimed in one atomic operation, guarded by a unique constraint
-- [ ] A reused key with a different payload fails loudly rather than replaying the wrong response
-- [ ] The in-flight-duplicate response is a deliberate choice (409, wait, or 202) rather than whatever falls out
-- [ ] Key retention outlives the longest retry path, including dead-letter replay
+- [ ] Jeder Endpunkt besitzt typisierte Ein- und Ausgabeschemata
+- [ ] Fehlerantworten folgen einem einheitlichen Format
+- [ ] Validierung erfolgt nur an Systemgrenzen
+- [ ] Listenendpunkte unterstützen Paginierung
+- [ ] Neue Felder ergänzen bestehende und sind optional sowie abwärtskompatibel
+- [ ] Die Benennung folgt über alle Endpunkte hinweg einheitlichen Konventionen
+- [ ] API-Dokumentation oder Typen werden zusammen mit der Implementierung committet
+- [ ] Zustandsändernde Endpunkte halten entweder einen Idempotenzschlüssel ein oder sind als nicht sicher wiederholbar dokumentiert
+- [ ] Der Schlüssel wird in einer atomaren Operation mit Eindeutigkeitsbedingung beansprucht
+- [ ] Ein wiederverwendeter Schlüssel mit anderer Nutzlast wird ausdrücklich abgewiesen
+- [ ] Die Antwort auf ein Duplikat während der Verarbeitung wurde bewusst gewählt: 409, Warten oder 202
+- [ ] Die Aufbewahrung überdauert den längsten Wiederholungsweg einschließlich erneuter Dead-Letter-Verarbeitung

@@ -1,24 +1,24 @@
 ---
 name: incremental-implementation
-description: Delivers changes incrementally in thin, verifiable slices. Use when implementing any feature or change that touches more than one file, or when picking up the next task from a plan. Use when rolling a change out behind a feature flag, when you're about to write a large amount of code at once, or when a task feels too big to land in one step.
+description: Setzt Änderungen schrittweise in kleinen, überprüfbaren Einheiten um. Nutze den Skill für dateiübergreifende Änderungen, geplante Aufgaben, Feature Flags oder Arbeiten, die für einen einzelnen Schritt zu umfangreich erscheinen.
 ---
 
-# Incremental Implementation
+# Inkrementelle Umsetzung
 
-## Overview
+## Überblick
 
-Build in thin vertical slices — implement one piece, test it, verify it, then expand. Avoid implementing an entire feature in one pass. Each increment should leave the system in a working, testable state. This is the execution discipline that makes large features manageable.
+Setze kleine vertikale Teilstücke um: Implementiere einen Teil, teste und prüfe ihn und erweitere ihn anschließend. Vermeide, eine gesamte Funktion in einem Durchgang umzusetzen. Jeder Schritt soll das System in einem funktionsfähigen, testbaren Zustand hinterlassen. So bleiben große Funktionen beherrschbar.
 
-## When to Use
+## Wann der Skill verwendet wird
 
-- Implementing any multi-file change
-- Building a new feature from a task breakdown
-- Refactoring existing code
-- Any time you're tempted to write more than ~100 lines before testing
+- Bei Änderungen über mehrere Dateien hinweg
+- Bei der Umsetzung einer neuen Funktion anhand einer Aufgabenzerlegung
+- Beim Refactoring vorhandenen Codes
+- Wenn mehr als ungefähr 100 Zeilen vor dem Testen geschrieben werden sollen
 
-**When NOT to use:** Single-file, single-function changes where the scope is already minimal.
+**Nicht verwenden:** Bei Änderungen an einer einzelnen Datei oder Funktion, deren Umfang bereits minimal ist.
 
-## The Increment Cycle
+## Zyklus eines Umsetzungsschritts
 
 ```
 ┌──────────────────────────────────────┐
@@ -33,19 +33,19 @@ Build in thin vertical slices — implement one piece, test it, verify it, then 
 └──────────────────────────────────────┘
 ```
 
-For each slice:
+Für jedes Teilstück:
 
-1. **Implement** the smallest complete piece of functionality
-2. **Test** — select meaningful tests relevant to the affected behavior and project
-3. **Verify** — use appropriate available checks and report failures or checks not run
-4. **Commit when appropriate** -- group coherent verified work according to `$git-workflow-and-versioning`, preserving unrelated changes
-5. **Move to the next slice** — carry forward, don't restart
+1. **Implementieren:** Setze das kleinste vollständige Funktionsteilstück um.
+2. **Testen:** Wähle aussagekräftige Tests passend zum betroffenen Verhalten und Projekt.
+3. **Prüfen:** Nutze geeignete verfügbare Prüfungen und berichte Fehler oder nicht ausgeführte Prüfungen.
+4. **Bei Bedarf committen:** Fasse zusammenhängende geprüfte Arbeit gemäß `$git-workflow-and-versioning` zusammen und bewahre nicht zugehörige Änderungen.
+5. **Zum nächsten Teilstück übergehen:** Baue auf dem Erreichten auf, statt neu zu beginnen.
 
-## Slicing Strategies
+## Strategien zur Aufteilung
 
-### Vertical Slices (Preferred)
+### Vertikale Teilstücke (bevorzugt)
 
-Build one complete path through the stack:
+Setze jeweils einen vollständigen Pfad durch den Stack um:
 
 ```
 Slice 1: Create a task (DB + API + basic UI)
@@ -61,11 +61,11 @@ Slice 4: Delete a task (delete + API + UI + confirmation)
     → Tests pass, full CRUD complete
 ```
 
-Each slice delivers working end-to-end functionality.
+Jedes Teilstück liefert eine durchgehend funktionsfähige Funktion.
 
-### Contract-First Slicing
+### Aufteilung anhand des Vertrags
 
-When backend and frontend need to develop in parallel:
+Wenn Backend und Frontend parallel entwickelt werden müssen:
 
 ```
 Slice 0: Define the API contract (types, interfaces, OpenAPI spec)
@@ -74,9 +74,9 @@ Slice 1b: Implement frontend against mock data matching the contract
 Slice 2: Integrate and test end-to-end
 ```
 
-### Risk-First Slicing
+### Aufteilung nach Risiko
 
-Tackle the riskiest or most uncertain piece first:
+Bearbeite den riskantesten oder unsichersten Teil zuerst:
 
 ```
 Slice 1: Prove the WebSocket connection works (highest risk)
@@ -84,19 +84,19 @@ Slice 2: Build real-time task updates on the proven connection
 Slice 3: Add offline support and reconnection
 ```
 
-If Slice 1 fails, you discover it before investing in Slices 2 and 3.
+Schlägt Schritt 1 fehl, wird dies vor Investitionen in Schritt 2 und 3 erkannt.
 
-## Implementation Rules
+## Umsetzungsregeln
 
-### Rule 0: Simplicity First
+### Regel 0: Einfachheit zuerst
 
-Before writing any code, ask: "What is the simplest thing that could work?"
+Frage vor dem Schreiben von Code: „Was ist die einfachste Lösung, die funktionieren könnte?“
 
-After writing code, review it against these checks:
-- Can this be done in fewer lines?
-- Are these abstractions earning their complexity?
-- Would a staff engineer look at this and say "why didn't you just..."?
-- Am I building for hypothetical future requirements, or the current task?
+Prüfe den Code anschließend anhand dieser Fragen:
+- Lässt sich dies mit weniger Zeilen umsetzen?
+- Rechtfertigen die Abstraktionen ihre Komplexität?
+- Würde ein erfahrener Entwickler fragen, warum es nicht einfacher gelöst wurde?
+- Entsteht die Lösung für hypothetische künftige Anforderungen oder für die aktuelle Aufgabe?
 
 ```
 SIMPLICITY CHECK:
@@ -110,20 +110,20 @@ SIMPLICITY CHECK:
 ✓ Three form components
 ```
 
-Three similar lines of code is better than a premature abstraction. Implement the naive, obviously-correct version first. Optimize only after correctness is proven with tests.
+Drei ähnliche Codezeilen sind besser als eine verfrühte Abstraktion. Implementiere zuerst die einfache, offensichtlich korrekte Version. Optimiere erst, nachdem ihre Korrektheit durch Tests belegt ist.
 
-### Rule 0.5: Scope Discipline
+### Regel 0.5: Umfang einhalten
 
-Touch only what the task requires.
+Ändere nur, was die Aufgabe erfordert.
 
-Do NOT:
-- "Clean up" code adjacent to your change
-- Refactor imports in files you're not modifying
-- Remove comments you don't fully understand
-- Add features not in the spec because they "seem useful"
-- Modernize syntax in files you're only reading
+Unterlasse Folgendes:
+- Benachbarten Code beiläufig „aufräumen“
+- Imports in nicht bearbeiteten Dateien umgestalten
+- Kommentare entfernen, die du nicht vollständig verstehst
+- Nicht spezifizierte Funktionen ergänzen, weil sie „nützlich erscheinen“
+- Syntax in Dateien modernisieren, die du nur liest
 
-If you notice something worth improving outside your task scope, note it — don't fix it:
+Wenn dir außerhalb des Aufgabenumfangs eine mögliche Verbesserung auffällt, notiere sie, statt sie beiläufig umzusetzen:
 
 ```
 NOTICED BUT NOT TOUCHING:
@@ -132,21 +132,21 @@ NOTICED BUT NOT TOUCHING:
 → Want me to create tasks for these?
 ```
 
-### Rule 1: One Thing at a Time
+### Regel 1: Ein Thema nach dem anderen
 
-Each increment changes one logical thing. Don't mix concerns:
+Jeder Schritt ändert eine zusammenhängende Sache. Vermische keine unterschiedlichen Anliegen:
 
-**Bad:** One commit that adds a new component, refactors an existing one, and updates the build config.
+**Ungünstig:** Ein Commit ergänzt eine neue Komponente, überarbeitet eine bestehende und ändert die Build-Konfiguration.
 
-**Good:** Three separate commits — one for each change.
+**Geeignet:** Drei getrennte Commits, jeweils einer pro Änderung.
 
-### Rule 2: Keep It Compilable
+### Regel 2: Kompilierbarkeit erhalten
 
-Keep each increment coherent and suitable for verification. Run checks affected by the change at an appropriate point; do not repeat an unchanged check without cause. Report pre-existing failures and checks that cannot run rather than claiming success.
+Halte jeden Schritt in sich schlüssig und überprüfbar. Führe von der Änderung betroffene Prüfungen zu einem geeigneten Zeitpunkt aus; wiederhole eine unveränderte Prüfung nicht ohne Anlass. Berichte bereits bestehende Fehler und nicht ausführbare Prüfungen, statt Erfolg zu behaupten.
 
-### Rule 3: Feature Flags for Incomplete Features
+### Regel 3: Feature Flags für unvollständige Funktionen
 
-If a feature isn't ready for users but you need to merge increments:
+Wenn eine Funktion noch nicht für Nutzer bereit ist, einzelne Schritte aber zusammengeführt werden müssen:
 
 ```typescript
 // Feature flag for work-in-progress
@@ -157,11 +157,11 @@ if (ENABLE_TASK_SHARING) {
 }
 ```
 
-This lets you merge small increments to the main branch without exposing incomplete work.
+So lassen sich kleine Schritte in den Hauptbranch integrieren, ohne unvollständige Arbeit sichtbar zu machen.
 
-### Rule 4: Safe Defaults
+### Regel 4: Sichere Standardwerte
 
-New code should default to safe, conservative behavior:
+Neuer Code soll standardmäßig ein sicheres, zurückhaltendes Verhalten aufweisen:
 
 ```typescript
 // Safe: disabled by default, opt-in
@@ -171,18 +171,18 @@ export function createTask(data: TaskInput, options?: { notify?: boolean }) {
 }
 ```
 
-### Rule 5: Rollback-Friendly
+### Regel 5: Rücknahme ermöglichen
 
-Each increment should be independently revertable:
+Jeder Schritt soll sich unabhängig zurücknehmen lassen:
 
-- Additive changes (new files, new functions) are easy to revert
-- Modifications to existing code should be minimal and focused
-- Plan an appropriate rollback or forward recovery for database migrations according to project and data constraints
-- Split deletion and replacement only when each intermediate commit remains coherent and verifiable; otherwise keep them together
+- Ergänzende Änderungen wie neue Dateien oder Funktionen lassen sich leicht zurücknehmen.
+- Änderungen an bestehendem Code sollen klein und zielgerichtet sein.
+- Plane für Datenbankmigrationen eine geeignete Rücknahme oder Vorwärtskorrektur entsprechend Projekt- und Datenbedingungen.
+- Trenne Löschung und Ersatz nur, wenn jeder Zwischen-Commit in sich schlüssig und überprüfbar bleibt; halte sie andernfalls zusammen.
 
-## Working with Agents
+## Arbeit mit Agenten
 
-When directing an agent to implement incrementally:
+Bei der Beauftragung eines Agenten für eine inkrementelle Umsetzung:
 
 ```
 "Let's implement Task 3 from the plan.
@@ -194,51 +194,51 @@ After implementing, run the repository's test and build commands to
 verify nothing is broken."
 ```
 
-Be explicit about what's in scope and what's NOT in scope for each increment.
+Halte für jeden Schritt ausdrücklich fest, was zum Umfang gehört und was nicht.
 
-## Increment Checklist
+## Checkliste je Schritt
 
-After each increment, verify with the repository's own commands (see the test-driven-development skill's Discover the Stack First section):
+Prüfe nach jedem Schritt mit den repositoryeigenen Befehlen; beachte den Abschnitt zur Ermittlung des Stacks im Skill `test-driven-development`:
 
-- [ ] The change does one thing and does it completely
-- [ ] Relevant tests, build, type checking and linting are selected based on the change and available project commands; results and unavailable checks are reported
-- [ ] The new functionality works as expected
-- [ ] Any commit follows the authorized Git workflow and has a descriptive message
+- [ ] Die Änderung erledigt eine Aufgabe vollständig
+- [ ] Relevante Tests, Build, Typprüfung und Linting wurden anhand der Änderung und verfügbaren Projektbefehle ausgewählt; Ergebnisse und nicht verfügbare Prüfungen sind berichtet
+- [ ] Die neue Funktion arbeitet wie erwartet
+- [ ] Jeder Commit folgt dem autorisierten Git-Workflow und hat eine aussagekräftige Nachricht
 
-**Note:** Run each verification command after a change that could affect it. After a successful run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no information.
+**Hinweis:** Führe einen Prüfbefehl nach Änderungen aus, die sein Ergebnis beeinflussen können. Wiederhole ihn nach einem erfolgreichen Lauf nicht ohne zwischenzeitliche Codeänderung; bei unverändertem Code liefert dies keine neue Information.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Einordnung |
 |---|---|
-| "I'll test it all at the end" | Bugs compound. A bug in Slice 1 makes Slices 2-5 wrong. Test each slice. |
-| "It's faster to do it all at once" | It *feels* faster until something breaks and you can't find which of 500 changed lines caused it. |
-| "These changes are too small to commit separately" | Small commits are free. Large commits hide bugs and make rollbacks painful. |
-| "I'll add the feature flag later" | If the feature isn't complete, it shouldn't be user-visible. Add the flag now. |
-| "This refactor is small enough to include" | Refactors mixed with features make both harder to review and debug. Separate them. |
-| "Let me run the build command again just to be sure" | After a successful run, repeating the same command adds nothing unless the code has changed since. Run it again after subsequent edits, not as reassurance. |
+| „Ich teste alles am Ende“ | Fehler können sich fortpflanzen. Ein Fehler in Schritt 1 kann Schritt 2 bis 5 beeinträchtigen. Prüfe jeden Schritt. |
+| „Alles auf einmal ist schneller“ | Es fühlt sich schneller an, bis etwas fehlschlägt und die Ursache unter 500 geänderten Zeilen gesucht werden muss. |
+| „Diese Änderungen sind für separate Commits zu klein“ | Kleine Commits sind kostengünstig. Große Commits können Fehler verbergen und Rücknahmen erschweren. |
+| „Das Feature Flag ergänze ich später“ | Ist die Funktion unvollständig, soll sie Nutzern nicht sichtbar sein. Ergänze das Flag jetzt. |
+| „Dieses Refactoring ist klein genug, um es mit aufzunehmen“ | Mit Funktionen vermischte Refactorings erschweren Prüfung und Fehlersuche. Trenne sie. |
+| „Ich führe den Build zur Sicherheit noch einmal aus“ | Nach einem erfolgreichen Lauf liefert derselbe Befehl ohne Codeänderung keine neue Information. Führe ihn nach späteren Änderungen aus, nicht zur bloßen Beruhigung. |
 
-## Red Flags
+## Warnzeichen
 
-- More than 100 lines of code written without running tests
-- Multiple unrelated changes in a single increment
-- "Let me just quickly add this too" scope expansion
-- Skipping the test/verify step to move faster
-- Build or tests broken between increments
-- Large uncommitted changes accumulating
-- Building abstractions before the third use case demands it
-- Touching files outside the task scope "while I'm here"
-- Creating new utility files for one-time operations
-- Running the same build/test command twice in a row without any intervening code change
+- Mehr als 100 Zeilen Code ohne Testausführung geschrieben
+- Mehrere zusammenhanglose Änderungen in einem Schritt
+- Umfangsausweitung durch „Das ergänze ich schnell noch“
+- Test- oder Prüfschritte zugunsten von Geschwindigkeit überspringen
+- Fehlgeschlagener Build oder fehlgeschlagene Tests zwischen Schritten
+- Ansammlung großer uncommitteter Änderungen
+- Abstraktionen erstellen, bevor ein dritter Anwendungsfall sie erfordert
+- Dateien außerhalb des Aufgabenumfangs beiläufig ändern
+- Neue Hilfsdateien für einmalige Operationen erstellen
+- Denselben Build- oder Testbefehl ohne zwischenzeitliche Codeänderung zweimal hintereinander ausführen
 
-## Verification
+## Verifikation
 
-After completing all increments for a task:
+Nach Abschluss aller Schritte einer Aufgabe:
 
-- [ ] Each increment received suitable verification; coherent work was committed as appropriate
-- [ ] Required and applicable tests, build and end-to-end checks have results or are explicitly reported as open
-- [ ] Remaining task-related and pre-existing uncommitted changes are identified and preserved
+- [ ] Jeder Schritt wurde geeignet geprüft; zusammenhängende Arbeit wurde bei Bedarf committet
+- [ ] Erforderliche und anwendbare Tests, Build und End-to-End-Prüfungen haben Ergebnisse oder sind ausdrücklich als offen berichtet
+- [ ] Verbleibende aufgabenbezogene und bereits bestehende uncommittete Änderungen sind erkannt und bleiben erhalten
 
-## See Also
+## Siehe auch
 
-Per-increment verification is the local check. Before declaring a task done, apply the project-wide Definition of Done as the final gate, the standing bar every increment clears regardless of the task. See `.codex/ai-engineering/references/definition-of-done.md` relative to the project root.
+Die Prüfung je Schritt ist die lokale Kontrolle. Wende vor Abschluss einer Aufgabe die projektweite Definition of Done als abschließenden Qualitätsmaßstab an. Siehe `.codex/ai-engineering/references/definition-of-done.md` relativ zum Projektstamm.

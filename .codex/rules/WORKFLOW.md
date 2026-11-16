@@ -20,11 +20,15 @@ Bei App-Arbeiten erfasst die Spec mindestens die folgenden Punkte. Führe nicht 
 
 Trenne belegte Fakten von Annahmen. Kläre nur Fragen, deren Antwort die Lösung wesentlich verändern würde; arbeite bei geringfügigen Lücken mit ausdrücklich benannten Annahmen weiter. Beschreibe das gewünschte Verhalten, nicht die technische Implementierung.
 
+Nutze die EPIC-Dimensionen passend zu Umfang und Risiko: Anforderungen eindeutig und einzeln formulieren, beobachtbare Prüfkriterien, Abhängigkeiten, Ausnahmen und offene Entscheidungen festhalten. Bei mehrteiligen Vorhaben verwende stabile Anforderungskennungen nach Projektkonvention, um Spec, Plan und Prüfungen zu verbinden. Für vertiefte Erstellung oder Prüfung siehe `.codex/skills/spec-driven-development/references/epic.md`; die 40 Praktiken sind keine starre Pflichtliste für jede Änderung.
+
 **Ausgabe:** `SPEC.md` oder eine kompakte Spec im Aufgaben-/Planungsartefakt. Eine Spec beschreibt das Was und Warum, nicht vorschnell eine konkrete Implementierung.
 
 ### 2. Plan
 
 Untersuche die vorhandene Architektur und Konventionen. Leite aus jedem Abnahmekriterium relevante Änderungen und Verifikationsschritte ab. Teile die Arbeit in kleine, logisch geordnete Schritte; notiere Abhängigkeiten, Risiken und betroffene Dateien, soweit bekannt. Plane keine unnötige Infrastruktur.
+
+Prüfe über Spec, Plan und vorhandene Aufgaben hinweg einheitliche Begriffe, Kennungen und Schnittstellen. Verknüpfe wesentliche Anforderungen mit Kriterien, zuständigen Schritten und geplanten Prüfungen; reine Querschnitts- oder Verwaltungsaufgaben benötigen keine künstliche Zuordnung.
 
 **Ausgabe:** Ein maßgeblicher Plan pro Vorhaben mit Schritten, Verifikation und Rückverfolgbarkeit zu den Kriterien, beispielsweise `PLAN.md` am bestehenden Planungsort. Aufgaben und Status können im Plan stehen; ein vorhandenes Aufgabensystem wird stattdessen verlinkt, ohne einen zweiten Aufgabenstatus zu pflegen. Nutze `$feature-planning` als Einstieg und bei Bedarf `$planning-and-task-breakdown` zur detaillierten Zerlegung desselben Plans. Fremde Pläne und offene Aufgaben werden nicht überschrieben oder gelöscht; für ein neues Vorhaben kann ein eigener Plan am bestehenden Ort entstehen.
 
@@ -35,6 +39,8 @@ Setze den Plan inkrementell um. Nutze bestehende Muster und halte Änderungen im
 ### 4. Verify
 
 Prüfe jedes Abnahmekriterium anhand des Ergebnisses. Führe passende Tests, Builds, statische Prüfungen oder manuelle Checks aus, wenn sie zum Auftrag gehören oder für belastbare Verifikation nötig sind. Behaupte keine Prüfung, die nicht ausgeführt wurde. Melde offene Kriterien, Einschränkungen und relevante Risiken.
+
+Ordne tatsächliche Nachweise bei vorhandenen Kennungen den Kriterien und bei Bedarf Aufgaben zu. Eine geplante Prüfung oder Fertigmeldung gilt nicht als bestandener Nachweis. Markiere nicht anwendbare EPIC-Praktiken getrennt von fehlenden Informationen.
 
 **Ausgabe:** `VERIFICATION.md` oder eine knappe Prüfübersicht mit Kriterium, Nachweis und Status.
 

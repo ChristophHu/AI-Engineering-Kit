@@ -1,62 +1,62 @@
 ---
 name: constraint-driven-development
-description: Establishes a project's quality bar as a written contract and stops agents quietly lowering it. Interviews the user on which dimensions matter, supplies sane default thresholds when they have no number in mind, records everything in CONSTRAINTS.md, and watches the diff for a weakened bar — new @ts-ignore or eslint-disable suppressions, skipped or deleted tests, assertions stripped out, unimplemented stubs, thresholds edited down. Use when no quality bar is written down, when the user says "set up constraints" or "define our standards", when the user wants dimensions they care about — accessibility, web performance, coverage — set up as enforced constraints, when an agent keeps silencing checks or skipping tests to get to green, when you need a coverage or performance threshold and don't know what number to pick, or when an agent writes more code than anyone will read.
+description: Definiert und dokumentiert verbindliche Qualitätsschranken in CONSTRAINTS.md. Nutze den Skill für fehlende Qualitätsstandards, prüfbare Grenzwerte und Qualitätsschranken sowie zum Erkennen abgeschwächter Prüfungen, unterdrückter Warnungen, übersprungener Tests und reduzierter Schwellenwerte.
 ---
 
-# Constraint-Driven Development
+# Entwicklung mit Qualitätsschranken
 
-## Overview
+## Überblick
 
-Other skills in this pack describe what good looks like. `code-review-and-quality` gives you five axes. `test-driven-development` gives you a cycle. `security-and-hardening` gives you a threat list. All of that lives in prose the agent reads and may or may not follow, and none of it survives the end of the session.
+Andere Skills beschreiben Qualitätsmerkmale: `code-review-and-quality` nennt fünf Prüfdimensionen, `test-driven-development` einen Zyklus und `security-and-hardening` Bedrohungen. Diese Anweisungen allein halten keine projektspezifischen Entscheidungen über die Sitzung hinaus fest.
 
-This skill produces something different: a written record of **this project's** bar, with numbers, that outlives the conversation and can be checked mechanically.
+Dieser Skill dokumentiert die Qualitätsanforderungen **dieses Projekts** mit überprüfbaren Zahlen dauerhaft.
 
-The reason matters. When you wrote the code, reading it told you whether it was any good. An agent writes more in an afternoon than you will read that week, so the judgement moves out of your head and into checks that run around the loop. Those checks need to exist, they need numbers you actually chose, and they need to fire close enough to the work that the agent fixes its own output.
+Wenn Agenten mehr Code erzeugen, als zeitnah gelesen wird, gewinnen automatisierte Prüfungen an Bedeutung. Sie benötigen bewusst gewählte Grenzwerte und müssen nah genug an der Arbeit ausgeführt werden, damit der Agent Befunde beheben kann.
 
-Spec-driven development says what to build. Test-driven development proves it works. Constraint-driven development defines what "good enough to ship" means, before anyone argues about it in a pull request.
+Spec-Driven Development beschreibt das Ziel, Test-Driven Development prüft die Funktion und Constraint-Driven Development legt vor einem Pull Request die Qualitätsanforderungen für die Veröffentlichung fest.
 
-## When to Use
+## Wann verwenden
 
-Apply this skill when:
+Nutze den Skill, wenn:
 
-- Starting a project or a significant feature and no quality bar is written down
-- The user asks to "set up constraints", "add quality gates", "define our standards", or "stop the agent shipping junk"
-- An agent is producing volume nobody is reading line by line
-- CI has checks but nobody can say which ones block a merge and which ones are decoration
-- Coverage, performance, or accessibility numbers get argued about per-PR instead of decided once
-- You're about to run an autonomous implementation loop, and the only thing standing between it and main is a test suite the agent also wrote
+- Ein Projekt oder größeres Feature ohne dokumentierte Qualitätsanforderungen beginnt
+- Der Nutzer Qualitätsstandards oder Prüfschranken einrichten möchte
+- Ein Agent mehr Code erzeugt, als zeilenweise geprüft wird
+- Unklar ist, welche CI-Prüfungen einen Merge blockieren
+- Grenzwerte für Coverage, Performance oder Barrierefreiheit bei jedem PR neu diskutiert werden
+- Ein autonomer Implementierungsablauf bevorsteht und nur eine vom selben Agenten geschriebene Testsuite ihn von main trennt
 
-**When NOT to use:**
+**Nicht verwenden, wenn:**
 
-- The project already has a `CONSTRAINTS.md` and the user isn't changing it — read it and follow it instead
-- One-off scripts, spikes, throwaway prototypes
-- The user wants a code review right now (`code-review-and-quality`) or a CI pipeline built (`ci-cd-and-automation`)
-- Pre-product-market-fit code with a two-week expected lifetime — the floor below is still worth it, the rest isn't
+- Bereits eine `CONSTRAINTS.md` existiert und der Nutzer sie nicht ändern möchte; lies und befolge sie stattdessen
+- Es sich um einmalige Skripte, Spikes oder Wegwerfprototypen handelt
+- Der Nutzer unmittelbar ein Code-Review (`code-review-and-quality`) oder eine CI-Pipeline (`ci-cd-and-automation`) möchte
+- Code vor dem Product-Market-Fit voraussichtlich nur zwei Wochen besteht; das folgende Mindestniveau bleibt sinnvoll, die weiteren Maßnahmen nicht
 
-## Loading Constraints
+## Voraussetzungen
 
-The interview needs a live user. **Don't run it in non-interactive contexts** (CI, `/loop`, autonomous runs). If constraints are missing and you're in one of those, apply the Floor below, note that you did, and flag the rest for a human.
+Das Interview benötigt einen ansprechbaren Nutzer. **Führe es nicht in nicht interaktiven Kontexten** wie CI, `/loop` oder autonomen Ausführungen durch. Fehlen dort Vorgaben, wende das folgende Mindestniveau an, dokumentiere dies und melde den Rest zur menschlichen Klärung.
 
-## The Process
+## Vorgehen
 
-### Step 1: Detect before you ask
+### Schritt 1: Vor dem Fragen recherchieren
 
-Never ask what you can read. Before the first question, gather:
+Frage nicht nach bereits lesbaren Informationen. Ermittle vor der ersten Frage:
 
-| What | Where to look |
+| Information | Fundstelle |
 |------|---------------|
-| Language and stack | `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml` |
-| Test runner | dev dependencies, `test` script, existing test files |
-| Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml` |
-| Coverage today | `coverage/` output, or run the suite once |
+| Sprache und Stack | `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml` |
+| Test Runner | Entwicklungsabhängigkeiten, `test`-Skript, vorhandene Testdateien |
+| Vorhandene Linter | `eslint.config.*`, `biome.json`, `.ruff.toml` |
+| Aktuelle Coverage | Ausgabe unter `coverage/` oder einmalige Testausführung |
 | CI | `.github/workflows/`, `.gitlab-ci.yml` |
-| Agent harness | `.claude/`, `.codex/`, `AGENTS.md` |
+| Agentenumgebung | `.claude/`, `.codex/`, `AGENTS.md` |
 
-Report what you found in two lines, then ask only what's left.
+Fasse die Ergebnisse in zwei Zeilen zusammen und frage nur nach offenen Punkten.
 
-### Step 2: Four questions, each with a default
+### Schritt 2: Vier Fragen mit je einem Standardwert
 
-Follow the one-question-at-a-time discipline from `interview-me`, with one change: every question here has a default, so "I don't know" is a complete answer that still produces a working config.
+Befolge das Vorgehen von `interview-me` mit jeweils einer Frage. Ergänze hier für jede Frage einen Standardwert, sodass auch „Ich weiß es nicht“ zu einer verwendbaren Konfiguration führt.
 
 ```
 Q1: Beyond the floor, which of these do you want enforced?
@@ -88,11 +88,11 @@ GUESS: About 90 seconds. Longer and you'll stop running it.
 DEFAULT if unsure: 90 seconds at task end, unlimited in CI.
 ```
 
-Stop at four. A twelve-question intake produces a config nobody understands and a user who regrets starting.
+Beschränke dich auf vier Fragen. Ein umfangreicherer Fragenkatalog erschwert die Verständlichkeit der Konfiguration.
 
-### Step 3: Write CONSTRAINTS.md
+### Schritt 3: CONSTRAINTS.md erstellen
 
-One file at the repo root. Any agent on any harness can read it, and a change to it shows up in review where it belongs.
+Lege eine Datei im Repository-Wurzelverzeichnis an. Agenten verschiedener Umgebungen können sie lesen und Änderungen erscheinen im Review.
 
 ```markdown
 # Constraints
@@ -137,40 +137,40 @@ number and no command in this column is an aspiration, not a constraint.
 | W1 | `no-explicit-any` | `src/legacy/**` | Rewrite tracked in ENG-441 | @addy | 2026-11-01 |
 ```
 
-Then add one line to `AGENTS.md` and `CLAUDE.md`: `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
+Ergänze anschließend in `AGENTS.md` und `CLAUDE.md` die Zeile: `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
 
-### Step 4: Install what each dimension needs
+### Schritt 4: Benötigte Werkzeuge je Dimension installieren
 
-Picking a dimension means installing something. Don't leave the user with a number and no mechanism, and don't invent your own checker when a de facto one exists — these tools are listed because their rule formats and thresholds are what everything else in the ecosystem targets, so the team's existing config keeps working.
+Eine gewählte Dimension benötigt einen ausführbaren Prüfmechanismus. Erfinde keinen eigenen Checker, wenn ein etabliertes Werkzeug existiert; dessen Regelformat und Grenzwerte erhalten die bestehende Teamkonfiguration.
 
-| Dimension | Tool | Install | Run | Gate on |
+| Dimension | Werkzeug | Installation | Ausführung | Blockiert bei |
 |-----------|------|---------|-----|---------|
-| Types (TS) | tsc | already there | `tsc --noEmit` | any error |
-| Types (Python) | mypy | `pip install mypy` | `mypy .` | any error |
-| Lint | your existing config | already there | `eslint .` / `biome check` / `ruff check` | any error |
-| Coverage (JS) | your test runner | Vitest: `npm i -D @vitest/coverage-v8`; Jest: already there | `vitest run --coverage` (or `jest --coverage`) | coverage of changed lines |
-| Coverage (Python) | pytest-cov | `pip install pytest-cov` | `pytest --cov --cov-report=lcov` | same |
-| Security: code | Semgrep | `pipx install semgrep` | `npm run check:security` (below) | high or critical, including legacy `ERROR` |
-| Security: secrets | gitleaks | `brew install gitleaks` | `gitleaks dir . --redact --no-banner` | any finding |
-| Security: dependencies | osv-scanner | `brew install osv-scanner` | `osv-scanner scan source -r .` | high or above |
-| Performance: page | Lighthouse | `npm i -D lighthouse` | `lighthouse $URL --output=json --quiet` | LCP, CLS, performance score |
-| Performance: bundle | size-limit | `npm i -D size-limit` | `size-limit --json` | per-entry byte budget |
-| Accessibility | axe-core | `npm i -D @axe-core/cli` | `npm run check:a11y` (below) | zero critical or serious |
-| Architecture | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | any violation |
-| Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
+| Typen (TS) | tsc | bereits vorhanden | `tsc --noEmit` | jedem Fehler |
+| Typen (Python) | mypy | `pip install mypy` | `mypy .` | jedem Fehler |
+| Lint | bestehende Konfiguration | bereits vorhanden | `eslint .` / `biome check` / `ruff check` | jedem Fehler |
+| Coverage (JS) | vorhandener Test Runner | Vitest: `npm i -D @vitest/coverage-v8`; Jest: bereits vorhanden | `vitest run --coverage` (oder `jest --coverage`) | Coverage geänderter Zeilen |
+| Coverage (Python) | pytest-cov | `pip install pytest-cov` | `pytest --cov --cov-report=lcov` | wie oben |
+| Sicherheit: Code | Semgrep | `pipx install semgrep` | `npm run check:security` (unten) | hoch oder kritisch, einschließlich älterem `ERROR` |
+| Sicherheit: Geheimnisse | gitleaks | `brew install gitleaks` | `gitleaks dir . --redact --no-banner` | jedem Befund |
+| Sicherheit: Abhängigkeiten | osv-scanner | `brew install osv-scanner` | `osv-scanner scan source -r .` | hoch oder höher |
+| Performance: Seite | Lighthouse | `npm i -D lighthouse` | `lighthouse $URL --output=json --quiet` | LCP, CLS, Performance-Wert |
+| Performance: Bundle | size-limit | `npm i -D size-limit` | `size-limit --json` | Byte-Budget je Einstiegspunkt |
+| Barrierefreiheit | axe-core | `npm i -D @axe-core/cli` | `npm run check:a11y` (unten) | kritischen oder schwerwiegenden Befunden |
+| Architektur | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | jedem Verstoß |
+| Qualität der Assertions | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | Mutationswert |
 
-Five things that will bite you if you skip them:
+Fünf wichtige Hinweise:
 
-1. **`--redact` on gitleaks is not optional.** Without it the matched secret lands in the agent's transcript, which is how a leaked key ends up in a log, a summary, or a commit message. Report the rule and the location, never the value.
-2. **Lighthouse and axe need a URL.** They only work against a running app, so they belong in the runtime stage against a preview deploy or a local server you start first. If the project has no URL to hit — a CLI, a library, a desktop app — say so and drop the dimension rather than inventing a check that can't run.
-3. **Scope the expensive ones to the diff.** `stryker run --mutate` on the whole repo takes hours and gets turned off; on the files a change touched it takes under a minute. Same for Semgrep, which takes a path list.
-4. **Coverage needs no second test run.** Read the lcov your suite already writes and intersect it with `git diff`. Running the suite twice to get a number is the fastest way to make people hate this.
-5. **Semgrep's registry rules are free to run; check the licence before redistributing them.** `opengrep` is a drop-in fork with the same rule format and JSON output if that matters to your legal team.
+1. **`--redact` ist bei gitleaks verpflichtend.** Andernfalls gelangen gefundene Geheimnisse ins Agentenprotokoll und möglicherweise in Logs, Zusammenfassungen oder Commit-Nachrichten. Melde Regel und Fundstelle, niemals den Wert.
+2. **Lighthouse und axe benötigen eine URL.** Prüfe eine laufende App über ein Preview-Deployment oder einen zuvor gestarteten lokalen Server. Hat das Projekt keine erreichbare URL, etwa bei CLI, Bibliothek oder Desktop-App, benenne dies und lasse die Dimension weg.
+3. **Begrenze aufwendige Prüfungen auf den Diff.** `stryker run --mutate` für das gesamte Repository kann Stunden dauern; für geänderte Dateien ist es deutlich schneller. Gleiches gilt für Semgrep, das eine Pfadliste akzeptiert.
+4. **Coverage benötigt keinen zweiten Testlauf.** Werte die bereits erzeugte lcov-Datei zusammen mit `git diff` aus.
+5. **Semgrep-Registry-Regeln dürfen kostenlos ausgeführt werden; prüfe vor der Weitergabe die Lizenz.** `opengrep` ist bei Bedarf ein kompatibler Fork mit gleichem Regelformat und JSON-Ausgabe.
 
-`semgrep scan` and `axe` can exit 0 on findings; copy [scripts/quality-gate.mjs](scripts/quality-gate.mjs) into the project's `scripts/` directory to enforce these thresholds.
-Keep the scanner before `&&` so a failed scan stops the command.
+`semgrep scan` und `axe` können trotz Befunden mit 0 enden. Kopiere [scripts/quality-gate.mjs](scripts/quality-gate.mjs) in das `scripts/`-Verzeichnis des Projekts, um die Grenzwerte durchzusetzen.
+Belasse den Scanner vor `&&`, damit ein fehlgeschlagener Scan den Befehl abbricht.
 
-Add each one to the project's own script so it's reproducible without an agent:
+Ergänze die Befehle in den Projektskripten, damit sie ohne Agenten reproduzierbar sind:
 
 ```json
 {
@@ -184,138 +184,138 @@ Add each one to the project's own script so it's reproducible without an agent:
 }
 ```
 
-That mapping matters more than the tools. `check:fast` is what runs after an edit, `check:task` when the agent thinks it's done, `check:full` in CI. Run `check:a11y` after the preview is reachable, with `PREVIEW_URL` set (the example uses POSIX shell syntax).
+Die Zuordnung ist entscheidend: `check:fast` läuft nach einer Änderung, `check:task` am Aufgabenende und `check:full` in CI. Führe `check:a11y` nach Erreichbarkeit der Vorschau mit gesetztem `PREVIEW_URL` aus; das Beispiel verwendet POSIX-Shellsyntax.
 
-Before calling any row enforced, run its actual CI command against a known violation and a clean control. Confirm that the violation fails, the control passes, and scanner errors fail too. For a severity threshold, also confirm a below-threshold finding passes. Apply this to every dimension, including coverage and Lighthouse: generating a report alone does not enforce the number in `CONSTRAINTS.md`.
+Bevor eine Zeile als durchgesetzt gilt, führe ihren tatsächlichen CI-Befehl gegen einen bekannten Verstoß und eine saubere Kontrolle aus. Der Verstoß und Scannerfehler müssen fehlschlagen, die Kontrolle bestehen. Prüfe bei Schweregradschwellen außerdem, dass ein Befund unterhalb der Schwelle besteht. Das gilt auch für Coverage und Lighthouse: Ein Bericht allein setzt den Wert in `CONSTRAINTS.md` nicht durch.
 
-The commands now live in two places — the `Checked by` column in `CONSTRAINTS.md` and these scripts. `CONSTRAINTS.md` is the canonical source: it carries the reason alongside each command and it shows up in review. The scripts are convenience wrappers that must mirror it, not a second source of truth; if they drift, the file wins.
+Die Befehle stehen nun in der Spalte `Checked by` von `CONSTRAINTS.md` und in den Skripten. `CONSTRAINTS.md` ist maßgeblich, dokumentiert die Gründe und erscheint im Review. Die Skripte müssen sie widerspiegeln; bei Abweichungen gilt die Datei.
 
-### Step 5: Wire it to the lifecycle
+### Schritt 5: In den Lebenszyklus einbinden
 
-The single biggest mistake is running everything everywhere. A check that stalls the agent gets switched off, and a gate people switched off is worse than no gate, because the bar still looks like it exists.
+Nicht jede Prüfung gehört in jede Phase. Prüfungen, die den Agenten zu lange blockieren, werden womöglich abgeschaltet, während ihre Qualitätswirkung weiterhin angenommen wird.
 
-Use the project's actual configured commands and CI jobs; the phases below are conceptual, not built-in Codex slash commands. Adapt budgets to the project.
+Verwende die tatsächlich konfigurierten Projektbefehle und CI-Jobs. Die folgenden Phasen sind konzeptionell und keine integrierten Codex-Slash-Befehle. Passe Budgets an das Projekt an.
 
-| Phase | Example checks | What runs | Example budget |
+| Phase | Beispielprüfungen | Ausführung | Beispielbudget |
 |-------|---------|-----------|--------|
-| BUILD | Configured fast checks | Types, lint, secrets, the floor | under 5s, changed file only |
-| VERIFY | Project test commands | Related tests, coverage on changed lines | under 90s |
-| REVIEW | Project review checks | Applicable checks and guards below | minutes |
-| SHIP | Configured CI/release checks | Direction checks, no regressions | CI |
+| BUILD | Konfigurierte schnelle Prüfungen | Typen, Lint, Geheimnisse, Mindestniveau | unter 5 s, nur geänderte Datei |
+| VERIFY | Projekttestbefehle | Zugehörige Tests, Coverage geänderter Zeilen | unter 90 s |
+| REVIEW | Review-Prüfungen des Projekts | Anwendbare Prüfungen und nachfolgende Schutzmechanismen | Minuten |
+| SHIP | Konfigurierte CI-/Release-Prüfungen | Richtungsprüfungen, keine Regressionen | CI |
 
-Two rules that keep this tolerable:
+Zwei Regeln für einen praktikablen Ablauf:
 
-1. **Scope to the diff.** Check the lines this change touched, not the whole repo. Coverage of changed lines is a number the agent can move; project coverage is one it inherited.
-2. **Cost decides placement.** Anything over a few seconds moves out of the edit loop. Mutation testing on a whole repo takes hours; on the files a change touched it takes under a minute, which is the difference between a check people run and one they don't.
+1. **Begrenze Prüfungen auf den Diff.** Prüfe die geänderten Zeilen statt des gesamten Repositorys. Coverage geänderter Zeilen kann der Agent beeinflussen; bestehende Projekt-Coverage wurde übernommen.
+2. **Der Aufwand bestimmt die Phase.** Prüfungen über wenigen Sekunden gehören nicht in jede Änderungsschleife. Mutationstests für das gesamte Repository können Stunden dauern, für geänderte Dateien deutlich kürzer.
 
-### Step 6: Guard the bar itself
+### Schritt 6: Qualitätsniveau selbst schützen
 
-Someone will point out that if the agent writes the code and the checks, the checks prove nothing. Half right, and worth engineering around.
+Wenn derselbe Agent Code und Prüfungen schreibt, ist deren Aussagekraft begrenzt. Berücksichtige dies bei der Absicherung.
 
-Agents don't craft clever loopholes. They hit a red check and take the cheapest road to green. Watch for these five moves in the diff, at review time:
+Achte im Diff beim Review auf fünf Arten, wie fehlgeschlagene Prüfungen abgeschwächt werden können:
 
-1. **The threshold moved.** A budget lowered, a severity dropped, a check removed from the fast stage. Compare `CONSTRAINTS.md` against its state at the branch point.
-2. **A test got easier.** `.skip` added, a test file deleted, assertions pulled out of tests that stayed.
-3. **A checker got silenced.** New `@ts-ignore` or `eslint-disable`. Four suppressions deserve special attention because they switch off a check you're relying on: `istanbul ignore` drops code from coverage instead of testing it, `Stryker disable` hides a surviving mutant, `nosemgrep` and `gitleaks:allow` do it for security findings.
-4. **Work is unfinished.** A stub that throws, an empty `catch` turning a failure into silence, a `TODO` standing where the implementation should be.
-5. **An exception appeared.** A new row in the Exceptions table nobody discussed.
+1. **Ein Grenzwert wurde verschoben.** Ein Budget oder Schweregrad wurde gesenkt oder eine schnelle Prüfung entfernt. Vergleiche `CONSTRAINTS.md` mit dem Stand beim Abzweigen.
+2. **Ein Test wurde abgeschwächt.** `.skip` wurde ergänzt, eine Testdatei gelöscht oder Assertions entfernt.
+3. **Eine Prüfung wurde unterdrückt.** Neue `@ts-ignore` oder `eslint-disable` beachten. Besonders wichtig: `istanbul ignore` entfernt Code aus der Coverage, `Stryker disable` verbirgt einen überlebenden Mutanten und `nosemgrep` sowie `gitleaks:allow` unterdrücken Sicherheitsbefunde.
+4. **Arbeit ist unvollständig.** Ein Stub löst eine Ausnahme aus, ein leeres `catch` verschluckt Fehler oder ein `TODO` steht anstelle der Implementierung.
+5. **Eine Ausnahme wurde ergänzt.** Eine neue Zeile in der Ausnahmetabelle wurde nicht besprochen.
 
-None of this needs tooling beyond `git diff`. Tightening the bar should be silent; loosening it should be loud.
+Dafür genügt `git diff`. Eine Verschärfung kann unmittelbar erfolgen; eine Abschwächung muss ausdrücklich sichtbar sein.
 
-Unlike the numbered dimensions, the floor has no de facto tool of its own, so an agent asked to enforce it tends to write a checker from scratch, and two agents write two different ones. A reference implementation of these five checks ships with this skill in [references/floor-guard.md](references/floor-guard.md) (diff-scoped, exit `0`/`1`/`2`, patterns adaptable per ecosystem). Adapt that rather than reinventing it, for the same reason every dimension names a de facto tool: so the mechanism is the same across runs and stacks.
+Für das Mindestniveau gibt es anders als für die bezifferten Dimensionen kein etabliertes Einzelwerkzeug. Eine Referenzimplementierung der fünf Prüfungen steht in [references/floor-guard.md](references/floor-guard.md): auf den Diff begrenzt, mit Exit-Codes `0`/`1`/`2` und anpassbaren Mustern. Passe sie an, statt einen weiteren Prüfer neu zu erfinden.
 
-**Not all checks are equally circular.** Rank them by one question: can the agent make this pass by writing code that doesn't work?
+**Nicht alle Prüfungen sind gleichermaßen selbstreferenziell.** Frage: Kann der Agent sie mit nicht funktionierendem Code bestehen lassen?
 
-- **External** — axe-core encodes WCAG, `osv-scanner` reads a vulnerability database, Lighthouse measures a real browser. The agent can't argue with these.
-- **Project** — your lint rules, your layer boundaries. A human owns the file.
-- **Suite** — your own tests. Most useful, and the only genuinely circular one.
+- **Extern**: axe-core bildet WCAG ab, `osv-scanner` liest eine Schwachstellendatenbank und Lighthouse misst in einem echten Browser.
+- **Projektbezogen**: Lintregeln und Schichtgrenzen, deren Datei einem Menschen zugeordnet ist.
+- **Testsuite**: eigene Tests; besonders nützlich, aber selbstreferenziell.
 
-A bar made entirely of the third kind is worth less than one with an outside opinion in it. Check that at least one external constraint is present.
+Ein Qualitätsniveau nur aus der dritten Art ist weniger aussagekräftig. Prüfe, dass mindestens eine externe Qualitätsschranke vorhanden ist.
 
-### Step 7: Ratchets, when you don't have a number
+### Schritt 7: Ratchets bei fehlendem Zielwert
 
-Set 80% coverage on a codebase at 62% and you get a red build forever, then a team that learns to ignore red builds.
+Ein Coverage-Ziel von 80 % bei einem aktuellen Stand von 62 % führt zunächst dauerhaft zu fehlschlagenden Builds, die das Team möglicherweise ignoriert.
 
-The alternative asks for no decision: record where you are, then refuse to get worse. Put it in the "Measured, not yet enforced" table with today's number and a direction. Every check compares against the recorded value, not an aspiration. When a number improves, update it; when it drops, that's the finding.
+Eine Alternative ist, den aktuellen Stand festzuhalten und Verschlechterungen zu verhindern. Trage den Wert und seine Richtung in die Tabelle „Measured, not yet enforced“ ein. Vergleiche jede Prüfung mit dem dokumentierten Wert. Verbessert er sich, aktualisiere ihn; sinkt er, ist dies ein Befund.
 
-This also answers a fair objection to training. Models are rewarded for passing tests, which you can evaluate in seconds. Architectural rot shows up over months and never reaches the weights. A ratchet is the missing penalty, written down where the build can see it.
+So werden auch schleichende Qualitätsverluste erkennbar, die kurzfristig erfolgreiche Tests nicht aufdecken. Der Ratchet macht diese Grenze für den Build sichtbar.
 
-## Sane Defaults
+## Sinnvolle Standardwerte
 
-When the user has no opinion, use these. They're chosen to be met by most codebases on day one.
+Wenn der Nutzer keinen eigenen Wert vorgibt, verwende die folgenden Ausgangswerte. Sie sind so gewählt, dass viele Codebasen sie anfangs erfüllen können.
 
-| Constraint | Default | Why this number |
+| Qualitätsschranke | Standardwert | Begründung |
 |------------|---------|-----------------|
-| Coverage of changed lines | ≥ 80% | High enough to force a test, low enough to allow a config line |
-| Project coverage | today's value, must not fall | No argument needed to adopt |
-| Mutation score (if used) | ≥ 60% to start | Typical for a suite never mutated before; 80% is mature |
-| Dependency vulnerabilities | nothing at high or above | Below that is mostly noise |
-| LCP | ≤ 2500 ms | Core Web Vitals "good" threshold |
-| CLS | ≤ 0.1 | Same |
-| Accessibility | zero critical or serious axe violations | Moderate and minor are often debatable |
-| Exception lifetime | 90 days | Long enough to plan the fix, short enough to remember |
-| Ratchet tolerance | 0.5% | Absorbs drift when an unrelated file moves the number |
+| Coverage geänderter Zeilen | ≥ 80 % | Fördert Tests und lässt einzelne Konfigurationszeilen zu |
+| Projekt-Coverage | aktueller Wert, darf nicht sinken | Ausgangswert lässt sich ohne neues Ziel übernehmen |
+| Mutationswert, falls verwendet | zunächst ≥ 60 % | Typischer Einstieg für eine bisher nicht mutierte Testsuite; 80 % gelten als reif |
+| Schwachstellen in Abhängigkeiten | keine ab hoch | Niedrigere Befunde sind häufig weniger relevant |
+| LCP | ≤ 2500 ms | Schwelle für „gut“ bei Core Web Vitals |
+| CLS | ≤ 0.1 | Entsprechende Schwelle |
+| Barrierefreiheit | keine kritischen oder schwerwiegenden axe-Verstöße | Mittlere und geringfügige Verstöße sind häufiger abwägungsbedürftig |
+| Dauer einer Ausnahme | 90 Tage | Genug Zeit für die Planung, aber zeitlich begrenzt |
+| Ratchet-Toleranz | 0.5 % | Fängt Verschiebungen durch nicht zusammenhängende Dateien ab |
 
-State the number and the reason together. A threshold without a rationale gets deleted by the next person who hits it.
+Nenne Wert und Begründung gemeinsam, damit der Grenzwert später nachvollziehbar bleibt.
 
-## Escalation Path
+## Ausbaustufen
 
-Constraints work at three levels of teeth. Start at the first.
+Qualitätsschranken können auf drei Stufen durchgesetzt werden. Beginne mit der ersten.
 
-1. **Written only.** `CONSTRAINTS.md` exists and agents read it. Costs nothing, catches the honest mistakes, relies on the agent complying.
-2. **Scripted.** An `npm run check` (or `make check`) that runs the fast checks, wired into your agent's post-edit hook and your CI. Deterministic, no new dependency.
-3. **Tool-backed.** A dedicated runner that handles diff scoping, budgets, ratchets, and the guard checks. Use when the config outgrows a shell script. The floor-guard reference in [references/floor-guard.md](references/floor-guard.md) is the starting point for the guard-checks half of this.
+1. **Nur dokumentiert.** `CONSTRAINTS.md` existiert und wird von Agenten gelesen. Dies ist einfach, setzt aber die Einhaltung voraus.
+2. **Skriptgesteuert.** `npm run check` oder `make check` führt schnelle Prüfungen aus und wird in den Post-Edit-Hook des Agenten und CI eingebunden.
+3. **Werkzeuggestützt.** Ein dedizierter Runner behandelt Diff-Begrenzung, Budgets, Ratchets und Schutzprüfungen. Nutze ihn, wenn die Konfiguration für ein Shellskript zu groß wird. [references/floor-guard.md](references/floor-guard.md) ist der Ausgangspunkt für die Schutzprüfungen.
 
-Most projects should stop at 2. Move to 3 when you're maintaining more than about thirty lines of check-running shell.
+Für die meisten Projekte reicht Stufe 2. Erwäge Stufe 3, wenn mehr als etwa dreißig Zeilen Shellcode zur Prüfausführung gepflegt werden.
 
-**A first run can be floor-only.** The floor guard is diff-only and needs no installs, so you can enforce the floor on day one and add numbered dimensions as you install each tool, rather than standing up every checker before the first commit is protected. Security tools that install machine-wide (gitleaks, osv-scanner) can also run CI-only if you'd rather keep laptops clean; declare where each dimension runs in the `Runs at` column.
+**Ein erster Lauf kann sich auf das Mindestniveau beschränken.** Der Floor Guard prüft nur den Diff und benötigt keine Installation. Ergänze bezifferte Dimensionen mit ihren jeweiligen Werkzeugen schrittweise. Systemweit installierte Sicherheitswerkzeuge wie gitleaks und osv-scanner können auch nur in CI laufen. Dokumentiere den Ausführungsort jeder Dimension in der Spalte `Runs at`.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Excuse | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |--------|---------|
-| "We'll add constraints once the code settles" | Code settles around whatever was allowed while it was moving |
-| "The tests are the constraints" | Tests you wrote prove you agree with yourself; they say nothing about coverage of new code, dependency risk, or bundle growth |
-| "We can't hit 80% coverage" | Then don't set 80%. Set today's number and hold it |
-| "This will slow the agent down" | Only if you put slow checks in the fast loop. That's a placement error, not an argument against constraints |
-| "I'll remember what our standards are" | The agent won't, and it's writing most of the code |
-| "Constraints will block us shipping" | An exception with an owner and a date unblocks you. Deleting the constraint unblocks everyone forever |
+| „Qualitätsschranken ergänzen wir, wenn der Code stabil ist.“ | Der Code entwickelt sich um das herum, was bis dahin erlaubt war. |
+| „Die Tests sind unsere Qualitätsschranken.“ | Eigene Tests allein belegen weder Coverage neuen Codes noch Abhängigkeitsrisiken oder Bundle-Wachstum. |
+| „80 % Coverage erreichen wir nicht.“ | Setze stattdessen den heutigen Wert und verhindere eine Verschlechterung. |
+| „Das bremst den Agenten.“ | Langsame Prüfungen gehören nicht in die schnelle Änderungsschleife. |
+| „Ich merke mir unsere Standards.“ | Der Agent benötigt dokumentierte Standards. |
+| „Qualitätsschranken verhindern die Veröffentlichung.“ | Eine befristete Ausnahme mit Verantwortlichem kann helfen; das Löschen der Schranke wirkt dauerhaft. |
 
-## Red Flags
+## Warnzeichen
 
-Stop and reconsider if you notice:
+Halte inne und prüfe das Vorgehen, wenn:
 
-- The interview ran past four questions, or produced a config the user can't explain
-- A budget was set that the codebase fails today, with no plan to reach it
-- A dimension was written into CONSTRAINTS.md with a number but no tool behind it
-- A checker was hand-rolled when a de facto one exists, so the team's existing config is ignored
-- Every constraint is checked by the project's own test suite, with no external opinion
-- `CONSTRAINTS.md` changed in the same commit as the feature that was failing
-- An exception has no owner, or an expiry more than a year out
-- The agent proposed relaxing a threshold instead of fixing the code
-- Slow checks landed in the edit loop and someone has started passing `--no-verify`
-- Nobody has opened `CONSTRAINTS.md` since it was written
+- Das Interview mehr als vier Fragen umfasst oder eine unverständliche Konfiguration erzeugt
+- Ein aktuell nicht erfülltes Budget ohne Plan zu seiner Erreichung festgelegt wurde
+- Eine Dimension in CONSTRAINTS.md einen Wert, aber kein Prüfwerkzeug besitzt
+- Ein eigener Prüfer ein etabliertes Werkzeug ersetzt und dadurch Teamkonfigurationen ignoriert
+- Alle Qualitätsschranken nur durch die eigene Testsuite und keine extern geprüft werden
+- `CONSTRAINTS.md` im selben Commit wie das zuvor fehlgeschlagene Feature geändert wurde
+- Einer Ausnahme ein Verantwortlicher fehlt oder sie erst in über einem Jahr abläuft
+- Der Agent eine Abschwächung statt einer Codekorrektur vorschlägt
+- Langsame Prüfungen in der Änderungsschleife liegen und `--no-verify` verwendet wird
+- Seit Erstellung niemand `CONSTRAINTS.md` geöffnet hat
 
-## Verification
+## Überprüfung
 
-The skill was applied correctly when:
+Der Skill wurde korrekt angewendet, wenn:
 
-- [ ] `CONSTRAINTS.md` exists, and every number in it has a stated reason
-- [ ] The floor is enforced and passes on the current codebase without changes
-- [ ] Every dimension the user picked has a tool installed and a command that runs today
-- [ ] Each constraint says where it runs, and the fast stage stays under a few seconds
-- [ ] At least one constraint is external (not judged by this project's own tests)
-- [ ] Measured-only metrics record today's value and a direction
-- [ ] Exceptions have an owner and an expiry date
-- [ ] `AGENTS.md` or `CLAUDE.md` points at the file
-- [ ] A trial run on the current branch produces no failures the user disagrees with
-- [ ] Each enforced command fails on a deliberate violation and scanner error, passes a clean control, and preserves the agreed severity threshold
+- [ ] `CONSTRAINTS.md` existiert und jeder Zahlenwert begründet ist
+- [ ] Das Mindestniveau durchgesetzt wird und die aktuelle Codebasis es unverändert besteht
+- [ ] Jede gewählte Dimension ein installiertes Werkzeug und einen ausführbaren Befehl besitzt
+- [ ] Jede Schranke ihren Ausführungsort nennt und die schnelle Phase wenige Sekunden nicht überschreitet
+- [ ] Mindestens eine Qualitätsschranke extern geprüft wird
+- [ ] Nur gemessene Metriken ihren aktuellen Wert und ihre Richtung festhalten
+- [ ] Ausnahmen einen Verantwortlichen und ein Ablaufdatum besitzen
+- [ ] `AGENTS.md` oder `CLAUDE.md` auf die Datei verweist
+- [ ] Ein Probelauf auf dem aktuellen Branch keine vom Nutzer abgelehnten Fehler erzeugt
+- [ ] Jeder durchgesetzte Befehl bei absichtlichem Verstoß und Scannerfehler fehlschlägt, eine saubere Kontrolle besteht und die vereinbarte Schweregradschwelle einhält
 
-## See Also
+## Siehe auch
 
-- `interview-me` — the one-question-at-a-time discipline this skill's intake borrows
-- `code-review-and-quality` — how to review; this skill decides what the review enforces
-- `ci-cd-and-automation` — building the pipeline these constraints run in
-- `test-driven-development` — the suite that coverage and mutation constraints measure
-- `security-and-hardening` — what the security dimension should contain
-- `performance-optimization` — where the performance numbers come from
+- `interview-me` — Vorgehen mit jeweils einer Frage
+- `code-review-and-quality` — Durchführung des Reviews; dieser Skill legt dessen Qualitätsschranken fest
+- `ci-cd-and-automation` — Erstellung der Pipeline für die Prüfungen
+- `test-driven-development` — Testsuite als Grundlage für Coverage- und Mutationstests
+- `security-and-hardening` — Inhalte der Sicherheitsdimension
+- `performance-optimization` — Ermittlung von Performance-Werten

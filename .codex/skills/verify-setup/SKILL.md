@@ -1,88 +1,88 @@
 ---
 name: verify-setup
-description: Verify an existing app's local development prerequisites, selected backend tooling, configuration, and separation between development and hosted environments without exposing secrets.
+description: Prüft lokale Entwicklungsvoraussetzungen, Backend-Werkzeuge, Konfiguration und Umgebungstrennung einer bestehenden App, ohne Geheimnisse offenzulegen.
 ---
 
-# Verify Setup
+# Setup prüfen
 
-Use this skill to determine whether a project is ready for local development or a planned environment workflow. It supports projects using Supabase, NestJS with PostgreSQL, or C# with Microsoft SQL Server alongside SwiftUI, Next.js, or Angular. Verification is read-only by default; setup changes belong to a separately requested repair or setup task.
+Nutze diesen Skill, um die Bereitschaft eines Projekts für lokale Entwicklung oder einen geplanten Umgebungsablauf festzustellen. Er unterstützt Projekte mit Supabase, NestJS mit PostgreSQL oder C# mit Microsoft SQL Server zusammen mit SwiftUI, Next.js oder Angular. Die Prüfung ist standardmäßig lesend; Setup-Änderungen gehören zu einer gesondert beauftragten Reparatur- oder Einrichtungsaufgabe.
 
-## Discover the expected setup
+## Erwartetes Setup ermitteln
 
-1. Read project instructions, `.codex/PROJECT.md`, the relevant PRD/Spec, and the selected environment strategy. Identify whether the project uses Supabase, NestJS with PostgreSQL, C# with Microsoft SQL Server, another backend, or no backend. If the project description and codebase do not establish the backend, mark **Needs decision** and ask for the backend choice before backend-specific setup checks.
-2. Inspect existing setup files before checking the machine: as applicable, `supabase/config.toml`, NestJS manifests/configuration, `.sln`/`.csproj`/`global.json`, ORM or database migration files, seeds, `.env.example`, `.gitignore`, lockfiles, runtime/version files, app configuration, CI workflows, and setup documentation.
-3. Detect the app platform and its intended runtime from the repository. Follow the project's pinned versions, package manager, scripts, Xcode scheme, and configuration. Do not replace them with global defaults.
-4. Report missing or conflicting information as **Needs decision**; do not infer a production project, environment, region, or runtime from an example architecture.
+1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante PRD oder Spec und die gewählte Umgebungsstrategie. Ermittle, ob Supabase, NestJS mit PostgreSQL, C# mit Microsoft SQL Server, ein anderes oder kein Backend verwendet wird. Geht das Backend nicht aus Projektbeschreibung und Codebasis hervor, markiere **Needs decision** und frage vor backend-spezifischen Setup-Prüfungen nach der Backend-Wahl.
+2. Prüfe vorhandene Setup-Dateien vor der Prüfung des Rechners: soweit zutreffend `supabase/config.toml`, NestJS-Manifeste und -Konfiguration, `.sln`/`.csproj`/`global.json`, ORM- oder Datenbankmigrationsdateien, Seeds, `.env.example`, `.gitignore`, Lockfiles, Laufzeit- und Versionsdateien, App-Konfiguration, CI-Workflows und Setup-Dokumentation.
+3. Ermittle App-Plattform und vorgesehene Laufzeit aus dem Repository. Folge den festgelegten Versionen, der Paketverwaltung, den Skripten, dem Xcode-Schema und der Konfiguration des Projekts. Ersetze sie nicht durch globale Standardwerte.
+4. Melde fehlende oder widersprüchliche Informationen als **Needs decision**; leite Produktionsprojekt, Umgebung, Region oder Laufzeit nicht aus einer Beispielarchitektur ab.
 
-## Verify local prerequisites
+## Lokale Voraussetzungen prüfen
 
-Check only what applies to the project:
+Prüfe nur, was auf das Projekt zutrifft:
 
-- required app runtime and version (for example, Node.js/package manager or Xcode/Swift toolchain)
-- required package manager and whether the lockfile matches the project configuration
-- Supabase CLI availability and version, using the project-pinned CLI when it has one
-- `supabase/config.toml` presence and basic validity when the repository uses the Supabase CLI
-- local runtime support and availability: the default Supabase local stack needs a Docker-compatible runtime; use another runtime only if the installed CLI and host support it and the project has chosen it
-- local Supabase service state, migrations/schema, seeds, and relevant local tests when they are part of the setup
-- app configuration for connecting to the intended local or development backend
-- for NestJS/PostgreSQL: Node.js and package-manager versions, project scripts, selected ORM/driver CLI, local PostgreSQL/runtime availability, migration status, and app-to-API/database endpoint configuration
-- for C#/SQL Server: pinned .NET SDK/runtime and target framework, solution/project restore/build configuration, EF Core/provider tooling if used, intended local/test SQL Server availability and migration status, and API/database endpoint configuration
-- when SQLite is selected: verify the configured library/runtime and schema migration files, and confirm the intended local/server/browser storage location is available and persistent for the target environment
+- Benötigte App-Laufzeit und Version, etwa Node.js und Paketverwaltung oder Xcode/Swift-Toolchain
+- Benötigte Paketverwaltung und Übereinstimmung des Lockfiles mit der Projektkonfiguration
+- Verfügbarkeit und Version der Supabase CLI; verwende eine im Projekt festgelegte CLI, sofern vorhanden
+- Vorhandensein und grundlegende Gültigkeit von `supabase/config.toml`, wenn das Repository die Supabase CLI verwendet
+- Unterstützung und Verfügbarkeit der lokalen Laufzeit: Der lokale Supabase-Standardstack benötigt eine Docker-kompatible Laufzeit; nutze eine andere nur, wenn installierte CLI und Host sie unterstützen und das Projekt sie gewählt hat
+- Lokalen Supabase-Dienststatus, Migrationen und Schema, Seeds und relevante lokale Tests, wenn sie zum Setup gehören
+- App-Konfiguration für die Verbindung zum vorgesehenen lokalen oder Entwicklungs-Backend
+- Für NestJS/PostgreSQL: Versionen von Node.js und Paketverwaltung, Projektskripte, gewählte ORM- oder Treiber-CLI, Verfügbarkeit von lokalem PostgreSQL und Laufzeit, Migrationsstatus und Endpunktkonfiguration zwischen App, API und Datenbank
+- Für C#/SQL Server: festgelegtes .NET SDK, Laufzeit und Ziel-Framework, Restore- und Build-Konfiguration von Solution und Projekt, gegebenenfalls EF-Core- und Provider-Werkzeuge, vorgesehene lokale oder Test-SQL-Server-Verfügbarkeit, Migrationsstatus und API- beziehungsweise Datenbankendpunkte
+- Bei SQLite: konfigurierte Bibliothek, Laufzeit und Schemamigrationsdateien sowie Verfügbarkeit und Persistenz des vorgesehenen lokalen, serverseitigen oder browserbasierten Speicherorts für die Zielumgebung
 
-Do not install tools, download dependencies, initialize a new Supabase project, edit configuration, or start services in verify-only mode. If a check requires a stack to be started, report that prerequisite and ask before changing machine or project state. A running local stack is for development only and must not be exposed as a production service.
+Installiere im reinen Prüfmodus keine Werkzeuge, lade keine Abhängigkeiten herunter, initialisiere kein neues Supabase-Projekt, ändere keine Konfiguration und starte keine Dienste. Wenn eine Prüfung einen laufenden Stack voraussetzt, melde dies und frage vor Änderungen am Rechner oder Projektzustand nach. Ein laufender lokaler Stack dient nur der Entwicklung und darf nicht als Produktionsdienst bereitgestellt werden.
 
-## Check configuration and credentials safely
+## Konfiguration und Zugangsdaten sicher prüfen
 
-- Inspect example/configuration files and required variable **names**, not secret values.
-- Never print, quote, copy into reports, or commit values from `.env*`, shell environments, Supabase secrets, access tokens, database URLs/passwords, JWTs, publishable keys, or secret/service-role keys.
-- Check that secret-bearing files are ignored by Git and that a safe `.env.example` documents required names with placeholders only.
-- Check that browser and native-client configuration contains only values intended to be public. Service-role/secret keys and database passwords must remain in trusted server or function environments.
-- Confirm the app points to the intended local or development endpoint without exposing credentials. Compare environment identity using redacted identifiers or boolean equality checks.
-- Avoid commands whose normal output includes credentials. Supabase CLI status/start output can include local JWT and API-key values (publishable/secret keys or legacy anon/service-role keys, depending on CLI version); suppress or redact those values before they reach the terminal transcript or report. Report only whether the stack is running and non-sensitive endpoint information.
-- For NestJS/PostgreSQL, do not dump process environments or connection strings. Report database reachability and environment identity only in redacted/non-sensitive form.
-- For C#/SQL Server, do not dump environment configuration, connection strings, passwords, or tokens. Report SQL Server reachability and environment identity only in redacted/non-sensitive form.
-- Do not dump all environment variables, `.env` files, full config files with embedded secrets, or complete process environments to diagnose one missing setting.
+- Prüfe Beispiel- und Konfigurationsdateien sowie benötigte Variablen**namen**, keine geheimen Werte.
+- Gib Werte aus `.env*`, Shell-Umgebungen, Supabase-Secrets, Access Tokens, Datenbank-URLs oder -Passwörtern, JWTs, Publishable Keys oder Secret- und Service-Role Keys niemals aus, zitiere sie nicht, übernimm sie nicht in Berichte und committe sie nicht.
+- Prüfe, dass Git Dateien mit Geheimnissen ignoriert und eine sichere `.env.example` benötigte Namen ausschließlich mit Platzhaltern dokumentiert.
+- Prüfe, dass Browser- und native Client-Konfiguration nur für die Öffentlichkeit vorgesehene Werte enthalten. Service-Role- und Secret Keys sowie Datenbankpasswörter müssen in vertrauenswürdigen Server- oder Funktionsumgebungen verbleiben.
+- Bestätige ohne Offenlegung von Zugangsdaten, dass die App auf den vorgesehenen lokalen oder Entwicklungsendpunkt zeigt. Vergleiche Umgebungsidentitäten anhand redigierter Bezeichner oder boolescher Gleichheitsprüfungen.
+- Vermeide Befehle, deren normale Ausgabe Zugangsdaten enthält. Status- und Startausgaben der Supabase CLI können lokale JWT- und API-Key-Werte enthalten, je nach CLI-Version Publishable oder Secret Keys beziehungsweise frühere Anon- oder Service-Role Keys. Unterdrücke oder redigiere diese Werte, bevor sie das Terminalprotokoll oder den Bericht erreichen. Berichte nur, ob der Stack läuft, und unkritische Endpunktinformationen.
+- Gib für NestJS/PostgreSQL keine Prozessumgebungen oder Verbindungszeichenfolgen aus. Berichte Erreichbarkeit der Datenbank und Umgebungsidentität nur redigiert oder in unkritischer Form.
+- Gib für C#/SQL Server keine Umgebungskonfiguration, Verbindungszeichenfolgen, Passwörter oder Tokens aus. Berichte SQL-Server-Erreichbarkeit und Umgebungsidentität nur redigiert oder in unkritischer Form.
+- Gib zur Diagnose einer einzelnen fehlenden Einstellung nicht alle Umgebungsvariablen, `.env`-Dateien, vollständige Konfigurationsdateien mit Geheimnissen oder komplette Prozessumgebungen aus.
 
-## Verify environment separation
+## Umgebungstrennung prüfen
 
-Apply the project's declared strategy:
+Wende die erklärte Strategie des Projekts an:
 
-- **Local:** confirm local runtime/configuration and that development uses local credentials and endpoints. Do not link to or mutate a hosted project as part of local verification.
-- **Separate dev and production projects:** confirm the configured project identities are distinct without displaying credentials. Check that local/dev configuration cannot silently target production.
-- **Single hosted project:** report clearly that test and live data share one project. Do not silently reclassify this as a setup failure if it was an explicit decision.
-- **Branching/preview:** confirm the intended base project and branch configuration using current provider docs. Check current availability and billing implications rather than assuming plan or price.
-- **NestJS/PostgreSQL:** confirm local and hosted API/database targets follow the declared strategy, and that development cannot silently target production. Never connect to or mutate a hosted database as part of verification.
-- **C#/SQL Server:** confirm the declared .NET API and SQL Server targets are aligned, local/test settings cannot silently target production, and the Windows Server/IIS runtime is documented for deployment. Never connect to or mutate a hosted database as part of setup verification.
-- **SQLite:** distinguish app-container storage, durable server file storage, and browser-origin storage. For browser OPFS, check the declared browser/worker requirements; for server SQLite, check that the hosting filesystem is durable. Do not claim backup, cross-device sync, or data recovery based only on file presence.
+- **Local:** Bestätige lokale Laufzeit und Konfiguration sowie die Nutzung lokaler Zugangsdaten und Endpunkte in der Entwicklung. Verknüpfe oder ändere im Rahmen lokaler Prüfungen kein gehostetes Projekt.
+- **Separate dev and production projects:** Bestätige unterschiedliche konfigurierte Projektidentitäten, ohne Zugangsdaten anzuzeigen. Prüfe, dass lokale oder Entwicklungskonfiguration nicht stillschweigend auf Produktion zielen kann.
+- **Single hosted project:** Berichte klar, dass Test- und Livedaten ein Projekt teilen. Werte dies nicht stillschweigend als Setup-Fehler, wenn es ausdrücklich entschieden wurde.
+- **Branching/preview:** Bestätige vorgesehenes Basisprojekt und Branch-Konfiguration anhand aktueller Anbieterdokumentation. Prüfe aktuelle Verfügbarkeit und Abrechnungsfolgen, statt Tarif oder Preis anzunehmen.
+- **NestJS/PostgreSQL:** Bestätige, dass lokale und gehostete API- und Datenbankziele der erklärten Strategie folgen und die Entwicklung nicht stillschweigend auf Produktion zielen kann. Verbinde dich im Rahmen der Prüfung niemals mit einer gehosteten Datenbank und ändere sie nicht.
+- **C#/SQL Server:** Bestätige, dass die erklärten Ziele für .NET API und SQL Server zusammenpassen, lokale und Testeinstellungen nicht stillschweigend auf Produktion zielen können und die Windows Server/IIS-Laufzeit für das Deployment dokumentiert ist. Verbinde dich im Rahmen der Setup-Prüfung niemals mit einer gehosteten Datenbank und ändere sie nicht.
+- **SQLite:** Unterscheide Speicher im App-Container, dauerhaften serverseitigen Dateispeicher und Speicher der Browser-Origin. Prüfe bei OPFS im Browser die erklärten Browser- und Worker-Anforderungen und bei serverseitigem SQLite die Dauerhaftigkeit des Hosting-Dateisystems. Behaupte Sicherung, geräteübergreifende Synchronisierung oder Datenwiederherstellung nicht allein aufgrund vorhandener Dateien.
 
-When the strategy is missing or production may be confused with development, mark the setup **Needs decision** and stop before any remote operation.
+Fehlt die Strategie oder kann Produktion mit Entwicklung verwechselt werden, markiere das Setup als **Needs decision** und stoppe vor jeder entfernten Operation.
 
-## Safety boundaries
+## Sicherheitsgrenzen
 
-- Do not create, link, migrate, reset, seed, or modify a hosted project during verification.
-- Do not run remote-target commands or destructive reset commands. Confirm command target and environment before any later authorized mutation.
-- Do not rotate or create credentials as a setup fix unless explicitly requested.
-- Do not assume that a successful CLI check means database policies, application authorization, or GDPR compliance are correct. Use `$backend-dev-supabase`, `$backend-dev-nestjs-postgres`, or `$backend-dev-csharp-sqlserver` according to the selected backend for backend security/schema checks, and `$dsgvo` for personal-data requirements.
-- If verification uncovers a fix, describe the exact gap and proposed change first. Apply changes only when the user requested setup/repair, then verify the resulting state.
+- Erstelle, verknüpfe, migriere, resette, befülle oder ändere während der Prüfung kein gehostetes Projekt.
+- Führe keine Befehle gegen entfernte Ziele und keine destruktiven Reset-Befehle aus. Bestätige Ziel und Umgebung vor jeder späteren autorisierten Änderung.
+- Rotiere oder erstelle Zugangsdaten nicht als Setup-Korrektur, sofern dies nicht ausdrücklich beauftragt wurde.
+- Setze nicht voraus, dass eine erfolgreiche CLI-Prüfung korrekte Datenbank-Policies, Anwendungsautorisierung oder DSGVO-Konformität belegt. Nutze für Backend-Sicherheits- und Schemaprüfungen je nach Backend `$backend-dev-supabase`, `$backend-dev-nestjs-postgres` oder `$backend-dev-csharp-sqlserver` und für Anforderungen zu personenbezogenen Daten `$dsgvo`.
+- Deckt die Prüfung eine nötige Korrektur auf, beschreibe zuerst die genaue Lücke und die vorgeschlagene Änderung. Nimm Änderungen nur vor, wenn der Nutzer Einrichtung oder Reparatur beauftragt hat, und prüfe anschließend den resultierenden Zustand.
 
-## Report
+## Bericht
 
-Summarize results in a compact checklist with one of these statuses:
+Fasse Ergebnisse in einer kompakten Checkliste mit einem dieser Status zusammen:
 
-- **Ready:** verified and usable for the intended local/development workflow
-- **Not ready:** a concrete prerequisite or configuration is missing or failing
-- **Needs decision:** the environment, target, or expected behavior is unclear
-- **Not checked:** the check could not safely or practically be run
+- **Ready:** für den vorgesehenen lokalen oder Entwicklungsablauf geprüft und nutzbar
+- **Not ready:** eine konkrete Voraussetzung oder Konfiguration fehlt oder schlägt fehl
+- **Needs decision:** Umgebung, Ziel oder erwartetes Verhalten ist unklar
+- **Not checked:** die Prüfung konnte nicht sicher oder praktisch durchgeführt werden
 
-Include the command or observation, relevant version/target, and next action for every non-ready item. Keep credentials and sensitive environment values out of the report. Distinguish verified facts from assumptions, and do not claim a full setup is ready based on a partial check.
+Nenne für jeden nicht bereiten Punkt Befehl oder Beobachtung, relevante Version beziehungsweise Ziel und nächste Aktion. Halte Zugangsdaten und sensible Umgebungswerte aus dem Bericht heraus. Unterscheide geprüfte Fakten von Annahmen und erkläre ein Setup nicht aufgrund einer Teilprüfung vollständig für bereit.
 
-## Official documentation
+## Offizielle Dokumentation
 
-Use current documentation that matches the installed CLI and runtime. Start with:
+Nutze aktuelle Dokumentation passend zu installierter CLI und Laufzeit. Beginne mit:
 
-- [Supabase Local Development and CLI](https://supabase.com/docs/guides/local-development)
-- [Supabase local development workflow and project files](https://supabase.com/docs/guides/local-development/cli-workflows)
-- [Supabase CLI configuration and secrets](https://supabase.com/docs/guides/local-development/managing-config)
-- [Running commands against local and hosted projects](https://supabase.com/docs/guides/local-development/local-and-hosted-projects)
-- [Supabase CLI status command](https://supabase.com/docs/reference/cli/supabase-status)
-- [Supabase API key types](https://supabase.com/docs/guides/getting-started/migrating-to-new-api-keys)
+- [Lokale Entwicklung mit Supabase und CLI](https://supabase.com/docs/guides/local-development)
+- [Lokaler Entwicklungsablauf und Projektdateien von Supabase](https://supabase.com/docs/guides/local-development/cli-workflows)
+- [Supabase-CLI-Konfiguration und Geheimnisse](https://supabase.com/docs/guides/local-development/managing-config)
+- [Befehle für lokale und gehostete Projekte ausführen](https://supabase.com/docs/guides/local-development/local-and-hosted-projects)
+- [Statusbefehl der Supabase CLI](https://supabase.com/docs/reference/cli/supabase-status)
+- [API-Key-Typen von Supabase](https://supabase.com/docs/guides/getting-started/migrating-to-new-api-keys)

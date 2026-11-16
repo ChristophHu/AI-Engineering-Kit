@@ -59,3 +59,5 @@ Für kleine, eindeutige Aufgaben kann Codex Spec und Plan knapp halten. Bei Änd
 - `install.sh` – idempotente, konfliktbewusste Integration
 
 Nach Installation kann ein Skill mit `$init`, `$spec-driven-development`, `$feature-planning`, `$verify-setup` oder `$implementation-review` aufgerufen werden.
+
+`$spec-driven-development` nutzt EPIC als an Umfang und Risiko angepasste Hilfe zum Erstellen und Prüfen von Anforderungen. Für größere Vorhaben verbindet der Ablauf Anforderungen, Plan und Nachweise; das vertiefte Review und eine optionale Bewertung sind in der [EPIC-Referenz](.codex/skills/spec-driven-development/references/epic.md) beschrieben. Kleine eindeutige Änderungen bleiben kompakt.

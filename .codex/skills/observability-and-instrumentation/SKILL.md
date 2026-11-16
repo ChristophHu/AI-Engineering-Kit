@@ -1,57 +1,57 @@
 ---
 name: observability-and-instrumentation
-description: Instruments code so production behavior is visible and diagnosable. Use when adding logging, metrics, tracing, or alerting. Use when shipping any feature that runs in production and you need evidence it works. Use when production issues are reported but you can't tell what happened from the available data.
+description: Macht Produktionsverhalten durch Logging, Metriken, Tracing und Alerting sichtbar und diagnostizierbar. Nutze den Skill bei der Instrumentierung produktiver Funktionen und wenn vorhandene Daten zur Untersuchung von Produktionsproblemen nicht ausreichen.
 ---
 
-# Observability and Instrumentation
+# Observability und Instrumentierung
 
-## Overview
+## Überblick
 
-Code you can't observe is code you can't operate. Observability is the ability to answer "what is the system doing and why?" from the outside, using the telemetry the code emits. Instrumentation is not a post-launch add-on — it's written alongside the feature, the same way tests are. If a feature ships without telemetry, the first user-reported bug becomes archaeology instead of a query.
+Observability ermöglicht es, anhand der ausgegebenen Telemetrie von außen zu beantworten, was ein System tut und warum. Instrumentierung entsteht zusammen mit dem Feature, ähnlich wie Tests. Ohne passende Telemetrie wird die Untersuchung gemeldeter Produktionsfehler unnötig aufwendig.
 
-## When to Use
+## Wann verwenden
 
-- Building any feature that will run in production
-- Adding a new service, endpoint, background job, or external integration
-- A production incident took too long to diagnose ("we couldn't tell what happened")
-- Setting up or reviewing alerting rules
-- Reviewing a PR that adds I/O, retries, queues, or cross-service calls
+- Ein Feature erstellen, das in Produktion laufen wird
+- Einen Dienst, Endpunkt, Hintergrundjob oder eine externe Integration ergänzen
+- Ein Produktionsvorfall konnte mangels Informationen nur langsam diagnostiziert werden
+- Alerting-Regeln einrichten oder prüfen
+- Einen PR mit I/O, Wiederholungen, Queues oder dienstübergreifenden Aufrufen prüfen
 
-**NOT for:**
-- Diagnosing a failure happening right now — use the `debugging-and-error-recovery` skill (observability is what makes that skill fast next time)
-- Profiling and optimizing measured slowness — use the `performance-optimization` skill
-- Launch-day monitoring checklists and rollback triggers — see the `shipping-and-launch` skill; this skill covers the instrumentation that feeds them
+**Nicht verwenden für:**
+- Die Diagnose eines aktuell auftretenden Fehlers; nutze `debugging-and-error-recovery`
+- Profiling und Optimierung bereits gemessener Langsamkeit; nutze `performance-optimization`
+- Monitoring-Checklisten und Rollback-Auslöser am Veröffentlichungstag; siehe `shipping-and-launch`. Dieser Skill behandelt die zugrunde liegende Instrumentierung.
 
-## Process
+## Vorgehen
 
-### 1. Define "working" before instrumenting
+### 1. Funktionieren vor der Instrumentierung definieren
 
-Telemetry without a question is noise. Before adding any instrumentation, write down 2–4 questions an on-call engineer will ask about this feature:
+Telemetrie benötigt einen Zweck. Halte vor der Instrumentierung zwei bis vier Fragen fest, die eine Person im Bereitschaftsdienst zu diesem Feature stellen wird:
 
 ```
-FEATURE: checkout payment retry
-QUESTIONS ON-CALL WILL ASK:
-1. What fraction of payments succeed on first attempt vs after retry?
-2. When a payment fails permanently, why? (provider error? timeout? validation?)
-3. Is the payment provider slower than usual?
-→ Every signal below must help answer one of these.
+FEATURE: Wiederholung einer Zahlung beim Checkout
+FRAGEN IM BEREITSCHAFTSDIENST:
+1. Welcher Anteil der Zahlungen gelingt beim ersten Versuch und welcher nach einer Wiederholung?
+2. Warum schlägt eine Zahlung endgültig fehl? Anbieterfehler, Timeout oder Validierung?
+3. Ist der Zahlungsanbieter langsamer als üblich?
+→ Jedes nachfolgende Signal muss bei der Beantwortung einer dieser Fragen helfen.
 ```
 
-If you can't name the questions, you're not ready to instrument — you'll log everything and learn nothing.
+Sind die Fragen unbekannt, kläre zuerst den Informationsbedarf, statt wahllos Daten zu protokollieren.
 
-### 2. Pick the right signal for each question
+### 2. Das passende Signal je Frage wählen
 
-| Signal | Answers | Cost profile | Example |
+| Signal | Beantwortet | Kostenprofil | Beispiel |
 |---|---|---|---|
-| **Structured log** | "What happened in this specific case?" | Per-event; grows with traffic | `payment_failed` with provider error code |
-| **Metric** | "How often / how fast, in aggregate?" | Fixed per series; cheap to query | p99 latency of provider calls |
-| **Trace** | "Where did time go across services?" | Per-request; usually sampled | One slow checkout, broken down by hop |
+| **Strukturiertes Log** | „Was geschah in diesem Einzelfall?“ | Je Ereignis; wächst mit dem Datenverkehr | `payment_failed` mit Fehlercode des Anbieters |
+| **Metrik** | „Wie oft oder wie schnell insgesamt?“ | Fest pro Zeitreihe; günstig abzufragen | p99-Latenz von Anbieteraufrufen |
+| **Trace** | „Wo wurde dienstübergreifend Zeit benötigt?“ | Je Anfrage; meist stichprobenartig erfasst | Ein langsamer Checkout, aufgeschlüsselt nach Stationen |
 
-Rule of thumb: metrics tell you **that** something is wrong, traces tell you **where**, logs tell you **why**.
+Faustregel: Metriken zeigen, **dass** etwas falsch läuft; Traces zeigen, **wo**; Logs zeigen, **warum**.
 
-### 3. Structured logging
+### 3. Strukturiertes Logging
 
-Log events, not prose. Every log line is a JSON object with a stable event name and machine-readable fields:
+Protokolliere Ereignisse statt Freitext. Jede Logzeile ist ein JSON-Objekt mit stabilem Ereignisnamen und maschinenlesbaren Feldern:
 
 ```typescript
 // BAD: string interpolation — unqueryable, inconsistent
@@ -67,16 +67,16 @@ logger.warn({
 }, 'payment failed');
 ```
 
-**Log levels — use them consistently:**
+**Log-Level einheitlich verwenden:**
 
-| Level | Meaning | On-call action |
+| Level | Bedeutung | Reaktion im Bereitschaftsdienst |
 |---|---|---|
-| `error` | Invariant broken; someone may need to act | Investigate |
-| `warn` | Degraded but handled (retry succeeded, fallback used) | Watch for trends |
-| `info` | Significant business event (order placed, job finished) | None |
-| `debug` | Diagnostic detail | Off in production by default |
+| `error` | Invariante verletzt; möglicherweise ist eine Handlung nötig | Untersuchen |
+| `warn` | Beeinträchtigt, aber behandelt, etwa erfolgreiche Wiederholung oder verwendeter Fallback | Entwicklung beobachten |
+| `info` | Wesentliches fachliches Ereignis, etwa Bestellung oder abgeschlossener Job | Keine |
+| `debug` | Diagnosedetail | In Produktion standardmäßig deaktiviert |
 
-**Correlation IDs are mandatory.** Generate (or accept) a request ID at the system boundary and attach it to every log line, span, and outbound call. Without it, you cannot reconstruct a single request from interleaved logs:
+**Correlation IDs sind verpflichtend.** Erzeuge oder akzeptiere an der Systemgrenze eine Request-ID und füge sie jeder Logzeile, jedem Span und ausgehenden Aufruf hinzu. Ohne sie lässt sich eine einzelne Anfrage in vermischten Logs nicht zuverlässig nachvollziehen:
 
 ```typescript
 // Express: child logger per request, ID propagated downstream
@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 });
 ```
 
-**When several entry points write to one log, name the entry point.** A correlation ID identifies a run; it does not say which code path started it. The same job reached by a scheduler, by a replay endpoint, and by a manual CLI run produces interchangeable lines in one sink, so attributing a line falls back to elimination — cross-reading the scheduler's history, the process table, a deploy log — and that argument holds only as long as those external records happen to still exist. Stamp the entry point where the run starts, next to the correlation ID, and propagate both the same way:
+**Wenn mehrere Einstiegspunkte in dasselbe Log schreiben, benenne den Einstiegspunkt.** Eine Correlation ID identifiziert einen Lauf, nicht den auslösenden Codepfad. Erreicht derselbe Job den gemeinsamen Log-Speicher über Scheduler, Replay-Endpunkt und manuellen CLI-Aufruf, ist eine Zuordnung sonst nur über zusätzliche Aufzeichnungen möglich. Setze den Einstiegspunkt beim Start neben der Correlation ID und gib beide gleichermaßen weiter:
 
 ```typescript
 // One helper for every entry point: the run's own logger carries both fields.
@@ -101,15 +101,15 @@ export const runLog = (entryPoint: 'scheduler' | 'replay_endpoint' | 'cli', runI
 // CLI invocation        -> runLog('cli', process.env.RUN_ID ?? crypto.randomUUID())
 ```
 
-Both fields have to cross the same boundaries as the correlation ID — queue metadata, HTTP headers — or a worker re-derives the entry point and guesses. A field that merely correlates with an entry point is a hint, not an attribution: anything that can invoke the job can reproduce it.
+Beide Felder müssen dieselben Grenzen wie die Correlation ID überschreiten, etwa Queue-Metadaten und HTTP-Header. Andernfalls müsste ein Worker den Einstiegspunkt erneut ableiten. Ein lediglich damit korrelierendes Feld ist ein Hinweis, keine eindeutige Zuordnung.
 
-**Never log secrets, tokens, passwords, or full PII.** This is a hard rule from the `security-and-hardening` skill — telemetry pipelines are a classic data-leak path. Allowlist fields; don't log whole request bodies.
+**Protokolliere niemals Geheimnisse, Tokens, Passwörter oder vollständige PII.** Dies ist eine verbindliche Regel aus `security-and-hardening`; Telemetriepipelines können Daten offenlegen. Erlaube Felder ausdrücklich per Allowlist und protokolliere keine vollständigen Anfrageinhalte.
 
-### 4. Metrics
+### 4. Metriken
 
-For request-driven services, instrument **RED** on every endpoint and every external dependency: **R**ate (requests/sec), **E**rrors (failure rate), **D**uration (latency histogram, not average). For resources (queues, pools, hosts), use **USE**: **U**tilization, **S**aturation, **E**rrors.
+Instrumentiere bei anfragegesteuerten Diensten jeden Endpunkt und jede externe Abhängigkeit nach **RED**: **R**ate (Anfragen pro Sekunde), **E**rrors (Fehlerrate) und **D**uration (Latenzhistogramm statt Durchschnitt). Verwende für Ressourcen wie Queues, Pools und Hosts **USE**: **U**tilization, **S**aturation und **E**rrors.
 
-As with tracing, the vendor-neutral path is the OpenTelemetry metrics API (same SDK and context as step 5). The example below uses Prometheus' `prom-client` — one common backend choice, not the only one; the RED/USE and cardinality rules are identical either way.
+Wie beim Tracing bietet die OpenTelemetry-Metrik-API einen herstellerneutralen Weg mit demselben SDK und Kontext wie in Schritt 5. Das Beispiel verwendet `prom-client` von Prometheus als eine mögliche Backend-Wahl; die Regeln zu RED/USE und Kardinalität gelten unabhängig davon.
 
 ```typescript
 import { Histogram } from 'prom-client';
@@ -122,18 +122,18 @@ const httpDuration = new Histogram({
 });
 ```
 
-**Cardinality is the failure mode.** Every unique label combination is a separate time series. Labels must come from small, fixed sets (route template, status class, provider name). Never use user IDs, raw URLs, error messages, or other unbounded values as labels — that belongs in logs and traces.
+**Kardinalität ist ein zentrales Risiko.** Jede eindeutige Label-Kombination erzeugt eine eigene Zeitreihe. Labels müssen aus kleinen, festen Mengen stammen, etwa Routenvorlage, Statusklasse und Anbietername. Verwende niemals Nutzer-IDs, rohe URLs, Fehlermeldungen oder andere unbegrenzte Werte als Labels; solche Angaben gehören in Logs und Traces.
 
 ```
-OK as label:    route="/api/tasks/:id"   status_class="5xx"   provider="stripe"
-NEVER a label:  user_id, email, request_id, full URL, error message text
+Als Label geeignet:    route="/api/tasks/:id"   status_class="5xx"   provider="stripe"
+Niemals als Label:     user_id, email, request_id, vollständige URL, Fehlermeldungstext
 ```
 
-Track averages never, percentiles always: an average hides the 1% of users having a terrible time. Use histograms and read p50/p95/p99.
+Erfasse statt Durchschnittswerten Perzentile: Ein Durchschnitt verdeckt die Erfahrung des langsamsten Prozents der Nutzer. Verwende Histogramme und werte p50/p95/p99 aus.
 
-### 5. Distributed tracing
+### 5. Verteiltes Tracing
 
-Use OpenTelemetry — it's the vendor-neutral standard, and auto-instrumentation covers HTTP, gRPC, and common DB clients with near-zero code:
+Verwende OpenTelemetry als herstellerneutralen Standard. Automatische Instrumentierung deckt HTTP, gRPC und gängige Datenbankclients mit wenig zusätzlichem Code ab:
 
 ```typescript
 // tracing.ts — must be imported before anything else
@@ -147,33 +147,33 @@ const sdk = new NodeSDK({
 sdk.start();
 ```
 
-Add manual spans only around meaningful internal units of work (e.g., `applyDiscounts`, `chargeProvider`) and attach the attributes on-call will filter by. Propagate context across every async boundary — HTTP headers, queue message metadata — or the trace dies at the gap. Sample head-based at a low rate by default; keep 100% of errors if your backend supports tail sampling.
+Ergänze manuelle Spans nur für aussagekräftige interne Arbeitseinheiten wie `applyDiscounts` und `chargeProvider` und füge die für den Bereitschaftsdienst relevanten Filterattribute hinzu. Gib Kontext über jede asynchrone Grenze weiter, etwa HTTP-Header und Queue-Nachrichtenmetadaten. Verwende standardmäßig eine niedrige Head-Sampling-Rate; behalte 100 % der Fehler, wenn das Backend Tail Sampling unterstützt.
 
 ### 6. Alerting
 
-Alert on **symptoms users feel**, not on causes:
+Alarmiere bei **Symptomen, die Nutzer bemerken**, statt bei Ursachen:
 
 ```
-SYMPTOM (page-worthy):           CAUSE (dashboard, not a page):
-error rate > 1% for 5 min        CPU at 85%
-p99 latency > 2s                 one pod restarted
-queue age > 10 min               disk at 70%
+SYMPTOM (Bereitschaft alarmieren):    URSACHE (Dashboard, kein Alarm):
+Fehlerrate > 1 % für 5 min           CPU bei 85 %
+p99-Latenz > 2s                      Ein Pod wurde neu gestartet
+Queue-Alter > 10 min                 Festplatte bei 70 %
 ```
 
-Cause-based alerts fire when nothing is wrong and miss failures you didn't predict. Symptom-based alerts fire exactly when users are hurt, regardless of the cause.
+Ursachenbasierte Alarme können ohne Nutzerbeeinträchtigung auslösen und unerwartete Fehler übersehen. Symptombasierte Alarme zeigen Auswirkungen auf Nutzer unabhängig von der Ursache.
 
-Rules for every alert you create:
+Regeln für jeden neu erstellten Alarm:
 
-1. **It must be actionable.** If the response is "ignore it, it self-heals", delete the alert.
-2. **It links to a runbook** — even three lines: what it means, first query to run, escalation path.
-3. **It has a threshold and duration** justified by the SLO or by historical data, not by a guess.
-4. Use two severities only: **page** (user-facing, act now) and **ticket** (degradation, act this week). A third tier becomes noise that trains people to ignore everything.
+1. **Er muss eine Handlung ermöglichen.** Lautet die Reaktion „ignorieren, behebt sich selbst“, entferne den Alarm.
+2. **Er verweist auf ein Runbook**, mindestens mit Bedeutung, erster Abfrage und Eskalationsweg.
+3. **Schwellenwert und Dauer** sind durch das SLO oder historische Daten begründet, nicht geraten.
+4. Verwende nur zwei Schweregrade: **page** für unmittelbaren Handlungsbedarf bei Nutzerwirkung und **ticket** für Beeinträchtigungen, die diese Woche bearbeitet werden. Eine dritte Stufe kann unnötige Alarme erzeugen.
 
-#### Writing Runbooks
+#### Runbooks erstellen
 
-Rule 2 above requires every alert to link to a runbook. A runbook's job is to answer three questions without requiring the reader to think: what is happening, what to check first, and who to call if that doesn't resolve it. Store in `docs/runbooks/` named after the alert.
+Regel 2 verlangt für jeden Alarm einen Runbook-Link. Das Runbook beantwortet drei Fragen: Was geschieht, was wird zuerst geprüft und wer wird kontaktiert, wenn dies nicht hilft? Speichere es unter `docs/runbooks/`, benannt nach dem Alarm.
 
-**Minimum viable runbook (three lines):**
+**Minimales Runbook (drei Zeilen):**
 
 ```markdown
 # Runbook: High Error Rate on /api/tasks
@@ -183,56 +183,56 @@ Rule 2 above requires every alert to link to a runbook. A runbook's job is to an
 **Escalate to:** #db-oncall or engineering on-call rotation.
 ```
 
-**When to expand beyond three lines:** add steps only when the first check alone isn't enough to decide. A five-step runbook that covers the three most common causes is better than a twenty-step document that covers every edge case and gets skimmed.
+**Wann mehr als drei Zeilen sinnvoll sind:** Ergänze Schritte nur, wenn die erste Prüfung für eine Entscheidung nicht ausreicht. Ein knappes Runbook für häufige Ursachen ist leichter nutzbar als eine lange Liste aller Randfälle.
 
-**Keep runbooks current.** Update the runbook as part of closing every incident it was used in — a stale runbook builds false confidence. If a step was wrong or missing, fix it before marking the incident resolved.
+**Halte Runbooks aktuell.** Aktualisiere ein genutztes Runbook beim Abschluss jedes Vorfalls. Korrigiere falsche oder fehlende Schritte, bevor der Vorfall als behoben gilt.
 
-### 7. Verify the telemetry itself
+### 7. Telemetrie selbst überprüfen
 
-Instrumentation is code; it can be wrong. Before calling the work done, trigger the paths and look at the actual output:
+Instrumentierung ist Code und kann Fehler enthalten. Löse vor Abschluss die relevanten Pfade aus und prüfe die tatsächliche Ausgabe:
 
-- Force an error in staging → find it in the logs by `requestId`, confirm fields are structured (not `[object Object]`)
-- Send test traffic → confirm metric series appear with the expected labels and sane values
-- Follow one request across services in the tracing UI → no broken spans
-- Fire each new alert once (lower the threshold temporarily) → confirm it reaches the right channel and the runbook link works
+- Einen Fehler in Staging auslösen → anhand von `requestId` in den Logs finden und strukturierte Felder statt `[object Object]` bestätigen
+- Testverkehr senden → erwartete Labels und plausible Werte der Metrikreihen prüfen
+- Eine Anfrage in der Tracing-UI dienstübergreifend verfolgen → keine unterbrochenen Spans
+- Jeden neuen Alarm einmal auslösen, etwa durch vorübergehend niedrigere Schwelle → richtigen Kanal und funktionierenden Runbook-Link prüfen
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "I'll add logging after it works" | "After" becomes "after the first incident", which is the most expensive moment to discover you're blind. Instrument as you build. |
-| "More logs = more observability" | Unstructured noise makes incidents slower, not faster. Three queryable events beat three hundred prose lines. |
-| "console.log is fine for now" | Unstructured output can't be filtered, correlated, or alerted on. The structured logger costs five extra minutes once. |
-| "We can just look at the dashboards when something breaks" | Dashboards built without defined questions show you everything except the answer. Start from on-call questions. |
-| "Alert on everything important, we'll tune later" | A noisy pager trains people to ignore it. The tuning never happens; the missed real page does. |
-| "User ID as a metric label makes debugging easier" | It also makes your metrics backend fall over. High-cardinality lookups belong in logs and traces. |
-| "Tracing is overkill for our two services" | Two services already means cross-service latency questions logs can't answer. Auto-instrumentation makes the cost trivial. |
+| „Logging ergänze ich, wenn es funktioniert.“ | Beim ersten Vorfall können wichtige Hinweise fehlen. Instrumentiere während der Umsetzung. |
+| „Mehr Logs bedeuten mehr Observability.“ | Unstrukturierte Ausgaben erschweren die Diagnose. Wenige abfragbare Ereignisse können hilfreicher sein. |
+| „console.log reicht vorerst.“ | Unstrukturierte Ausgaben lassen sich schlechter filtern, korrelieren und für Alarme nutzen. |
+| „Bei Problemen sehen wir einfach ins Dashboard.“ | Ohne definierte Fragen zeigt ein Dashboard möglicherweise nicht die benötigte Antwort. Beginne mit Fragen des Bereitschaftsdiensts. |
+| „Wir alarmieren bei allem und passen später an.“ | Viele unnötige Alarme führen dazu, dass wichtige Warnungen übersehen werden. |
+| „Eine Nutzer-ID als Metriklabel vereinfacht die Fehlersuche.“ | Hohe Kardinalität kann das Metrik-Backend überlasten. Solche Suchwerte gehören in Logs und Traces. |
+| „Tracing ist für zwei Dienste übertrieben.“ | Schon zwei Dienste erzeugen Fragen zu dienstübergreifender Latenz; automatische Instrumentierung reduziert den Aufwand. |
 
-## Red Flags
+## Warnzeichen
 
-- A feature PR with retries, queues, or external calls and zero new telemetry
-- Log lines built by string interpolation instead of structured fields
-- No correlation/request ID — each log line is an orphan
-- One log stream fed by a scheduler, a webhook, and manual runs, with no field naming which one produced the line
-- Metrics labeled with user IDs, raw URLs, or error message text (cardinality bomb)
-- Latency tracked as an average with no percentiles
-- Alerts that fire daily and get acknowledged without action
-- Alerts on causes (CPU, memory) paging humans while user-facing error rate is unmonitored
-- Secrets, tokens, or full request bodies appearing in logs
-- "It works on my machine" as the only evidence a production feature is healthy
+- Ein Feature-PR ergänzt Wiederholungen, Queues oder externe Aufrufe ohne neue Telemetrie
+- Logzeilen verwenden Zeichenketteninterpolation statt strukturierter Felder
+- Eine Correlation ID oder Request-ID fehlt
+- Ein gemeinsamer Logstrom für Scheduler, Webhook und manuelle Aufrufe enthält kein Feld für den Einstiegspunkt
+- Metriken verwenden Nutzer-IDs, rohe URLs oder Fehlermeldungstexte als Labels und erzeugen hohe Kardinalität
+- Latenz wird nur als Durchschnitt ohne Perzentile erfasst
+- Alarme lösen täglich aus und werden ohne Handlung bestätigt
+- Ursachen wie CPU oder Speicher alarmieren Menschen, während die nutzerseitige Fehlerrate nicht überwacht wird
+- Geheimnisse, Tokens oder vollständige Anfrageinhalte erscheinen in Logs
+- „Auf meinem Rechner funktioniert es“ ist der einzige Nachweis für den Zustand eines produktiven Features
 
-## Verification
+## Überprüfung
 
-After instrumenting a feature, confirm:
+Nach der Instrumentierung eines Features prüfen:
 
-- [ ] The on-call questions for this feature are written down, and each signal maps to one
-- [ ] All log output is structured (JSON), with stable event names and a correlation ID on every line
-- [ ] Every log sink written by more than one entry point carries an entry-point field, set where the run starts and propagated with the correlation ID rather than inferred downstream
-- [ ] No secrets, tokens, or unredacted PII in any log line (spot-check actual output)
-- [ ] RED metrics exist for every new endpoint and every external dependency, with bounded label sets
-- [ ] Latency is a histogram; p95/p99 are queryable
-- [ ] A single request can be followed end-to-end in the tracing UI without broken spans
-- [ ] Every new alert is symptom-based, has a runbook link, and was test-fired once
-- [ ] An induced failure in staging was located via telemetry alone, without reading the source
+- [ ] Fragen des Bereitschaftsdiensts sind dokumentiert und jedes Signal ist einer Frage zugeordnet
+- [ ] Alle Logausgaben sind strukturiert (JSON), mit stabilen Ereignisnamen und Correlation ID pro Zeile
+- [ ] Jeder Log-Speicher mit mehreren Einstiegspunkten enthält ein beim Start gesetztes und mit der Correlation ID weitergegebenes Einstiegspunktfeld, das nicht nachgelagert abgeleitet wird
+- [ ] Keine Logzeile enthält Geheimnisse, Tokens oder ungeschwärzte PII; tatsächliche Ausgaben wurden stichprobenartig geprüft
+- [ ] RED-Metriken mit begrenzten Label-Mengen existieren für jeden neuen Endpunkt und jede externe Abhängigkeit
+- [ ] Latenz liegt als Histogramm vor; p95/p99 sind abfragbar
+- [ ] Eine Anfrage lässt sich in der Tracing-UI ohne unterbrochene Spans durchgängig verfolgen
+- [ ] Jeder neue Alarm ist symptombasiert, verweist auf ein Runbook und wurde einmal testweise ausgelöst
+- [ ] Ein in Staging ausgelöster Fehler wurde allein anhand der Telemetrie lokalisiert, ohne den Quellcode zu lesen
 
-For the at-a-glance version of this list, including the pre-launch instrumentation gate, see `.codex/ai-engineering/references/observability-checklist.md` relative to the project root.
+Eine kompakte Fassung dieser Liste einschließlich der Instrumentierungsprüfung vor Veröffentlichung steht in `.codex/ai-engineering/references/observability-checklist.md` relativ zum Projektstamm.

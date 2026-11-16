@@ -1,97 +1,97 @@
 ---
 name: backend-dev-sqlite-data
-description: Plan, implement, or review SQLite persistence for native Apple apps, server-side APIs, and browser-based WebAssembly/OPFS storage, including offline synchronization and conflict handling.
+description: Plant, implementiert oder prüft SQLite-Persistenz für native Apple-Apps, serverseitige APIs und browserbasierten WebAssembly/OPFS-Speicher einschließlich Offline-Synchronisierung und Konfliktbehandlung.
 ---
 
-# SQLite Data Development
+# Datenentwicklung mit SQLite
 
-Follow `.codex/rules/ARCHITECTURE.md` to resolve storage location and any backend and hosting. SQLite alone requires neither a Swagger decision nor a Swagger implementation. When a separate NestJS or C# API uses SQLite, follow that API's explicit Swagger decision and protection rules. For other APIs follow project requirements; protect any Swagger UI or OpenAPI document actually provided from public and unauthorized access. Local SQLite alone does not imply an API backend.
+Kläre Speicherort sowie ein etwaiges Backend und Hosting gemäß `.codex/rules/ARCHITECTURE.md`. SQLite allein erfordert weder eine Swagger-Entscheidung noch eine Swagger-Implementierung. Verwendet eine separate NestJS- oder C#-API SQLite, gelten deren Regeln zur ausdrücklichen Swagger-Entscheidung und zum Schutz. Folge bei anderen APIs den Projektanforderungen; schütze tatsächlich bereitgestellte Swagger UI und OpenAPI-Dokumente vor öffentlichem und unberechtigtem Zugriff. Lokales SQLite allein setzt kein API-Backend voraus.
 
-Use this skill when a project stores data in SQLite on iOS, iPadOS, macOS, a server, or in a browser. First identify which runtime owns each database and whether it is a source of truth, a cache, a local working copy, or a server database. SQLite in one runtime is not automatically shared or synchronized with SQLite in another runtime.
+Nutze diesen Skill, wenn ein Projekt Daten in SQLite auf iOS, iPadOS, macOS, einem Server oder im Browser speichert. Ermittle zuerst, welche Laufzeit für welche Datenbank zuständig ist und ob diese führender Datenbestand, Cache, lokale Arbeitskopie oder Serverdatenbank ist. SQLite in einer Laufzeit wird nicht automatisch mit SQLite in einer anderen Laufzeit geteilt oder synchronisiert.
 
-Follow the approved Spec and Plan for substantial changes. Use `$spec-driven-development` and `$feature-planning` when behavior or architecture is unclear. Preserve the selected backend: local SQLite can complement Supabase, NestJS/PostgreSQL, or C#/SQL Server as an offline store or cache; do not silently replace the project's server backend with SQLite.
+Folge bei größeren Änderungen der abgestimmten Spec und dem Plan. Nutze `$spec-driven-development` und `$feature-planning`, wenn Verhalten oder Architektur unklar sind. Bewahre das gewählte Backend: Lokales SQLite kann Supabase, NestJS/PostgreSQL oder C#/SQL Server als Offline-Speicher oder Cache ergänzen; ersetze das Server-Backend des Projekts nicht stillschweigend durch SQLite.
 
-## Discover the data ownership model
+## Modell der Datenhoheit untersuchen
 
-Before designing a schema or sync implementation, establish:
+Kläre vor dem Entwurf eines Schemas oder einer Synchronisierung:
 
-- target runtime and platforms, supported OS/browser versions, and the SQLite implementation/library already used
-- data owner and scope: device-local, browser-profile-local, user-owned, tenant-shared, or globally shared
-- source of truth for each record: local SQLite, a remote API/database, or an explicitly defined conflict-resolution model
-- whether offline use is read-only, permits local edits, or supports the full workflow
-- which data must synchronize, in which direction, and whether sync is automatic, manual, or both
-- expected data volume, write frequency, simultaneous writers, retention, deletion, export, backup, and recovery needs
-- behavior at first launch, upgrade, sign-out/account switch, network loss/recovery, and database corruption or quota exhaustion
+- Ziellaufzeit und Plattformen, unterstützte Betriebssystem- und Browserversionen sowie die bereits verwendete SQLite-Implementierung oder -Bibliothek
+- Verantwortlichkeit und Geltungsbereich der Daten: gerätelokal, lokal zum Browserprofil, nutzerbezogen, mandantenweit oder global geteilt
+- Führenden Datenbestand für jeden Datensatz: lokales SQLite, entfernte API oder Datenbank oder ein ausdrücklich definiertes Konfliktlösungsmodell
+- Ob die Offline-Nutzung nur lesend ist, lokale Änderungen erlaubt oder den gesamten Ablauf unterstützt
+- Welche Daten in welche Richtung synchronisiert werden und ob die Synchronisierung automatisch, manuell oder auf beide Arten erfolgt
+- Erwartete Datenmenge, Schreibfrequenz, gleichzeitige Schreibzugriffe und Anforderungen an Aufbewahrung, Löschung, Export, Sicherung und Wiederherstellung
+- Verhalten bei erstem Start, Upgrade, Abmeldung oder Kontowechsel, Verbindungsverlust und -wiederherstellung sowie Datenbankbeschädigung oder ausgeschöpftem Kontingent
 
-Do not infer that “offline-capable” means bidirectional sync or that a local cache is authoritative. If data ownership, multi-device behavior, or conflict policy would change user-visible outcomes and is unspecified, mark it as an open decision and ask before implementing that behavior.
+Leite aus „offlinefähig“ weder eine bidirektionale Synchronisierung noch die Verbindlichkeit eines lokalen Caches ab. Sind Datenhoheit, Verhalten über mehrere Geräte oder Konfliktregeln nicht festgelegt und beeinflussen das für Nutzer sichtbare Ergebnis, markiere dies als offene Entscheidung und frage vor der Implementierung des betreffenden Verhaltens nach.
 
-## Native Apple apps (iOS, iPadOS, macOS)
+## Native Apple-Apps (iOS, iPadOS, macOS)
 
-- Follow the existing persistence architecture and minimum OS targets. Inspect whether the project uses SQLite directly, SwiftData, Core Data, GRDB, SQLite.swift, or another established layer; do not add or replace a library without a requirement and plan.
-- Keep database access behind the application's persistence boundary. Define schema ownership, versioned migrations, constraints, indexes, transactions, and recovery behavior. Do not perform blocking database work on the UI thread.
-- Keep the database in the app's appropriate container and account for iOS/iPadOS background suspension, macOS lifecycle, app upgrades, backups, and platform file-protection requirements. Store sensitive data only with an explicitly reviewed protection policy.
-- If remote synchronization is required, implement it through the selected authenticated API/backend. Define incremental checkpoints, retry/backoff, idempotency, duplicate handling, deletion propagation/tombstones, and user-visible sync status.
-- Define conflict behavior per data type: server wins, client wins, field merge, append-only/event merge, or user resolution. Do not pick a general “last write wins” policy without checking whether timestamps, clock skew, and concurrent edits make it safe.
-- Ensure account changes cannot reveal a prior user's local records. Specify whether sign-out retains, locks, clears, or queues local data, and handle pending writes consistently.
+- Folge der bestehenden Persistenzarchitektur und den Mindestversionen des Betriebssystems. Prüfe, ob das Projekt SQLite direkt, SwiftData, Core Data, GRDB, SQLite.swift oder eine andere etablierte Schicht nutzt; ergänze oder ersetze keine Bibliothek ohne Anforderung und Plan.
+- Halte Datenbankzugriffe hinter der Persistenzgrenze der Anwendung. Definiere Schemaverantwortung, versionierte Migrationen, Constraints, Indizes, Transaktionen und Wiederherstellungsverhalten. Führe blockierende Datenbankarbeit nicht auf dem UI-Thread aus.
+- Bewahre die Datenbank im geeigneten Container der App und berücksichtige Hintergrundunterbrechungen unter iOS/iPadOS, den macOS-Lebenszyklus, App-Upgrades, Sicherungen und Dateischutzanforderungen der Plattform. Speichere sensible Daten nur mit ausdrücklich geprüfter Schutzregelung.
+- Implementiere erforderliche entfernte Synchronisierung über die gewählte authentifizierte API beziehungsweise das Backend. Definiere inkrementelle Prüfpunkte, Wiederholungen mit Backoff, Idempotenz, Duplikatbehandlung, Löschweitergabe beziehungsweise Tombstones und einen für Nutzer sichtbaren Synchronisierungsstatus.
+- Definiere das Konfliktverhalten je Datentyp: Server gewinnt, Client gewinnt, Zusammenführung auf Feldebene, Append-only- oder Event-Zusammenführung oder Auflösung durch Nutzer. Wähle keine allgemeine „last write wins“-Regel, ohne Zeitstempel, abweichende Uhren und gleichzeitige Änderungen auf Sicherheit zu prüfen.
+- Stelle sicher, dass ein Kontowechsel keine lokalen Datensätze eines vorherigen Nutzers offenlegt. Lege fest, ob eine Abmeldung lokale Daten erhält, sperrt, löscht oder einreiht, und behandle ausstehende Schreibvorgänge konsistent.
 
-## Web applications: server-side SQLite
+## Webanwendungen: serverseitiges SQLite
 
-- SQLite may be used behind a server-side API, with the database file and application code on the same host/storage system. Clients must call the API; never expose the database file or accept arbitrary client SQL.
-- Confirm the hosting platform provides durable file storage, correct file locking, backup/restore, and an operational process for schema migrations. Ephemeral container filesystems must not be treated as durable storage.
-- Assess write contention, request concurrency, data size, deployment topology, and scaling needs. SQLite permits many readers but only one writer at a time per database file. A write-light workload with a single application server may fit; high write concurrency, multiple app instances sharing the file, direct network-filesystem access, or growth beyond the planned operating envelope points toward a client/server database such as PostgreSQL.
-- Keep API authentication and per-user/tenant authorization at the server boundary. A shared SQLite file is not an authorization model.
-- Use explicit transactions, short write transactions, bounded busy handling, and safe parameterized queries or the selected ORM. Never copy a live database file as a backup without using a consistent SQLite backup mechanism.
-- If server-side SQLite is selected as the primary backend, record the decision and operational limits in the project description/architecture. Do not assume it is compatible with multi-instance or serverless deployment.
+- SQLite kann hinter einer serverseitigen API verwendet werden, wobei Datenbankdatei und Anwendungscode auf demselben Host beziehungsweise Speichersystem liegen. Clients müssen die API aufrufen; stelle niemals die Datenbankdatei bereit und akzeptiere kein beliebiges SQL von Clients.
+- Bestätige, dass die Hostingplattform dauerhaften Dateispeicher, korrekte Dateisperren, Sicherung und Wiederherstellung sowie einen Betriebsprozess für Schemamigrationen bietet. Vergängliche Container-Dateisysteme dürfen nicht als dauerhafter Speicher behandelt werden.
+- Beurteile konkurrierende Schreibzugriffe, gleichzeitige Anfragen, Datengröße, Deployment-Topologie und Skalierungsbedarf. SQLite erlaubt viele Leser, aber pro Datenbankdatei jeweils nur einen Schreibvorgang. Eine schreibarme Last mit einem Anwendungsserver kann passen; hohe Schreibkonkurrenz, mehrere Anwendungsinstanzen mit gemeinsamer Datei, direkter Zugriff über Netzwerkdateisysteme oder Wachstum über den geplanten Betriebsrahmen hinaus sprechen für eine Client-Server-Datenbank wie PostgreSQL.
+- Halte API-Authentifizierung und Autorisierung je Nutzer oder Mandant an der Servergrenze. Eine gemeinsam genutzte SQLite-Datei ist kein Autorisierungsmodell.
+- Nutze ausdrückliche Transaktionen, kurze Schreibtransaktionen, begrenzte Behandlung von Belegungszuständen und sichere parametrisierte Abfragen oder das gewählte ORM. Kopiere eine laufende Datenbankdatei niemals als Sicherung ohne konsistenten SQLite-Sicherungsmechanismus.
+- Ist serverseitiges SQLite als primäres Backend gewählt, halte Entscheidung und Betriebsgrenzen in Projektbeschreibung beziehungsweise Architektur fest. Setze keine Kompatibilität mit mehreren Instanzen oder serverlosem Deployment voraus.
 
-## Web applications: browser SQLite with WebAssembly
+## Webanwendungen: SQLite im Browser mit WebAssembly
 
-- Treat browser SQLite as storage local to a browser origin/profile, not as a shared multi-user database and not as an automatic backup. The application must separately design any sync, export, recovery, or backup behavior.
-- Inspect the current SQLite WASM implementation and its official persistence documentation. OPFS-backed configurations have worker-context requirements; keep database I/O out of the UI thread and verify support in the project's actual browser matrix.
-- Select and document the persistence/VFS mode based on browser support, multi-tab behavior, locking, required headers/isolation, and product needs. Do not assume all OPFS modes have identical concurrency or deployment requirements.
-- Define behavior when OPFS, workers, persistent storage, or browser quota is unavailable. Provide a supported fallback or an explicit user-facing limitation; do not silently report a successful save when storage failed.
-- Test reload, tab duplication/concurrency, browser restart, storage denial/quota, sign-out/account switching, and schema upgrade. Consider origin changes and browser-managed deletion as data-loss scenarios.
-- For user-specific records, partition data by authenticated account locally and prevent cross-account leakage. Do not put secrets, credentials, or authorization decisions in a client database.
+- Behandle SQLite im Browser als lokalen Speicher einer Browser-Origin beziehungsweise eines Browserprofils, nicht als gemeinsam genutzte Mehrbenutzerdatenbank oder automatische Sicherung. Synchronisierung, Export, Wiederherstellung und Sicherung muss die Anwendung gesondert gestalten.
+- Prüfe die aktuelle SQLite-WASM-Implementierung und ihre offizielle Persistenzdokumentation. OPFS-basierte Konfigurationen haben Anforderungen an den Worker-Kontext; halte Datenbank-Ein- und -Ausgabe vom UI-Thread fern und prüfe die Unterstützung anhand der tatsächlichen Browsermatrix des Projekts.
+- Wähle und dokumentiere den Persistenz- beziehungsweise VFS-Modus anhand von Browserunterstützung, Verhalten mehrerer Tabs, Sperren, erforderlichen Headern und Isolation sowie Produktbedarf. Setze keine identischen Anforderungen aller OPFS-Modi an Nebenläufigkeit oder Deployment voraus.
+- Definiere das Verhalten, wenn OPFS, Worker, persistenter Speicher oder Browserkontingent nicht verfügbar sind. Biete eine unterstützte Ausweichlösung oder eine ausdrückliche nutzersichtbare Einschränkung; melde keinen erfolgreichen Speichervorgang, wenn die Speicherung fehlgeschlagen ist.
+- Teste Neuladen, Tab-Duplizierung und -Nebenläufigkeit, Browserneustart, Speicherverweigerung oder Kontingentprobleme, Abmeldung und Kontowechsel sowie Schema-Upgrades. Berücksichtige Origin-Änderungen und browsergesteuerte Löschung als Datenverlustszenarien.
+- Trenne nutzerspezifische Datensätze lokal nach authentifiziertem Konto und verhindere Datenlecks zwischen Konten. Speichere keine Geheimnisse, Zugangsdaten oder Autorisierungsentscheidungen in einer Client-Datenbank.
 
-## Synchronization design
+## Gestaltung der Synchronisierung
 
-When local and remote stores both exist, document the synchronization contract before implementation:
+Wenn lokale und entfernte Speicher bestehen, dokumentiere vor der Implementierung den Synchronisierungsvertrag:
 
-- stable record IDs and ownership/tenant binding
-- local pending-operation/outbox representation and durable transaction boundaries
-- API contract, authentication, pagination, delta cursor/checkpoint, and idempotency key behavior
-- ordering, retry/backoff, partial failure recovery, duplicate delivery, and cancellation behavior
-- conflict resolution by entity/field and how rejected changes are surfaced
-- deletion propagation, retention, data export, and account deletion behavior
-- sync status and user-visible guarantees, including what remains available offline
+- Stabile Datensatz-IDs und Bindung an Eigentümer oder Mandant
+- Lokale Darstellung ausstehender Operationen beziehungsweise der Outbox und dauerhafte Transaktionsgrenzen
+- API-Vertrag, Authentifizierung, Paginierung, Delta-Cursor oder Prüfpunkt sowie Verhalten von Idempotenzschlüsseln
+- Reihenfolge, Wiederholung und Backoff, Wiederherstellung nach teilweisem Fehler, mehrfache Zustellung und Abbruchverhalten
+- Konfliktauflösung je Entität oder Feld und Darstellung abgelehnter Änderungen
+- Weitergabe von Löschungen, Aufbewahrung, Datenexport und Verhalten bei Kontolöschung
+- Synchronisierungsstatus und für Nutzer sichtbare Zusagen einschließlich der offline verfügbaren Funktionen
 
-Make local writes and their pending-sync records atomic where the design uses an outbox. Make retries safe. A successful local write must not be presented as remotely synchronized until the server confirms it. Avoid destructive full refreshes that can erase unuploaded local edits.
+Führe lokale Schreibvorgänge und zugehörige ausstehende Synchronisierungsdatensätze atomar aus, wenn das Design eine Outbox verwendet. Gestalte Wiederholungen sicher. Ein erfolgreicher lokaler Schreibvorgang darf erst nach Bestätigung durch den Server als entfernt synchronisiert dargestellt werden. Vermeide destruktive vollständige Aktualisierungen, die noch nicht hochgeladene lokale Änderungen löschen können.
 
-## Security and privacy
+## Sicherheit und Datenschutz
 
-- Treat every local database as potentially inspectable by someone with access to the device/browser profile. Apply platform storage protections appropriate to data sensitivity; do not claim encryption solely because data is in SQLite or OPFS.
-- Enforce server-side authentication and authorization independently of the local database and UI. Validate ownership again when syncing or accepting mutations.
-- Avoid secrets and unnecessary personal data in records, debug logs, fixtures, and exported database files. Define retention and deletion across local copies, sync queues, server data, backups, and exports.
-- Use `$dsgvo` when personal data is processed and the selected backend skill for the remote API/database.
+- Betrachte jede lokale Datenbank als potenziell einsehbar für Personen mit Zugriff auf Gerät oder Browserprofil. Wende zur Sensibilität der Daten passende Speicherschutzmaßnahmen der Plattform an; behaupte Verschlüsselung nicht allein deshalb, weil Daten in SQLite oder OPFS liegen.
+- Setze serverseitige Authentifizierung und Autorisierung unabhängig von lokaler Datenbank und UI durch. Prüfe die Eigentümerschaft bei Synchronisierung oder Annahme von Änderungen erneut.
+- Vermeide Geheimnisse und unnötige personenbezogene Daten in Datensätzen, Debug-Logs, Fixtures und exportierten Datenbankdateien. Definiere Aufbewahrung und Löschung für lokale Kopien, Synchronisierungswarteschlangen, Serverdaten, Sicherungen und Exporte.
+- Nutze `$dsgvo`, wenn personenbezogene Daten verarbeitet werden, und den gewählten Backend-Skill für entfernte API oder Datenbank.
 
-## Verification
+## Verifikation
 
-Select checks matching the platform and the approved Plan. Relevant checks may include:
+Wähle Prüfungen passend zur Plattform und zum abgestimmten Plan. Relevante Prüfungen können umfassen:
 
-- create/open/migrate the database from both a clean install and each supported previous schema version
-- test constraints, transaction rollback, concurrent reads/writes, busy/locked behavior, and recovery from an interrupted operation
-- verify local-only behavior with the network disabled, then reconnect and validate idempotent synchronization and the agreed conflict policy
-- verify account/tenant isolation, sign-out behavior, deletion propagation, and unauthorized server requests
-- test browser worker/OPFS availability, target browsers, multiple tabs, quota/storage errors, and persistence across reload/restart
-- verify server durability, backup/restore procedure, and migrations against a local/test copy; do not point setup checks at production
-- confirm backups and exports are consistent and contain no unintended secrets
+- Datenbank aus einer sauberen Installation und aus jeder unterstützten früheren Schemaversion erstellen, öffnen und migrieren.
+- Constraints, Transaktions-Rollback, gleichzeitiges Lesen und Schreiben, Verhalten bei belegter oder gesperrter Datenbank und Wiederherstellung nach unterbrochener Operation testen.
+- Lokales Verhalten bei deaktiviertem Netzwerk prüfen; anschließend Verbindung wiederherstellen und idempotente Synchronisierung sowie vereinbarte Konfliktregeln validieren.
+- Konto- und Mandantentrennung, Abmeldeverhalten, Löschweitergabe und unberechtigte Serveranfragen prüfen.
+- Verfügbarkeit von Browser-Workern und OPFS, Zielbrowser, mehrere Tabs, Kontingent- und Speicherfehler sowie Persistenz nach Neuladen und Neustart testen.
+- Dauerhaftigkeit auf dem Server, Sicherungs- und Wiederherstellungsverfahren sowie Migrationen anhand einer lokalen oder Testkopie prüfen; richte Setup-Prüfungen nicht auf Produktion.
+- Bestätigen, dass Sicherungen und Exporte konsistent sind und keine unbeabsichtigten Geheimnisse enthalten.
 
-Do not run destructive resets, production migrations, or hosted data changes without explicit authorization for that environment and action. Use `$verify-setup` for runtime/environment readiness, `$app-dev-swiftui`, `$app-dev-nextjs`, or `$app-dev-angular` for platform conventions, and the selected backend skill for remote integration. Report executed checks, unrun checks, open decisions, and known storage limits.
+Führe destruktive Resets, Produktionsmigrationen oder Änderungen gehosteter Daten nicht ohne ausdrückliche Autorisierung für Umgebung und Aktion aus. Nutze `$verify-setup` für die Einsatzbereitschaft von Laufzeit und Umgebung, `$app-dev-swiftui`, `$app-dev-nextjs` oder `$app-dev-angular` für Plattformkonventionen und den gewählten Backend-Skill für entfernte Integration. Berichte ausgeführte und nicht ausgeführte Prüfungen, offene Entscheidungen und bekannte Speichergrenzen.
 
-## Official documentation
+## Offizielle Dokumentation
 
-Use documentation matching the selected SQLite/WASM library and platform versions. Start with:
+Nutze die zur gewählten SQLite/WASM-Bibliothek und den Plattformversionen passende Dokumentation. Beginne mit:
 
-- [Appropriate Uses For SQLite](https://www.sqlite.org/whentouse.html)
-- [SQLite Over a Network, Caveats and Considerations](https://www.sqlite.org/useovernet.html)
-- [SQLite Wasm Persistent Storage Options](https://sqlite.org/wasm/doc/trunk/persistence.md)
+- [Geeignete Anwendungsfälle für SQLite](https://www.sqlite.org/whentouse.html)
+- [SQLite über ein Netzwerk: Einschränkungen und Hinweise](https://www.sqlite.org/useovernet.html)
+- [Persistente Speicheroptionen für SQLite Wasm](https://sqlite.org/wasm/doc/trunk/persistence.md)
 - [SQLite Online Backup API](https://www.sqlite.org/backup.html)

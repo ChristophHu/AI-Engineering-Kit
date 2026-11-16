@@ -1,70 +1,70 @@
 ---
 name: backend-dev-nestjs-postgres
-description: Plan, implement, or review a NestJS API with PostgreSQL, including authentication, authorization, schema migrations, and protected Swagger/OpenAPI documentation.
+description: Plant, implementiert oder prüft eine NestJS-API mit PostgreSQL einschließlich Authentifizierung, Autorisierung, Schemamigrationen und geschützter Swagger/OpenAPI-Dokumentation.
 ---
 
-# NestJS and PostgreSQL Backend Development
+# Backend-Entwicklung mit NestJS und PostgreSQL
 
-Use this skill when the project description or established codebase selects a NestJS backend with PostgreSQL. It is especially suited to web applications that need a separately operated API. Follow the approved Spec and Plan for substantial changes; use `$spec-driven-development` and `$feature-planning` when requirements or scope need clarification first. Do not substitute this stack for Supabase or another established backend without an explicit project decision.
+Nutze diesen Skill, wenn die Projektbeschreibung oder die bestehende Codebasis ein NestJS-Backend mit PostgreSQL vorsieht. Er eignet sich besonders für Webanwendungen mit separat betriebener API. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$spec-driven-development` und `$feature-planning`, wenn Anforderungen oder Umfang zuerst geklärt werden müssen. Ersetze Supabase oder ein anderes bestehendes Backend nicht ohne ausdrückliche Projektentscheidung durch diesen Stack.
 
-## Discover the existing project
+## Bestehendes Projekt untersuchen
 
-1. Read project instructions, `.codex/PROJECT.md`, relevant Specs/Plans, data-model documentation, and deployment documentation.
-2. Inspect the NestJS, Node.js, TypeScript, package-manager, PostgreSQL, ORM/query-builder, migration, validation, authentication, and test versions and conventions already in use. Preserve established choices unless the approved plan calls for a change.
-3. Identify local, development, staging/preview, and production environments and how each is selected. Determine database targets before invoking commands; never expose credentials.
-4. Inspect module boundaries, controllers, providers, DTOs, guards, interceptors, exception handling, database access, migrations, seeds, CI, and deployment configuration relevant to the work.
-5. Consult current official NestJS, PostgreSQL, and selected ORM/tool documentation when behavior depends on version or configuration.
+1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante Specs und Pläne sowie Datenmodell- und Deployment-Dokumentation.
+2. Prüfe die bereits eingesetzten Versionen und Konventionen für NestJS, Node.js, TypeScript, Paketverwaltung, PostgreSQL, ORM oder Query-Builder, Migrationen, Validierung, Authentifizierung und Tests. Bewahre bestehende Entscheidungen, sofern der abgestimmte Plan keine Änderung vorsieht.
+3. Ermittle lokale, Entwicklungs-, Staging-/Preview- und Produktionsumgebungen sowie deren Auswahl. Bestimme Datenbankziele vor der Ausführung von Befehlen; lege keine Zugangsdaten offen.
+4. Prüfe die für die Aufgabe relevanten Modulgrenzen, Controller, Provider, DTOs, Guards, Interceptors, Ausnahmebehandlung, Datenbankzugriffe, Migrationen, Seeds sowie CI- und Deployment-Konfiguration.
+5. Ziehe aktuelle offizielle Dokumentation zu NestJS, PostgreSQL und dem gewählten ORM oder Werkzeug hinzu, wenn das Verhalten von Version oder Konfiguration abhängt.
 
-## API and module design
+## API- und Modulgestaltung
 
-- Organize modules around product responsibilities and keep controllers focused on HTTP concerns. Put business rules in providers/services and database access behind clear persistence boundaries consistent with the codebase.
-- Define request and response DTOs; validate and transform untrusted input at the API boundary. Avoid using database entities as public response contracts.
-- Use consistent HTTP semantics, pagination, error shapes, and API versioning where the project requires them. Do not expose stack traces, SQL details, or internal identifiers without a product need.
-- Keep secrets and privileged operations on the server. Treat browser and native-client code as public and enforce authorization in the API, regardless of client-side route guards or UI state.
+- Ordne Module nach Produktverantwortlichkeiten und beschränke Controller auf HTTP-Aufgaben. Hinterlege Geschäftsregeln in Providern oder Services und Datenbankzugriffe hinter klaren Persistenzgrenzen entsprechend der Codebasis.
+- Definiere DTOs für Anfragen und Antworten; validiere und transformiere nicht vertrauenswürdige Eingaben an der API-Grenze. Vermeide Datenbankentitäten als öffentliche Antwortverträge.
+- Verwende einheitliche HTTP-Semantik, Paginierung, Fehlerformate und API-Versionierung, soweit das Projekt sie benötigt. Gib Stacktraces, SQL-Details oder interne Kennungen nicht ohne Produktbedarf preis.
+- Halte Geheimnisse und privilegierte Operationen auf dem Server. Betrachte Browser- und nativen Client-Code als öffentlich und setze Autorisierung unabhängig von clientseitigen Route-Guards oder UI-Zuständen in der API durch.
 
-## PostgreSQL schema and migrations
+## PostgreSQL-Schema und Migrationen
 
-- Model only data required by the Spec. Make ownership, relationships, constraints, indexes, deletion behavior, and tenant boundaries explicit; update `docs/data-model.md` when present.
-- Use the repository's existing migration tool and workflow. Make schema changes reproducible; review generated migrations and account for backfills, lock duration, and compatibility with deployed application versions.
-- Keep development, preview, and production databases distinct according to the agreed environment strategy. Seed only synthetic or otherwise authorized non-production data.
-- Use parameterized queries or the selected ORM's safe query APIs. Apply transactions and database constraints where needed for correctness; do not rely only on application checks for invariants the database can enforce.
-- Keep database URLs and passwords in trusted environment configuration or an approved secret store. Never put them in browser bundles, logs, reports, or version control.
+- Modelliere nur Daten, die die Spec benötigt. Halte Eigentümerschaft, Beziehungen, Constraints, Indizes, Löschverhalten und Mandantengrenzen ausdrücklich fest; aktualisiere `docs/data-model.md`, sofern vorhanden.
+- Nutze das bestehende Migrationswerkzeug und den Workflow des Repositorys. Gestalte Schemaänderungen reproduzierbar; prüfe erzeugte Migrationen und berücksichtige Nachbefüllung, Sperrdauer und Kompatibilität mit bereitgestellten Anwendungsversionen.
+- Trenne Entwicklungs-, Preview- und Produktionsdatenbanken entsprechend der vereinbarten Umgebungsstrategie. Verwende für Seeds ausschließlich synthetische oder anderweitig autorisierte Nichtproduktionsdaten.
+- Verwende parametrisierte Abfragen oder sichere Abfrage-APIs des gewählten ORM. Nutze Transaktionen und Datenbank-Constraints, soweit für Korrektheit erforderlich; verlasse dich bei durch die Datenbank durchsetzbaren Invarianten nicht allein auf Prüfungen der Anwendung.
+- Hinterlege Datenbank-URLs und Passwörter in vertrauenswürdiger Umgebungskonfiguration oder einem freigegebenen Secret Store. Lege sie niemals in Browser-Bundles, Logs, Berichten oder der Versionsverwaltung ab.
 
-## Authentication and authorization
+## Authentifizierung und Autorisierung
 
-- Implement only authentication methods and account lifecycle behavior required by the Spec and existing project. State whether identity is managed by this API or by a separately selected identity provider; do not assume a provider.
-- Authenticate each protected request and enforce resource-level authorization server-side. Check object ownership and tenant membership on every relevant operation; do not treat a valid JWT or role name alone as permission for arbitrary records.
-- Use established password hashing, session/token validation, rotation, expiration, and revocation patterns appropriate to the selected auth design. Never log credentials, tokens, authorization headers, or sensitive personal data.
-- Cover relevant denied-access cases as well as successful operations. Keep authorization decisions independent of Swagger UI access controls.
+- Implementiere nur die Authentifizierungsmethoden und das Kontolebenszyklusverhalten, die Spec und bestehendes Projekt benötigen. Halte fest, ob diese API oder ein separat ausgewählter Identitätsanbieter Identitäten verwaltet; setze keinen Anbieter voraus.
+- Authentifiziere jede geschützte Anfrage und setze Autorisierung auf Ressourcenebene serverseitig durch. Prüfe bei jeder relevanten Operation Objektzugehörigkeit und Mandantenmitgliedschaft; ein gültiges JWT oder ein Rollenname allein berechtigt nicht zum Zugriff auf beliebige Datensätze.
+- Nutze etablierte, zum gewählten Authentifizierungsdesign passende Verfahren für Passwort-Hashing, Sitzungs- und Tokenvalidierung, Rotation, Ablauf und Widerruf. Protokolliere niemals Zugangsdaten, Tokens, Autorisierungsheader oder sensible personenbezogene Daten.
+- Berücksichtige relevante abgelehnte Zugriffe ebenso wie erfolgreiche Operationen. Halte Autorisierungsentscheidungen unabhängig vom Zugriffsschutz der Swagger UI.
 
-## Protected Swagger / OpenAPI
+## Geschütztes Swagger / OpenAPI
 
-- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Recommend Swagger/OpenAPI with visual Swagger UI as the default; honor a previously agreed decision and document any decision to omit it, its reason and any alternative. Do not proceed with creation while this decision is unresolved. Describe DTO schemas, authentication schemes, relevant success/error responses, and versioning accurately when documentation is provided.
-- **Swagger UI and any served OpenAPI JSON/document endpoint must not be publicly reachable.** Enforce a non-public network access path (for example VPN or private ingress) and explicit server-side authentication/authorization for intended operators. Authentication alone does not make a public URL private. Do not rely on an obscure URL, CORS, frontend routing, or an undocumented query token.
-- Default documentation endpoints to disabled in production unless the approved deployment design explicitly provides protected, non-public access. Test allowed and denied access where enabled; where disabled, verify both endpoints are unreachable.
-- Avoid embedding secrets, real credentials, internal hostnames, or sensitive example data in the OpenAPI document. Use non-sensitive examples and declare bearer/API authentication schemes without including actual tokens.
-- Document how authorized developers/operators reach the UI. If access control is provided by an ingress or identity-aware proxy, record that dependency and verify the application cannot be reached around it in the intended deployment topology.
+- Kläre vor Erstellung eines Backends nach `.codex/rules/ARCHITECTURE.md` Backend-Art, Hosting und die ausdrückliche Swagger/OpenAPI-Entscheidung des Entwicklers. Empfiehl Swagger/OpenAPI mit visueller Swagger UI als Standard; beachte eine bereits vereinbarte Entscheidung und dokumentiere einen Verzicht, dessen Grund und eine etwaige Alternative. Fahre mit der Erstellung nicht fort, solange diese Entscheidung offen ist. Beschreibe bei bereitgestellter Dokumentation DTO-Schemata, Authentifizierungsschemata, relevante Erfolgs- und Fehlerantworten sowie Versionierung korrekt.
+- **Swagger UI und jeder bereitgestellte OpenAPI-JSON- oder Dokumentendpunkt dürfen nicht öffentlich erreichbar sein.** Setze einen nicht öffentlichen Netzwerkzugang, etwa VPN oder privaten Ingress, und ausdrückliche serverseitige Authentifizierung und Autorisierung für vorgesehene Betreiber durch. Authentifizierung allein macht eine öffentliche URL nicht privat. Verlasse dich nicht auf eine versteckte URL, CORS, Frontend-Routing oder einen undokumentierten Query-Token.
+- Deaktiviere Dokumentationsendpunkte standardmäßig in Produktion, sofern das freigegebene Deployment-Design keinen geschützten, nicht öffentlichen Zugriff ausdrücklich vorsieht. Prüfe bei aktivierten Endpunkten erlaubte und abgelehnte Zugriffe; prüfe bei deaktivierten, dass beide Endpunkte nicht erreichbar sind.
+- Vermeide Geheimnisse, echte Zugangsdaten, interne Hostnamen und sensible Beispieldaten im OpenAPI-Dokument. Verwende unkritische Beispiele und deklariere Bearer- oder API-Authentifizierungsschemata ohne echte Tokens.
+- Dokumentiere, wie berechtigte Entwickler und Betreiber die UI erreichen. Erfolgt die Zugriffskontrolle über einen Ingress oder identitätsbewussten Proxy, dokumentiere diese Abhängigkeit und prüfe, dass die Anwendung in der vorgesehenen Deployment-Topologie nicht daran vorbei erreichbar ist.
 
-## Verification
+## Verifikation
 
-Choose checks that match the change and existing repository setup. Relevant checks may include:
+Wähle Prüfungen passend zur Änderung und zur bestehenden Repository-Konfiguration. Relevante Prüfungen können umfassen:
 
-- apply migrations to a clean local/test database and confirm the resulting schema; verify migration ordering and rollback strategy where supported
-- run unit/integration tests for changed services, controllers, validation, transactions, and error mapping
-- exercise authenticated and unauthenticated requests, ownership/tenant boundaries, and expected denied operations
-- if Swagger is provided, verify authorized access and denied anonymous/unauthorized access to both UI and document where enabled, including non-public network access; verify both endpoints are unreachable where disabled
-- if provided, validate the generated OpenAPI document against current DTOs and authentication behavior
-- validate the backend build and frontend integration against the API contract
-- confirm environment configuration uses the intended database without revealing its URL or credentials
+- Migrationen auf eine saubere lokale oder Testdatenbank anwenden und das resultierende Schema bestätigen; Migrationsreihenfolge und, soweit unterstützt, Rückfallstrategie prüfen.
+- Unit- und Integrationstests für geänderte Services, Controller, Validierung, Transaktionen und Fehlerzuordnung ausführen.
+- Authentifizierte und nicht authentifizierte Anfragen, Eigentümer- und Mandantengrenzen sowie erwartete abgelehnte Operationen prüfen.
+- Falls Swagger bereitgestellt wird, bei aktivierten Endpunkten berechtigten sowie abgelehnten anonymen und unberechtigten Zugriff auf UI und Dokument einschließlich nicht öffentlichem Netzwerkzugang prüfen; bei deaktivierten prüfen, dass beide nicht erreichbar sind.
+- Falls bereitgestellt, das erzeugte OpenAPI-Dokument gegen aktuelle DTOs und das Authentifizierungsverhalten validieren.
+- Backend-Build und Frontend-Integration gegen den API-Vertrag prüfen.
+- Bestätigen, dass die Umgebungskonfiguration die vorgesehene Datenbank verwendet, ohne URL oder Zugangsdaten offenzulegen.
 
-Do not run destructive database resets, production migrations, production data changes, or secret changes without explicit authorization for that environment and action. Prefer local/test verification first. Use `$verify-setup` for runtime, CLI, configuration, and environment readiness, `$dsgvo` when personal data is processed, and `$deploy` for release/deployment work. Report executed checks, open risks, and checks not run.
+Führe destruktive Datenbank-Resets, Produktionsmigrationen, Änderungen an Produktionsdaten oder Geheimnissen nicht ohne ausdrückliche Autorisierung für Umgebung und Aktion aus. Bevorzuge zunächst lokale oder Testprüfungen. Nutze `$verify-setup` für die Einsatzbereitschaft von Laufzeit, CLI, Konfiguration und Umgebung, `$dsgvo` bei Verarbeitung personenbezogener Daten und `$deploy` für Release- und Deployment-Arbeiten. Berichte ausgeführte Prüfungen, offene Risiken und nicht ausgeführte Prüfungen.
 
-## Official documentation
+## Offizielle Dokumentation
 
-Use documentation matching the installed versions. Start with:
+Nutze die zu den installierten Versionen passende Dokumentation. Beginne mit:
 
 - [NestJS OpenAPI](https://docs.nestjs.com/openapi/introduction)
-- [NestJS authentication](https://docs.nestjs.com/security/authentication)
-- [NestJS authorization](https://docs.nestjs.com/security/authorization)
-- [NestJS validation](https://docs.nestjs.com/techniques/validation)
-- [PostgreSQL documentation](https://www.postgresql.org/docs/)
+- [NestJS-Authentifizierung](https://docs.nestjs.com/security/authentication)
+- [NestJS-Autorisierung](https://docs.nestjs.com/security/authorization)
+- [NestJS-Validierung](https://docs.nestjs.com/techniques/validation)
+- [PostgreSQL-Dokumentation](https://www.postgresql.org/docs/)

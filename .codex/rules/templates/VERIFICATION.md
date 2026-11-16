@@ -1,6 +1,8 @@
 # Verifikation: <Titel>
 
-| Abnahmekriterium | Nachweis/Prüfung | Status |
+Bei vorhandenen Anforderungskennungen diese mit dem Kriterium angeben und bei Bedarf auf den Planschritt oder die bestehende Aufgabe verweisen. Nur tatsächlich ausgeführte Prüfungen als Nachweis eines bestandenen Ergebnisses ausweisen; geplante oder nicht ausführbare Prüfungen bleiben offen. Aufgabenstatus wird nicht doppelt geführt.
+
+| Abnahmekriterium (ggf. Anforderungskennung) | Nachweis/Prüfung | Status |
 |---|---|---|
 | <Kriterium> | <Test, Check oder beobachtetes Verhalten> | Erfüllt / Offen / Nicht erfüllt |
 

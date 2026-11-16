@@ -1,6 +1,6 @@
 ---
 name: dsgvo
-description: Plant, implement, or review privacy-related behavior in native Apple and web apps that process personal data, with traceable assumptions and current authoritative sources.
+description: Plant, implementiert oder prüft datenschutzrelevantes Verhalten in nativen Apple- und Web-Apps mit personenbezogenen Daten anhand nachvollziehbarer Annahmen und aktueller maßgeblicher Quellen.
 ---
 
 # DSGVO und Datenschutz

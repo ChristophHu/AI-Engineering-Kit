@@ -5,7 +5,7 @@ Wähle Skills anhand von Auftrag, Projektzustand und Plattform. Lies die jeweili
 ## Einstieg
 
 - **Neues Projekt oder noch unklare Produktidee:** `$init` koordiniert den Einstieg. Es nutzt `$interview-me` und `$idea-refine` nur bei Bedarf, erhält `.codex/IDEA.md` und übernimmt bereits abgeschlossene Ideenschärfung ohne Wiederholung.
-- **Bestehendes Projekt mit konkreter Funktion:** Beginne bei mehrteiligen oder unklaren Anforderungen mit `$spec-driven-development`, danach bei Bedarf mit `$feature-planning` und `$planning-and-task-breakdown`. Eine erneute Projektinitialisierung ist nicht erforderlich.
+- **Bestehendes Projekt mit neuer oder noch unklarer Feature-Idee oder konkreter Funktion:** Nutze `$spec-driven-development` als Einstieg; bei unklaren Feature-Ideen zieht dieser Skill bei Bedarf `$idea-refine` zur Schärfung heran. Folge bei Bedarf mit `$feature-planning` und `$planning-and-task-breakdown`. Eine erneute Projektinitialisierung ist nicht erforderlich.
 - **Fehler, Review oder andere konkrete Aufgabe:** Wähle den passenden Skill direkt, beispielsweise `$debugging-and-error-recovery` oder `$code-review-and-quality`.
 
 ## Auswahl nach Aufgabe

@@ -1,72 +1,72 @@
 ---
 name: backend-dev-csharp-sqlserver
-description: Plan, implement, or review a C# ASP.NET Core Web API with Microsoft SQL Server, Entity Framework Core or the project's established data layer, and protected Swagger/OpenAPI documentation.
+description: Plant, implementiert oder prüft eine C#-ASP.NET-Core-Web-API mit Microsoft SQL Server, der etablierten Datenschicht und geschützter Swagger/OpenAPI-Dokumentation.
 ---
 
-# C# and Microsoft SQL Server Backend Development
+# Backend-Entwicklung mit C# und Microsoft SQL Server
 
-Use this skill when the project description or established codebase selects a C# backend with Microsoft SQL Server. For web APIs, use the project's established ASP.NET Core version and application model (controllers or Minimal APIs); do not assume a new .NET version, ORM, identity provider, or hosting provider. Follow the approved Spec and Plan for substantial changes; use `$spec-driven-development` and `$feature-planning` when requirements or scope need clarification first.
+Nutze diesen Skill, wenn die Projektbeschreibung oder die bestehende Codebasis ein C#-Backend mit Microsoft SQL Server vorsieht. Verwende für Web-APIs die etablierte ASP.NET-Core-Version und das Anwendungsmodell des Projekts (Controller oder Minimal APIs); setze keine neue .NET-Version, kein ORM und keinen Identitäts- oder Hostinganbieter voraus. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$spec-driven-development` und `$feature-planning`, wenn Anforderungen oder Umfang zuerst geklärt werden müssen.
 
-## Discover the existing project
+## Bestehendes Projekt untersuchen
 
-1. Read project instructions, `.codex/PROJECT.md`, relevant Specs/Plans, data-model documentation, and deployment documentation.
-2. Inspect `.sln`/`.csproj`, `global.json`, target frameworks, SDK/runtime, package sources, API style, dependency-injection conventions, SQL Server version/edition, data-access layer, EF Core/provider versions if used, migrations, authentication, tests, and CI. Preserve established choices unless the approved plan calls for a change.
-3. Identify whether hosting is Windows Server/IIS, another Windows Server process model, Azure App Service, or another explicit target. Determine local, development, staging, and production SQL/API targets before commands; never expose connection strings or credentials.
-4. Map the relevant API layers, DTOs, validation, middleware, authorization policies, database contexts/repositories, migrations, Swagger/OpenAPI setup, health checks, and deployment configuration.
-5. Consult current Microsoft documentation matching the project's .NET, ASP.NET Core, EF Core, SQL Server, and hosting versions when behavior is version-dependent.
+1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante Specs und Pläne sowie Datenmodell- und Deployment-Dokumentation.
+2. Prüfe `.sln`/`.csproj`, `global.json`, Ziel-Frameworks, SDK und Laufzeit, Paketquellen, API-Stil, Dependency-Injection-Konventionen, SQL-Server-Version und -Edition, Datenzugriffsschicht, gegebenenfalls EF-Core- und Provider-Versionen, Migrationen, Authentifizierung, Tests und CI. Bewahre bestehende Entscheidungen, sofern der abgestimmte Plan keine Änderung vorsieht.
+3. Ermittle, ob Windows Server/IIS, ein anderes Windows-Server-Prozessmodell, Azure App Service oder ein anderes ausdrückliches Ziel verwendet wird. Bestimme vor Befehlen lokale, Entwicklungs-, Staging- und Produktionsziele für SQL und API; lege Verbindungszeichenfolgen oder Zugangsdaten niemals offen.
+4. Erfasse relevante API-Schichten, DTOs, Validierung, Middleware, Autorisierungsrichtlinien, Datenbankkontexte und Repositories, Migrationen, Swagger/OpenAPI-Konfiguration, Zustandsprüfungen und Deployment-Konfiguration.
+5. Ziehe bei versionsabhängigem Verhalten aktuelle Microsoft-Dokumentation passend zu den Projektversionen von .NET, ASP.NET Core, EF Core, SQL Server und Hosting hinzu.
 
-## API structure and contracts
+## API-Struktur und Verträge
 
-- Preserve the project's API style (controllers or Minimal APIs), dependency injection, routing, versioning, and error conventions. Keep endpoints focused on HTTP concerns and business logic in appropriate application services.
-- Validate untrusted input at the boundary. Use request/response contracts rather than exposing persistence entities as the public API. Return consistent HTTP status codes and problem details without leaking SQL, stack traces, or internal data.
-- Use asynchronous I/O and cancellation tokens for request-scoped database and network operations. Respect scoped lifetimes and avoid retaining request services in long-lived objects.
-- Keep authentication and authorization server-side. Check resource ownership and tenant boundaries for each relevant operation; client-side guards are not a security boundary.
-- Do not assume Windows Integrated Authentication is appropriate merely because the API runs on Windows Server. Select authentication based on the approved identity and deployment design.
+- Bewahre API-Stil des Projekts (Controller oder Minimal APIs), Dependency Injection, Routing, Versionierung und Fehlerkonventionen. Beschränke Endpunkte auf HTTP-Aufgaben und hinterlege Geschäftslogik in geeigneten Anwendungsservices.
+- Validiere nicht vertrauenswürdige Eingaben an der Grenze. Verwende Anfrage- und Antwortverträge, statt Persistenzentitäten als öffentliche API bereitzustellen. Gib einheitliche HTTP-Statuscodes und Problemdetails zurück, ohne SQL, Stacktraces oder interne Daten preiszugeben.
+- Nutze asynchrone Ein- und Ausgabe sowie Cancellation Tokens für anfragegebundene Datenbank- und Netzwerkoperationen. Beachte begrenzte Lebensdauern und halte Anfrage-Services nicht in langlebigen Objekten fest.
+- Halte Authentifizierung und Autorisierung serverseitig. Prüfe Ressourcenzugehörigkeit und Mandantengrenzen für jede relevante Operation; clientseitige Guards sind keine Sicherheitsgrenze.
+- Setze Windows Integrated Authentication nicht allein deshalb voraus, weil die API auf Windows Server läuft. Wähle Authentifizierung anhand des abgestimmten Identitäts- und Deployment-Designs.
 
-## Microsoft SQL Server and data access
+## Microsoft SQL Server und Datenzugriff
 
-- Use Entity Framework Core with the Microsoft SQL Server provider when that is the project's established or approved data layer. Otherwise preserve the chosen approach, such as Dapper or parameterized `Microsoft.Data.SqlClient` access; do not introduce an ORM by default.
-- Model only data required by the Spec. Define relationships, keys, constraints, indexes, concurrency behavior, tenant ownership, and deletion rules explicitly. Update `docs/data-model.md` when present.
-- Make schema changes reproducible through the project's existing migration workflow. Review generated migrations and SQL, plan compatibility/backfills/locks, and coordinate deployment order with application versions.
-- For production, prefer reviewed deployment scripts or migration bundles where the team's approval process requires it. Do not silently apply migrations at application startup or run `EnsureCreated` against an existing managed database.
-- Use transactions for multi-step invariants, parameterized queries, and bounded retry behavior appropriate to SQL Server/Azure SQL. Do not retry non-idempotent operations without a safe idempotency design.
-- Store connection strings and credentials in the approved server-side secret/configuration mechanism. Do not place them in source control, client bundles, logs, reports, or Swagger examples. Determine whether the target uses Windows authentication, managed identity, or SQL authentication rather than assuming one.
+- Nutze Entity Framework Core mit dem Microsoft-SQL-Server-Provider, wenn dies die etablierte oder freigegebene Datenschicht des Projekts ist. Bewahre andernfalls den gewählten Ansatz, etwa Dapper oder parametrisierten Zugriff mit `Microsoft.Data.SqlClient`; führe nicht standardmäßig ein ORM ein.
+- Modelliere nur die von der Spec benötigten Daten. Definiere Beziehungen, Schlüssel, Constraints, Indizes, Nebenläufigkeitsverhalten, Mandantenzugehörigkeit und Löschregeln ausdrücklich. Aktualisiere `docs/data-model.md`, sofern vorhanden.
+- Mache Schemaänderungen über den bestehenden Migrations-Workflow des Projekts reproduzierbar. Prüfe generierte Migrationen und SQL, plane Kompatibilität, Nachbefüllungen und Sperren und stimme die Deployment-Reihenfolge mit Anwendungsversionen ab.
+- Bevorzuge in Produktion geprüfte Deployment-Skripte oder Migrationspakete, sofern der Freigabeprozess des Teams dies verlangt. Wende Migrationen beim Anwendungsstart nicht stillschweigend an und führe `EnsureCreated` nicht gegen eine bestehende verwaltete Datenbank aus.
+- Nutze Transaktionen für mehrstufige Invarianten, parametrisierte Abfragen und begrenzte, für SQL Server/Azure SQL geeignete Wiederholungen. Wiederhole nicht idempotente Operationen nur mit einem sicheren Idempotenzkonzept.
+- Speichere Verbindungszeichenfolgen und Zugangsdaten im freigegebenen serverseitigen Secret- oder Konfigurationsmechanismus. Lege sie nicht in Versionsverwaltung, Client-Bundles, Logs, Berichten oder Swagger-Beispielen ab. Ermittle, ob das Ziel Windows-Authentifizierung, Managed Identity oder SQL-Authentifizierung verwendet, statt dies anzunehmen.
 
-## Swagger / OpenAPI protection
+## Schutz von Swagger / OpenAPI
 
-- Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type, hosting and the developer's explicit Swagger/OpenAPI decision. Prefer Windows Server with IIS; ASP.NET Core also supports Linux, so ask the developer to confirm an intended Linux target or resolve conflicting hosting requirements before creation. Recommend Swagger/OpenAPI with visual Swagger UI as the default; honor a previously agreed decision and document any decision to omit it, its reason and any alternative. Do not proceed with creation while this decision is unresolved. Match the implementation to the target framework and existing tooling; do not upgrade packages or framework versions solely to change documentation setup.
-- When documentation is provided, document DTO schemas, authentication schemes, relevant responses/errors, and API versioning accurately. Keep generated documentation aligned with the actual endpoints and avoid secrets, internal credentials, or sensitive example values.
-- **Swagger UI and every served OpenAPI JSON/document endpoint must be protected and unavailable to anonymous or unauthorized users.** Enforce a non-public network access path (for example VPN or private ingress) and explicit authorization at the application or hosting boundary for both UI and document endpoints. Authentication alone does not make a public URL private. An obscure URL, CORS, or an authentication declaration inside the OpenAPI schema does not protect the documentation route.
-- Verify the protection through the actual Windows Server/IIS or reverse-proxy topology so the application cannot be reached around an outer access-control rule. Choose and document who may access the documentation and how they authenticate.
-- Keep documentation enabled only in the intended environments. Where enabled, require non-public, authorized access and verify denied and allowed requests; where disabled, verify both UI and document endpoints are unreachable.
+- Kläre vor Erstellung eines Backends nach `.codex/rules/ARCHITECTURE.md` Backend-Art, Hosting und die ausdrückliche Swagger/OpenAPI-Entscheidung des Entwicklers. Bevorzuge Windows Server mit IIS; ASP.NET Core unterstützt auch Linux. Bitte den Entwickler daher vor der Erstellung, ein beabsichtigtes Linux-Ziel zu bestätigen oder widersprüchliche Hostinganforderungen zu klären. Empfiehl Swagger/OpenAPI mit visueller Swagger UI als Standard; beachte eine bereits vereinbarte Entscheidung und dokumentiere einen Verzicht, dessen Grund und eine etwaige Alternative. Fahre mit der Erstellung nicht fort, solange diese Entscheidung offen ist. Richte die Implementierung am Ziel-Framework und vorhandenen Werkzeugen aus; aktualisiere Pakete oder Framework-Versionen nicht allein zur Änderung der Dokumentationskonfiguration.
+- Dokumentiere bei Bereitstellung DTO-Schemata, Authentifizierungsschemata, relevante Antworten und Fehler sowie API-Versionierung korrekt. Halte erzeugte Dokumentation mit den tatsächlichen Endpunkten synchron und vermeide Geheimnisse, interne Zugangsdaten oder sensible Beispielwerte.
+- **Swagger UI und jeder bereitgestellte OpenAPI-JSON- oder Dokumentendpunkt müssen geschützt und für anonyme oder unberechtigte Nutzer unerreichbar sein.** Setze für UI und Dokumentendpunkte einen nicht öffentlichen Netzwerkzugang, etwa VPN oder privaten Ingress, und ausdrückliche Autorisierung an der Anwendungs- oder Hostinggrenze durch. Authentifizierung allein macht eine öffentliche URL nicht privat. Eine versteckte URL, CORS oder eine Authentifizierungsdeklaration im OpenAPI-Schema schützt die Dokumentationsroute nicht.
+- Prüfe den Schutz über die tatsächliche Windows-Server-/IIS- oder Reverse-Proxy-Topologie, sodass die Anwendung nicht an einer äußeren Zugriffskontrolle vorbei erreicht werden kann. Wähle und dokumentiere, wer die Dokumentation aufrufen darf und wie die Authentifizierung erfolgt.
+- Aktiviere die Dokumentation nur in den vorgesehenen Umgebungen. Verlange bei aktivierten Endpunkten nicht öffentlichen, autorisierten Zugriff und prüfe abgelehnte sowie erlaubte Anfragen; prüfe bei deaktivierten, dass UI und Dokumentendpunkte nicht erreichbar sind.
 
-## Windows Server hosting and operations
+## Windows-Server-Hosting und Betrieb
 
-- Follow the explicitly selected hosting model. For IIS hosting, verify the matching .NET Hosting Bundle/runtime, application pool configuration, process identity, file permissions, HTTPS bindings, reverse-proxy/forwarded-header behavior, and deployment output. For another model, inspect its service manager, runtime, logs, startup, and recovery conventions.
-- Run the API with only the filesystem and SQL permissions it needs. Keep database files/backups and application logs outside public/static directories; restrict access to secrets and deployment artifacts.
-- Define health/readiness behavior without exposing connection strings or detailed infrastructure information. Verify TLS, routing, logs, startup/restart behavior, and production configuration.
-- Confirm SQL Server backup, restore, monitoring, and retention responsibilities for the chosen hosting arrangement. Do not assume the Windows host itself supplies a verified backup process.
+- Folge dem ausdrücklich gewählten Hostingmodell. Prüfe bei IIS-Hosting das passende .NET Hosting Bundle und die Laufzeit, Anwendungspoolkonfiguration, Prozessidentität, Dateiberechtigungen, HTTPS-Bindungen, Reverse-Proxy- und Forwarded-Header-Verhalten sowie Deployment-Ergebnis. Prüfe bei anderen Modellen Dienstverwaltung, Laufzeit, Logs sowie Konventionen für Start und Wiederherstellung.
+- Betreibe die API nur mit den benötigten Dateisystem- und SQL-Berechtigungen. Halte Datenbankdateien und -sicherungen sowie Anwendungslogs außerhalb öffentlicher oder statischer Verzeichnisse; begrenze den Zugriff auf Geheimnisse und Deployment-Artefakte.
+- Definiere Zustands- und Bereitschaftsverhalten, ohne Verbindungszeichenfolgen oder detaillierte Infrastrukturinformationen preiszugeben. Prüfe TLS, Routing, Logs, Start- und Neustartverhalten sowie Produktionskonfiguration.
+- Kläre für die gewählte Hostingumgebung Verantwortlichkeiten für SQL-Server-Sicherung, Wiederherstellung, Monitoring und Aufbewahrung. Setze nicht voraus, dass der Windows-Host selbst einen verifizierten Sicherungsprozess bereitstellt.
 
-## Verification
+## Verifikation
 
-Choose checks matching the change and existing repository setup. Relevant checks may include:
+Wähle Prüfungen passend zur Änderung und zur bestehenden Repository-Konfiguration. Relevante Prüfungen können umfassen:
 
-- run the repository's pinned `dotnet` build and targeted unit/integration tests
-- apply/review migrations against a local or test SQL Server and confirm schema compatibility from clean and supported prior versions
-- exercise valid/invalid input, authentication, authorization, tenant isolation, validation errors, and database failure behavior
-- if Swagger is provided, verify both endpoints allow only intended operators where enabled, reject unauthorized access and are not publicly reachable; where disabled verify both endpoints are unreachable
-- if provided, validate generated OpenAPI output and frontend/client compatibility against the API contract
-- verify the publish output and the documented deployment target; on Windows Server, check IIS/runtime configuration and app-pool access without revealing secrets
-- confirm local/dev/test/prod endpoint separation using redacted identifiers or boolean comparisons
+- Den im Repository festgelegten `dotnet`-Build und gezielte Unit- und Integrationstests ausführen.
+- Migrationen auf einem lokalen oder Test-SQL-Server anwenden beziehungsweise prüfen und Schemakompatibilität aus einem sauberen Zustand sowie unterstützten Vorgängerversionen bestätigen.
+- Gültige und ungültige Eingaben, Authentifizierung, Autorisierung, Mandantentrennung, Validierungsfehler und Verhalten bei Datenbankfehlern prüfen.
+- Falls Swagger bereitgestellt wird, prüfen, dass beide aktivierten Endpunkte nur vorgesehene Betreiber zulassen, unberechtigten Zugriff ablehnen und nicht öffentlich erreichbar sind; bei deaktivierten Endpunkten deren Nichterreichbarkeit prüfen.
+- Falls bereitgestellt, erzeugte OpenAPI-Ausgabe sowie Frontend- und Client-Kompatibilität gegen den API-Vertrag validieren.
+- Veröffentlichungsausgabe und dokumentiertes Deployment-Ziel prüfen; auf Windows Server IIS- und Laufzeitkonfiguration sowie Anwendungspoolzugriff prüfen, ohne Geheimnisse preiszugeben.
+- Die Trennung lokaler, Entwicklungs-, Test- und Produktionsendpunkte anhand redigierter Kennungen oder boolescher Vergleiche bestätigen.
 
-Do not run destructive resets, production migrations, production data changes, or secret changes without explicit authorization for that environment and action. Prefer local/test verification first. Use `$verify-setup` for SDK/database/configuration readiness, `$dsgvo` when personal data is processed, and `$deploy` for release or server deployment work. Report executed checks, open risks, and checks not run.
+Führe destruktive Resets, Produktionsmigrationen, Änderungen an Produktionsdaten oder Geheimnissen nicht ohne ausdrückliche Autorisierung für Umgebung und Aktion aus. Bevorzuge zunächst lokale oder Testprüfungen. Nutze `$verify-setup` für die Einsatzbereitschaft von SDK, Datenbank und Konfiguration, `$dsgvo` bei Verarbeitung personenbezogener Daten und `$deploy` für Release- oder Server-Deployment-Arbeiten. Berichte ausgeführte Prüfungen, offene Risiken und nicht ausgeführte Prüfungen.
 
-## Official Microsoft documentation
+## Offizielle Microsoft-Dokumentation
 
-Use the documentation matching the project's target versions. Start with:
+Nutze die zu den Zielversionen des Projekts passende Dokumentation. Beginne mit:
 
-- [Create web APIs with ASP.NET Core](https://learn.microsoft.com/aspnet/core/web-api)
-- [ASP.NET Core web API documentation with Swagger / OpenAPI](https://learn.microsoft.com/aspnet/core/tutorials/web-api-help-pages-using-swagger)
-- [Microsoft SQL Server EF Core database provider](https://learn.microsoft.com/ef/core/providers/sql-server/)
-- [EF Core migrations overview](https://learn.microsoft.com/ef/core/managing-schemas/migrations/)
-- [Host ASP.NET Core on Windows with IIS](https://learn.microsoft.com/aspnet/core/host-and-deploy/iis/)
+- [Web-APIs mit ASP.NET Core erstellen](https://learn.microsoft.com/aspnet/core/web-api)
+- [ASP.NET-Core-Web-API mit Swagger / OpenAPI dokumentieren](https://learn.microsoft.com/aspnet/core/tutorials/web-api-help-pages-using-swagger)
+- [Microsoft-SQL-Server-Datenbankprovider für EF Core](https://learn.microsoft.com/ef/core/providers/sql-server/)
+- [Überblick über EF-Core-Migrationen](https://learn.microsoft.com/ef/core/managing-schemas/migrations/)
+- [ASP.NET Core unter Windows mit IIS hosten](https://learn.microsoft.com/aspnet/core/host-and-deploy/iis/)

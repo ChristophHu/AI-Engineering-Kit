@@ -1,58 +1,58 @@
 ---
 name: interview-me
-description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
+description: Ermittelt durch einzelne Fragen, was der Nutzer tatsächlich erreichen möchte, bis die zugrunde liegende Absicht mit etwa 95 % Sicherheit verstanden ist. Nutze den Skill bei unklaren Anforderungen, ausdrücklicher Bitte um ein Interview oder wenn vor Planung, Spec oder Code unbemerkte Annahmen getroffen werden.
 ---
 
 # Interview Me
 
-## Overview
+## Überblick
 
-What people ask for and what they actually want are different things. They ask for "a dashboard" because that's what one asks for, not because a dashboard solves their problem. They say "make it faster" without a number to hit.
+Was Menschen anfragen und was sie tatsächlich wollen, kann auseinanderfallen. Sie wünschen sich etwa ein Dashboard, weil es naheliegt, nicht weil es ihr Problem löst. Oder sie sagen „mach es schneller“, ohne ein Ziel zu nennen.
 
-The cheapest moment to find this gap is before any plan, spec, or code exists. Once you've started building, switching costs are real, and the user will rationalize the wrong thing into a "good enough" thing. The misfit gets locked in.
+Diese Lücke lässt sich am einfachsten erkennen, bevor Plan, Spec oder Code existieren. Nach Beginn der Umsetzung verursachen Änderungen Aufwand und eine ungeeignete Lösung kann als „gut genug“ akzeptiert und damit festgeschrieben werden.
 
-This skill closes the gap before it costs anything. The other Define-phase skills assume you already know roughly what you want: `idea-refine` generates variations from an idea, `spec-driven-development` writes the requirements down, `doubt-driven-development` stress-tests a plan after you've drafted one. Interview-me is the part before all of those, where you ask one question at a time, with your best guess attached, until you can predict what the user is going to say before they say it.
+Dieser Skill klärt die Lücke frühzeitig. Andere Skills der Definitionsphase setzen voraus, dass das Ziel ungefähr bekannt ist: `idea-refine` entwickelt Varianten, `spec-driven-development` dokumentiert Anforderungen und `doubt-driven-development` prüft einen entworfenen Plan kritisch. Interview-me setzt davor an: Stelle jeweils eine Frage mit deiner begründeten Vermutung, bis du die Antwort des Nutzers vorhersehen kannst.
 
-## When to Use
+## Wann verwenden
 
-During project initialization, `$init` is the entry point and coordinates this interview only when the user's intent or material requirements remain unclear. Use the original `.codex/IDEA.md`, any existing `.codex/PROJECT.md`, and information already given in the conversation; ask one question at a time and avoid repeating settled decisions. Return the clarified intent to `$init`, which coordinates `$idea-refine` when refinement has not already been completed.
+Bei der Projektinitialisierung ist `$init` der Einstiegspunkt und koordiniert dieses Interview nur, wenn Absicht oder wesentliche Anforderungen noch unklar sind. Berücksichtige die ursprüngliche `.codex/IDEA.md`, eine vorhandene `.codex/PROJECT.md` und bereits im Gespräch genannte Informationen. Stelle jeweils eine Frage und wiederhole keine geklärten Entscheidungen. Gib die geklärte Absicht an `$init` zurück; dieser koordiniert `$idea-refine`, sofern die Schärfung noch nicht abgeschlossen ist.
 
-Apply this skill when:
+Nutze diesen Skill, wenn:
 
-- The ask is missing at least one of: **who** the user is, **why** they want it, what **success** looks like, what the binding **constraint** is
-- The request is conventional rather than specific ("build me X", "make it faster") and you can't unpack the convention without guessing
-- You're tempted to start with assumptions you haven't surfaced
-- The user hasn't said which value they're optimizing for when two reasonable ones are in tension (simplicity vs. flexibility, cost vs. speed)
-- The user explicitly invokes: "interview me", "grill me", "before we start, are we sure?", "stress-test my thinking"
+- Mindestens eine Angabe fehlt: **wer** der Nutzer ist, **warum** er das Ziel verfolgt, woran **Erfolg** erkennbar ist oder welche **Einschränkung** bindend ist
+- Die Anfrage allgemein statt konkret ist und sich ohne Vermutungen nicht auflösen lässt
+- Du mit unausgesprochenen Annahmen beginnen würdest
+- Unklar ist, welcher Wert bei Zielkonflikten Vorrang hat, etwa Einfachheit oder Flexibilität beziehungsweise Kosten oder Geschwindigkeit
+- Der Nutzer ausdrücklich um ein Interview oder eine kritische Prüfung seiner Überlegungen bittet
 
-**When NOT to use:**
+**Nicht verwenden, wenn:**
 
-- The ask is unambiguous and self-contained ("rename this variable", "fix this typo")
-- The user has explicitly asked for speed over verification
-- Pure information requests ("how does X work?", "what does this code do?")
-- Mechanical operations (renames, formats, file moves)
-- You already have ≥95% confidence; re-read the stop condition below before assuming you don't
+- Die Anfrage eindeutig und in sich abgeschlossen ist, etwa eine Variable umzubenennen oder einen Tippfehler zu korrigieren
+- Der Nutzer ausdrücklich Geschwindigkeit gegenüber Überprüfung bevorzugt
+- Es sich um eine reine Informationsfrage handelt
+- Mechanische Arbeiten wie Umbenennen, Formatieren oder Verschieben anstehen
+- Deine Sicherheit bereits ≥95 % beträgt; lies die Abbruchbedingung, bevor du das Gegenteil annimmst
 
-## Loading Constraints
+## Voraussetzungen
 
-This skill needs a live, responsive user. **Do not invoke in non-interactive contexts** like CI pipelines, scheduled runs, `/loop`, or autonomous-loop. If you're in one of those and the ask is underspecified, flag that as a blocker for the user instead of guessing.
+Dieser Skill setzt einen ansprechbaren Nutzer voraus. **Verwende ihn nicht in nicht interaktiven Kontexten** wie CI-Pipelines, geplanten Ausführungen, `/loop` oder autonomous-loop. Melde unzureichende Anforderungen dort als Hindernis, statt zu raten.
 
-## The Process
+## Vorgehen
 
-### Step 1: Hypothesize, with a confidence number
+### Schritt 1: Hypothese und Sicherheit formulieren
 
-Before asking anything, write down your current best read of what the user wants in **one sentence**, plus an honest confidence number (0–100%):
+Halte vor der ersten Frage dein derzeit bestes Verständnis der Nutzerabsicht in **einem Satz** und einen ehrlichen Sicherheitswert von 0–100 % fest:
 
 ```
 HYPOTHESIS: You want a way to answer "how are we doing?" in standup, and "dashboard" was the convention that came to mind.
 CONFIDENCE: ~30% — missing: who it's for, what "metrics" means in context, and what success looks like
 ```
 
-The number forces honesty. If you wrote down a high number but can't actually predict the user's reactions to the next three questions you'd ask, the number is wrong. Start at the confidence level you can defend.
+Der Wert fordert eine ehrliche Einschätzung. Wenn du einen hohen Wert angibst, aber die Reaktionen auf deine nächsten drei Fragen nicht vorhersagen kannst, ist er falsch. Beginne mit einem Wert, den du begründen kannst.
 
-When confidence is below ~70%, append a brief reason on the same line — what's still unresolved or missing. This tells the user exactly what the interview needs to surface, and prevents the number from being a vague signal.
+Liegt die Sicherheit unter etwa 70 %, ergänze in derselben Zeile kurz, was noch ungeklärt ist oder fehlt. So erkennt der Nutzer, was das Interview klären muss.
 
-### Step 2: Ask one question at a time, each with a guess attached
+### Schritt 2: Jeweils eine Frage mit Vermutung stellen
 
 Format:
 
@@ -61,41 +61,41 @@ Q: <one focused question>
 GUESS: <your hypothesis for the answer, with the reasoning that produced it>
 ```
 
-Wait for the user to react before asking the next question.
+Warte auf die Reaktion des Nutzers, bevor du die nächste Frage stellst.
 
-**Why one at a time, not a batch:**
+**Warum jeweils eine Frage:**
 
-- The user can't react to your hypotheses if you bury them in a list
-- Batches encourage skim-reading and surface answers
-- The third question often depends on the answer to the first; asking them all at once locks in the wrong framing
-- The user's energy for thinking carefully is finite; spend it one question at a time
+- In einer langen Liste kann der Nutzer schlechter auf deine Hypothesen reagieren
+- Mehrere Fragen zugleich begünstigen oberflächliche Antworten
+- Spätere Fragen hängen oft von früheren Antworten ab
+- Die Aufmerksamkeit des Nutzers ist begrenzt; nutze sie für jeweils eine Frage
 
-**Why attach a guess:**
+**Warum eine Vermutung ergänzen:**
 
-- The user reacts faster to a wrong guess than they generate an answer from scratch
-- It commits you to a hypothesis you can be visibly wrong about, which keeps you honest
-- It surfaces *your* assumptions, which is what the interview is meant to expose
+- Auf eine falsche Vermutung kann der Nutzer schneller reagieren als eine Antwort neu formulieren
+- Eine überprüfbare Hypothese macht mögliche Fehler sichtbar
+- Sie legt *deine* Annahmen offen
 
-The risk here is a polite user agreeing with your guess to be agreeable. Mitigate by being visibly willing to be wrong, and occasionally guess in a direction you expect the user to push back on.
+Ein höflicher Nutzer könnte deiner Vermutung lediglich aus Zustimmung folgen. Zeige daher, dass du Irrtümer akzeptierst, und formuliere gelegentlich Vermutungen, denen der Nutzer voraussichtlich widerspricht.
 
-### Step 3: Listen for "want vs. should want"
+### Schritt 3: Tatsächliche Wünsche von vermeintlichen Erwartungen unterscheiden
 
-The most dangerous answers are the ones where the user says what a thoughtful answer *sounds like* rather than what they actually want. Watch for:
+Achte auf Antworten, die eher durch Konventionen als durch die tatsächlichen Wünsche des Nutzers geprägt sind:
 
-- Answers that pattern-match best-practice talk ("I want it to be scalable", "clean architecture") without specifics
-- Answers that defer to convention ("the way most apps do it", "the standard approach")
-- Phrases like "I should probably…", "I think I'm supposed to…", "good engineering practice says…"
-- Buzzwords as goals — when "modern", "scalable", "robust" are the answer instead of a specific outcome
+- Allgemeine Best-Practice-Aussagen ohne konkrete Bedeutung
+- Verweise auf Konventionen wie „so machen es die meisten Apps“
+- Formulierungen wie „ich sollte vermutlich …“ oder „gute Entwicklungspraxis verlangt …“
+- Schlagwörter wie „modern“, „skalierbar“ oder „robust“ anstelle konkreter Ergebnisse
 
-When you hear these, the question to ask is:
+Frage in solchen Fällen:
 
-> *"If you didn't have to justify this to anyone, what would you actually want?"*
+> *„Was würdest du tatsächlich wollen, wenn du es niemandem gegenüber begründen müsstest?“*
 
-That single question often does more work than the previous five.
+Diese Frage kann das eigentliche Ziel sichtbar machen.
 
-### Step 4: Restate intent in the user's own words
+### Schritt 4: Absicht in den Worten des Nutzers wiedergeben
 
-When your confidence is high, write back what you now think the user wants. Keep it tight (5–8 lines), use their language where possible, and structure it so the user can confirm or correct line by line:
+Fasse bei hoher Sicherheit knapp in fünf bis acht Zeilen zusammen, was der Nutzer nach deinem Verständnis möchte. Verwende möglichst seine Worte und ermögliche eine zeilenweise Bestätigung oder Korrektur:
 
 ```
 Here's what I now think you want:
@@ -110,50 +110,50 @@ Here's what I now think you want:
 Yes / no / refine?
 ```
 
-Including "Out of scope" is non-negotiable. Half of misalignment is silent disagreement about what is *not* being built.
+Der Punkt „Out of scope“ ist verpflichtend, damit auch die ausdrücklich ausgeschlossenen Ziele nachvollziehbar sind.
 
 ### Step 5: Bestätigung der Absicht
 
-Present the concrete understanding and accept the user's clear confirmation or correction in context; do not demand a particular wording. Silence alone is not confirmation. If the user delegates a routine decision, use that authorization rather than repeatedly asking. Clarify only a material unresolved decision, and incorporate corrections before the handoff.
+Stelle das konkrete Verständnis vor und akzeptiere eine im Kontext klare Bestätigung oder Korrektur; verlange keine bestimmte Formulierung. Schweigen allein ist keine Bestätigung. Nutze die erteilte Autorisierung, wenn der Nutzer eine Routineentscheidung delegiert, statt erneut zu fragen. Kläre nur wesentliche offene Entscheidungen und berücksichtige Korrekturen vor der Übergabe.
 
 ### Step 6: Übergabe nach bestätigter Absicht
 
-When the user clearly confirms the statement of intent in context:
+Wenn der Nutzer die Absichtserklärung im Kontext klar bestätigt:
 
-1. **Deliver the confirmed Statement of Intent.**
-2. During `$init`, return the confirmed intent to the initializer; use `$idea-refine` only if refinement has not already been completed. Respect any explicit request to stop or unresolved decision and do not repeat confirmed answers.
-3. When invoked independently, follow the user's existing instructions for the next step; ask only if the next action or an essential decision is unclear.
+1. **Gib die bestätigte Absichtserklärung aus.**
+2. Gib während `$init` die bestätigte Absicht zurück; verwende `$idea-refine` nur, wenn die Schärfung noch nicht abgeschlossen ist. Beachte ausdrückliche Stoppwünsche und offene Entscheidungen und wiederhole keine bestätigten Antworten.
+3. Befolge bei eigenständigem Aufruf die bestehenden Nutzeranweisungen für den nächsten Schritt; frage nur bei unklarer nächster Handlung oder wesentlicher Entscheidung nach.
 
-### The 95% Confidence Stop
+### Abbruch bei 95 % Sicherheit
 
-You're done when you can answer yes to this:
+Das Interview ist beendet, wenn du diese Frage bejahen kannst:
 
-> *Can I predict the user's reaction to the next three questions I would ask?*
+> *Kann ich die Reaktion des Nutzers auf meine nächsten drei Fragen vorhersagen?*
 
-If yes, you have shared understanding. Stop interviewing and produce the restate. If no, you're not done; ask the next question.
+Wenn ja, besteht ein gemeinsames Verständnis. Beende das Interview und formuliere die Zusammenfassung. Wenn nein, stelle die nächste Frage.
 
-This is a checkable test, not a vibe. It also has a floor: if you've gone several rounds and still can't predict, that's information about the ask, not a reason to keep grinding. Stop and tell the user: "I've asked X questions and I still can't predict your reactions. Something foundational is missing. Want to step back?"
+Dies ist eine überprüfbare Bedingung. Wenn du die Reaktionen nach mehreren Runden noch immer nicht vorhersagen kannst, stoppe und erkläre dem Nutzer, dass eine grundlegende Information fehlt; schlage vor, gemeinsam einen Schritt zurückzugehen.
 
-## Output
+## Ergebnis
 
-The output of this skill is a **confirmed statement of intent**: the restatement from Step 4, clearly confirmed or corrected by the user in context. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
+Das Ergebnis ist eine **bestätigte Absichtserklärung**: die im Kontext klar bestätigte oder korrigierte Zusammenfassung aus Schritt 4. Specs, Pläne und Aufgabenlisten bauen anschließend darauf auf.
 
-If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
+Wenn der Nutzer die Absicht dauerhaft festhalten möchte, etwa für mehrere Sitzungen oder eine Übergabe, biete das Speichern unter `docs/intent/[topic].md` an. Speichere nur nach seiner Bestätigung.
 
-## Example
+## Beispiel
 
-A short before-and-after.
+Ein kurzer Vergleich:
 
-**Without `interview-me`:**
+**Ohne `interview-me`:**
 
 ```
 User:  build me a dashboard for our metrics
 Agent: <starts proposing chart libraries and layouts>
 ```
 
-The agent has assumed: who it's for, what metrics, what "for our team" means, what success looks like. None of these are stated. Every assumption is a place the user can later say "that's not what I meant."
+Der Agent nimmt Zielgruppe, Kennzahlen, Bedeutung von „unser Team“ und Erfolgskriterien an, obwohl diese nicht genannt wurden. Jede Annahme kann am Bedarf vorbeigehen.
 
-**With `interview-me`:**
+**Mit `interview-me`:**
 
 ```
 User: build me a dashboard for our metrics
@@ -178,53 +178,53 @@ User: First one actually. I literally don't have a list. They're spread across d
 Agent: <continues>
 ```
 
-Two questions in, the agent has discovered the actual ask isn't "a dashboard." It's "a list." Different artifact, different scope, different work. The dashboard would have been wrong.
+Nach zwei Fragen zeigt sich, dass eigentlich eine Liste benötigt wird. Ein Dashboard hätte einen anderen Umfang und wäre am Bedarf vorbeigegangen.
 
-## Interaction with Other Skills
+## Zusammenspiel mit anderen Skills
 
-- **`init` / `idea-refine`**: During project initialization, `$init` coordinates an optional interview and, only if refinement remains unfinished, `$idea-refine`, which develops `.codex/IDEA.md` into `.codex/PROJECT.md`.
-- **`spec-driven-development`**: downstream. If the confirmed intent is concrete ("I want X for Y users with Z success criteria"), hand off to `spec-driven-development` to write it down.
-- **`feature-planning` / `planning-and-task-breakdown`**: After the spec, `$feature-planning` leads planning; use `$planning-and-task-breakdown` when detailed task breakdown is useful in the same authoritative plan.
-- **`doubt-driven-development`**: opposite end of the timeline. Interview-me is pre-decision intent extraction; doubt-driven is post-decision artifact review. Both catch divergence, but at different moments.
-- **`source-driven-development`**: orthogonal. Interview-me clarifies what the user wants; SDD verifies framework facts. They don't compete.
+- **`init` / `idea-refine`**: Bei der Initialisierung koordiniert `$init` ein optionales Interview und nur bei noch ausstehender Schärfung `$idea-refine`, das `.codex/IDEA.md` zu `.codex/PROJECT.md` ausarbeitet.
+- **`spec-driven-development`**: Übergib eine konkrete, bestätigte Absicht zur Dokumentation an `spec-driven-development`.
+- **`feature-planning` / `planning-and-task-breakdown`**: Nach der Spec führt `$feature-planning` die Planung; nutze `$planning-and-task-breakdown`, wenn eine detaillierte Zerlegung im selben maßgeblichen Plan hilfreich ist.
+- **`doubt-driven-development`**: Interview-me klärt die Absicht vor Entscheidungen; doubt-driven prüft Ergebnisse nach Entscheidungen kritisch.
+- **`source-driven-development`**: Interview-me klärt Nutzerwünsche; SDD überprüft Fakten zu Frameworks.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "The ask is clear enough" | If you can't write the user's desired outcome in one sentence right now, the ask isn't clear. Run Step 1 before deciding. |
-| "Asking too many questions wastes their time" | Time wasted by 4–6 targeted questions is small. Time wasted by building the wrong thing is enormous, and the user is the one bearing that cost. |
-| "I'll figure it out as I build" | Switching costs after code exists are 10x what they are now. Discovery during implementation is rework. |
-| "They said 'whatever you think,' so I should just decide" | Respect delegated routine decisions; clarify only a material unresolved decision. |
-| "I should give them several options to pick from" | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
-| "If I attach my guess, I'm leading them" | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong. |
-| "We've talked enough, I get it" | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet. |
-| "The user confirmed, we're done" | Check that the intent is concrete and the confirmation clear in context; do not require a particular wording. |
+| „Die Anfrage ist klar genug.“ | Kannst du das gewünschte Ergebnis nicht in einem Satz ausdrücken, ist es noch unklar. Führe vor der Entscheidung Schritt 1 aus. |
+| „Zu viele Fragen verschwenden Zeit.“ | Vier bis sechs gezielte Fragen kosten weniger Zeit als eine falsche Umsetzung. |
+| „Das finde ich während der Umsetzung heraus.“ | Änderungen an vorhandenem Code verursachen mehr Aufwand; späte Klärung führt zu Nacharbeit. |
+| „Der Nutzer überlässt mir die Entscheidung.“ | Respektiere delegierte Routineentscheidungen und kläre nur wesentliche offene Entscheidungen. |
+| „Ich sollte mehrere Optionen anbieten.“ | Optionen helfen bei bekannten Zielen und Abwägungen; Fragen grenzen unklare Ziele ein. |
+| „Meine Vermutung beeinflusst den Nutzer.“ | Eine Vermutung erleichtert die Reaktion; zeige ausdrücklich, dass du dich irren kannst. |
+| „Wir haben genug gesprochen, ich verstehe es.“ | Prüfe, ob du die Reaktionen auf die nächsten drei Fragen vorhersagen kannst. |
+| „Der Nutzer hat bestätigt, wir sind fertig.“ | Prüfe, ob die Absicht konkret und die Bestätigung im Kontext klar ist; verlange keine bestimmte Formulierung. |
 
-## Red Flags
+## Warnzeichen
 
-- Three or more questions in a single message: that's batching, not interviewing
-- A question without your hypothesis attached: that's surveying, not committing
-- Treating an unclear response as confirmation of an unresolved material decision
-- Producing a spec, plan, or task list before the user has explicitly confirmed your restate
-- Reopening confirmed questions or proceeding despite an unresolved essential decision or an explicit request to stop
-- Questions framed as "what would be best practice?" instead of "what do you actually want?"
-- The user gives a sophistication-signaling answer ("scalable", "clean", "modern") and you accept it without probing whether it's what they actually want
-- Three or more rounds without your confidence visibly rising: you're asking the wrong questions, step back and reframe
-- A confidence number below ~70% with no reason attached: the user can't help close the gap if they don't know what's missing
-- Saving the intent doc before the user has confirmed (the doc itself implies a yes the user didn't give)
-- Skipping the "Out of scope" line in the restate (silent disagreement about non-goals is half of misalignment)
+- Drei oder mehr Fragen in einer Nachricht
+- Eine Frage ohne eigene Hypothese
+- Eine unklare Antwort als Bestätigung einer wesentlichen offenen Entscheidung behandeln
+- Vor ausdrücklicher Bestätigung der Zusammenfassung eine Spec, einen Plan oder eine Aufgabenliste erstellen
+- Bestätigte Fragen erneut öffnen oder trotz wesentlicher offener Entscheidung beziehungsweise ausdrücklichem Stoppwunsch fortfahren
+- Nach Best Practices statt nach dem tatsächlichen Wunsch fragen
+- Schlagwörter wie „skalierbar“, „sauber“ oder „modern“ ohne Nachfrage akzeptieren
+- Drei oder mehr Runden ohne steigende Sicherheit: Gehe einen Schritt zurück und formuliere neu
+- Weniger als etwa 70 % Sicherheit ohne Begründung
+- Das Absichtsdokument vor Bestätigung durch den Nutzer speichern
+- Den Punkt „Out of scope“ in der Zusammenfassung auslassen
 
-## Verification
+## Überprüfung
 
-After applying interview-me:
+Nach Anwendung von interview-me:
 
-- [ ] An explicit hypothesis with a confidence number was stated in the first turn
-- [ ] Every confidence number below ~70% was accompanied by a one-line reason (what's still unresolved or missing)
-- [ ] Questions were asked one at a time, each with the agent's guess attached
-- [ ] At least one "what would you actually want if you didn't have to justify it?" probe ran when the user gave a sophistication-signaling or convention-signaling answer
-- [ ] A concrete restate (Outcome / User / Why now / Success / Constraint / Out of scope) was written back to the user
-- [ ] The user clearly confirmed or corrected the restated intent in context
-- [ ] At the stop point, the agent could predict reactions to the next three questions it would ask
-- [ ] The confirmed intent was handed to `$init` or the next user-authorized step without repeating settled questions
-- [ ] Any handoff to a downstream skill (`idea-refine`, `spec-driven-development`) was framed in terms of the confirmed intent, not the original underspecified ask
+- [ ] Im ersten Beitrag wurde eine ausdrückliche Hypothese mit Sicherheitswert genannt
+- [ ] Für jeden Wert unter etwa 70 % wurde in einer Zeile genannt, was fehlt oder unklar ist
+- [ ] Fragen wurden einzeln und jeweils mit einer Vermutung gestellt
+- [ ] Bei konventionsbezogenen oder vagen Antworten wurde mindestens einmal nach dem tatsächlichen Wunsch gefragt
+- [ ] Eine konkrete Zusammenfassung mit Ergebnis, Nutzer, Anlass, Erfolg, Einschränkung und Ausschlüssen wurde vorgelegt
+- [ ] Der Nutzer hat die Absicht im Kontext klar bestätigt oder korrigiert
+- [ ] Beim Abschluss konnte der Agent die Reaktionen auf die nächsten drei Fragen vorhersagen
+- [ ] Die bestätigte Absicht wurde ohne Wiederholung geklärter Fragen an `$init` oder den nächsten autorisierten Schritt übergeben
+- [ ] Eine Übergabe an nachgelagerte Skills (`idea-refine`, `spec-driven-development`) bezieht sich auf die bestätigte Absicht

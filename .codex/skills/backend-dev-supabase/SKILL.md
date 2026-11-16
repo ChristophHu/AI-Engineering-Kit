@@ -1,83 +1,83 @@
 ---
 name: backend-dev-supabase
-description: Plan, implement, or review Supabase database, authentication, authorization, storage, and Edge Function changes using the project's existing schema and deployment workflow.
+description: Plant, implementiert oder prüft Supabase-Änderungen an Datenbank, Authentifizierung, Autorisierung, Storage und Edge Functions anhand des bestehenden Schemas und Deployment-Workflows.
 ---
 
-# Supabase Backend Development
+# Backend-Entwicklung mit Supabase
 
-Before creating a backend, follow `.codex/rules/ARCHITECTURE.md` to resolve backend type and hosting constraints. Supabase alone requires neither a Swagger decision nor a Swagger implementation. If a separate NestJS or C# API is also selected, follow that API's Swagger decision and protection rules. Protect any Swagger UI or OpenAPI document actually provided from public and unauthorized access.
+Kläre vor Erstellung eines Backends gemäß `.codex/rules/ARCHITECTURE.md` Backend-Art und Hostingvorgaben. Supabase allein erfordert weder eine Swagger-Entscheidung noch eine Swagger-Implementierung. Wird zusätzlich eine separate NestJS- oder C#-API gewählt, gelten deren Regeln zur Swagger-Entscheidung und zum Schutz. Schütze tatsächlich bereitgestellte Swagger UI und OpenAPI-Dokumente vor öffentlichem und unberechtigtem Zugriff.
 
-Use this skill when a project uses Supabase for backend behavior. It supports SwiftUI, Next.js, and Angular clients. Follow the approved Spec and Plan for substantial changes; use `$spec-driven-development` and `$feature-planning` when requirements or scope need to be clarified first.
+Nutze diesen Skill, wenn ein Projekt Supabase für Backend-Funktionen verwendet. Er unterstützt Clients mit SwiftUI, Next.js und Angular. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$spec-driven-development` und `$feature-planning`, wenn Anforderungen oder Umfang zuerst geklärt werden müssen.
 
-## Discover the existing project
+## Bestehendes Projekt untersuchen
 
-1. Read project instructions, `.codex/PROJECT.md`, relevant Specs/Plans, and `docs/data-model.md` if present.
-2. Inspect the Supabase CLI version, `supabase/config.toml`, migration history, schema files, seeds, SQL tests, generated types, client SDKs, and deployment workflow.
-3. Determine whether the project uses imperative migrations, declarative schemas, or another established database workflow. Preserve it; do not mix schema-management approaches without an explicit plan.
-4. Identify local, development, staging/preview, and production projects. Determine which database and credentials commands will target before invoking them. Never print, commit, or expose secret values.
-5. Consult current official Supabase documentation when behavior depends on CLI/SDK version, Postgres version, security features, or provider configuration.
+1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante Specs und Pläne sowie `docs/data-model.md`, sofern vorhanden.
+2. Prüfe die Version der Supabase CLI, `supabase/config.toml`, Migrationshistorie, Schemadateien, Seeds, SQL-Tests, generierte Typen, Client-SDKs und den Deployment-Workflow.
+3. Ermittle, ob das Projekt imperative Migrationen, deklarative Schemata oder einen anderen etablierten Datenbank-Workflow verwendet. Behalte ihn bei; vermische Verfahren zur Schemaverwaltung nicht ohne ausdrücklichen Plan.
+4. Ermittle lokale, Entwicklungs-, Staging-/Preview- und Produktionsprojekte. Stelle vor Ausführung von Befehlen fest, welche Datenbank und Zugangsdaten sie verwenden. Gib geheime Werte niemals aus, committe sie nicht und lege sie nicht offen.
+5. Ziehe die aktuelle offizielle Supabase-Dokumentation hinzu, wenn das Verhalten von CLI-/SDK-Version, Postgres-Version, Sicherheitsfunktionen oder Anbieterkonfiguration abhängt.
 
-Use `$verify-setup` when local runtime, CLI, configuration, credentials presence, or environment separation needs a readiness check.
+Nutze `$verify-setup`, wenn die Einsatzbereitschaft von lokaler Laufzeit, CLI, Konfiguration, vorhandenen Zugangsdaten oder Umgebungstrennung geprüft werden muss.
 
-## Database schema and migrations
+## Datenbankschema und Migrationen
 
-- Model only data required by the Spec. Keep ownership, relationships, constraints, indexes, and deletion behavior explicit in the schema and `docs/data-model.md` when that project document exists.
-- Make schema and policy changes reproducible through the repository's established migration or declarative workflow. Review generated SQL rather than accepting it blindly.
-- Keep migrations compatible with the release sequence where possible: account for old and new application versions during rollout, backfills, locks, and data retention.
-- Seed only synthetic or otherwise authorized non-production data. Do not copy production personal data into local or preview environments unless the project has an approved, protected process for it.
-- Re-generate database types using the project's configured command when schema changes require it; review the resulting diff.
+- Modelliere nur die von der Spec benötigten Daten. Halte Eigentümerschaft, Beziehungen, Constraints, Indizes und Löschverhalten im Schema und in `docs/data-model.md` ausdrücklich fest, sofern das Projektdokument existiert.
+- Mache Schema- und Policy-Änderungen über den etablierten Migrations- oder deklarativen Workflow des Repositorys reproduzierbar. Prüfe generiertes SQL, statt es ungeprüft zu übernehmen.
+- Halte Migrationen nach Möglichkeit mit der Release-Reihenfolge kompatibel: Berücksichtige alte und neue Anwendungsversionen während des Rollouts, Nachbefüllungen, Sperren und Datenaufbewahrung.
+- Verwende für Seeds ausschließlich synthetische oder anderweitig autorisierte Nichtproduktionsdaten. Kopiere personenbezogene Produktionsdaten nur in lokale oder Preview-Umgebungen, wenn das Projekt dafür einen freigegebenen, geschützten Prozess besitzt.
+- Generiere Datenbanktypen mit dem konfigurierten Projektbefehl neu, wenn Schemaänderungen dies erfordern; prüfe den resultierenden Diff.
 
-## Security and Row Level Security
+## Sicherheit und Row Level Security
 
-- Treat database authorization as a security boundary, independent of client UI, route guards, or application checks.
-- For tables exposed through Supabase APIs, inspect grants as well as RLS. Enable RLS and define least-privilege grants and policies for the operations and roles the product actually needs.
-- Check both allowed and denied access: anonymous versus authenticated users, different user IDs, and tenant boundaries where applicable. Test `SELECT`, `INSERT`, `UPDATE`, and `DELETE` only where those operations are intended.
-- Avoid permissive policies such as unconditional access unless public access is an explicit product requirement. Review views, functions, RPCs, and `SECURITY DEFINER` code for privilege or RLS bypasses.
-- A publishable key (or legacy anon key) is not a substitute for authorization. Secret (or legacy service-role) keys bypass normal RLS protections; keep them in trusted server or function environments only, never in browser or native client code.
+- Betrachte die Datenbankautorisierung unabhängig von Client-UI, Route-Guards oder Anwendungsprüfungen als Sicherheitsgrenze.
+- Prüfe für über Supabase-APIs bereitgestellte Tabellen sowohl Grants als auch RLS. Aktiviere RLS und definiere minimal erforderliche Grants und Policies für die tatsächlich benötigten Operationen und Rollen.
+- Prüfe erlaubten und abgelehnten Zugriff: anonyme und authentifizierte Nutzer, unterschiedliche Nutzer-IDs und gegebenenfalls Mandantengrenzen. Teste `SELECT`, `INSERT`, `UPDATE` und `DELETE` nur dort, wo diese Operationen vorgesehen sind.
+- Vermeide weitreichende Policies wie bedingungslosen Zugriff, sofern öffentlicher Zugriff keine ausdrückliche Produktanforderung ist. Prüfe Views, Funktionen, RPCs und `SECURITY DEFINER`-Code auf Umgehung von Berechtigungen oder RLS.
+- Ein Publishable Key oder früherer Anon Key ersetzt keine Autorisierung. Secret Keys beziehungsweise frühere Service-Role Keys umgehen den normalen RLS-Schutz; verwahre sie nur in vertrauenswürdigen Server- oder Funktionsumgebungen, niemals im Browser oder nativen Client-Code.
 
-## Authentication and user data
+## Authentifizierung und Nutzerdaten
 
-- Implement only the authentication methods and account lifecycle required by the Spec and existing project.
-- Keep user-facing profile/application data in project-owned tables with explicit foreign keys, grants, and RLS. Do not expose Supabase's internal `auth` schema through application APIs.
-- When a signup trigger or other automatic provisioning is used, keep it minimal and test its failure behavior because a failed trigger can block signup. Follow the project's established profile-provisioning approach rather than introducing a trigger by default.
-- Cover relevant lifecycle cases such as email verification, session refresh, sign-out, account deletion, and orphaned data when they are in scope.
+- Implementiere nur die Authentifizierungsmethoden und den Kontolebenszyklus, die Spec und bestehendes Projekt benötigen.
+- Speichere nutzerbezogene Profil- und Anwendungsdaten in projekteigenen Tabellen mit ausdrücklichen Fremdschlüsseln, Grants und RLS. Stelle das interne Supabase-Schema `auth` nicht über Anwendungs-APIs bereit.
+- Halte einen verwendeten Registrierungs-Trigger oder eine andere automatische Bereitstellung schlank und teste das Fehlerverhalten, da ein fehlgeschlagener Trigger die Registrierung blockieren kann. Folge dem etablierten Verfahren zur Profilbereitstellung, statt standardmäßig einen Trigger einzuführen.
+- Berücksichtige relevante Lebenszyklusfälle wie E-Mail-Verifizierung, Sitzungsaktualisierung, Abmeldung, Kontolöschung und verwaiste Daten, soweit sie zum Umfang gehören.
 
-## Storage and Edge Functions
+## Storage und Edge Functions
 
-- For Storage, define bucket visibility and per-operation policies for upload, read, update/overwrite, and delete as required. Restrict access by user, tenant, and object path where applicable; do not make a bucket public merely to simplify delivery.
-- Validate file types, sizes, ownership, and processing requirements at the appropriate trust boundary. Use signed access when the files should not be public.
-- Use Edge Functions or another established server-side boundary when the feature needs secrets, privileged operations, webhooks, or server-only integration logic. Verify identity and authorization in the function itself.
-- Keep local function secrets out of Git and configure hosted secrets through the project's approved secret store. Never echo secret values into terminal output or reports.
+- Definiere für Storage nach Bedarf Bucket-Sichtbarkeit und Policies je Operation für Hochladen, Lesen, Aktualisieren oder Überschreiben sowie Löschen. Begrenze Zugriff gegebenenfalls nach Nutzer, Mandant und Objektpfad; mache einen Bucket nicht allein zur einfacheren Bereitstellung öffentlich.
+- Validiere Dateitypen, Größen, Eigentümerschaft und Verarbeitungsanforderungen an der passenden Vertrauensgrenze. Nutze signierten Zugriff, wenn Dateien nicht öffentlich sein sollen.
+- Nutze Edge Functions oder eine andere etablierte serverseitige Grenze, wenn die Funktion Geheimnisse, privilegierte Operationen, Webhooks oder ausschließlich serverseitige Integrationslogik benötigt. Prüfe Identität und Autorisierung in der Funktion selbst.
+- Halte lokale Funktionsgeheimnisse aus Git heraus und konfiguriere gehostete Geheimnisse über den freigegebenen Secret Store des Projekts. Gib geheime Werte niemals im Terminal oder in Berichten aus.
 
-## Client and framework boundaries
+## Client- und Framework-Grenzen
 
-- Keep platform SDK usage aligned with the existing SwiftUI, Next.js, or Angular patterns and SDK versions.
-- In Next.js, respect Server/Client Component and runtime boundaries; privileged operations and service keys stay server-side.
-- In Angular and SwiftUI clients, treat bundled code and client keys as public. Enforce sensitive access with RLS and trusted server-side code.
-- Avoid duplicating business authorization rules only in the client. The database policies or trusted backend must enforce access.
+- Richte die Nutzung von Plattform-SDKs an bestehenden SwiftUI-, Next.js- oder Angular-Mustern und SDK-Versionen aus.
+- Beachte in Next.js die Grenzen zwischen Server Components, Client Components und Laufzeiten; privilegierte Operationen und Service Keys bleiben serverseitig.
+- Betrachte gebündelten Code und Client Keys in Angular- und SwiftUI-Clients als öffentlich. Setze sensiblen Zugriff mit RLS und vertrauenswürdigem serverseitigem Code durch.
+- Vermeide, geschäftliche Autorisierungsregeln ausschließlich im Client abzubilden. Datenbank-Policies oder das vertrauenswürdige Backend müssen den Zugriff durchsetzen.
 
-## Verification and changes to remote projects
+## Verifikation und Änderungen an entfernten Projekten
 
-Choose checks that match the change and existing test setup. Relevant checks may include:
+Wähle Prüfungen passend zur Änderung und zur bestehenden Testumgebung. Relevante Prüfungen können umfassen:
 
-- apply/rebuild migrations against the local Supabase project and confirm the schema from a clean state
-- test RLS and grants with allowed and denied identities, using existing SQL tests or the project's configured test command
-- exercise signup/profile provisioning, session behavior, Storage access, and Edge Function authorization when affected
-- validate generated types and the client build/tests that consume them
-- inspect the migration target and compare environments before any hosted change
+- Migrationen auf das lokale Supabase-Projekt anwenden beziehungsweise es damit neu aufbauen und das Schema aus einem sauberen Zustand bestätigen.
+- RLS und Grants mit erlaubten und abgelehnten Identitäten anhand vorhandener SQL-Tests oder des konfigurierten Projekt-Testbefehls prüfen.
+- Bei betroffenen Änderungen Registrierung und Profilbereitstellung, Sitzungsverhalten, Storage-Zugriff und Edge-Function-Autorisierung prüfen.
+- Generierte Typen sowie den Client-Build und die Tests validieren, die sie verwenden.
+- Vor gehosteten Änderungen Migrationsziel prüfen und Umgebungen vergleichen.
 
-Remote schema changes, production data changes, secret changes, and destructive reset commands can have external or irreversible effects. Run them only when the user explicitly authorized that environment and action. Prefer local verification first; do not infer authorization from a request to implement code.
+Schemaänderungen auf entfernten Systemen, Änderungen an Produktionsdaten oder Geheimnissen und destruktive Reset-Befehle können externe oder irreversible Auswirkungen haben. Führe sie nur aus, wenn der Nutzer Umgebung und Aktion ausdrücklich autorisiert hat. Bevorzuge zunächst lokale Verifikation; leite eine Autorisierung nicht aus einem Auftrag zur Codeimplementierung ab.
 
-Use `$dsgvo` when personal data is processed and `$deploy` when Supabase changes are part of a release. Report executed checks, open risks, and checks not run.
+Nutze `$dsgvo`, wenn personenbezogene Daten verarbeitet werden, und `$deploy`, wenn Supabase-Änderungen Teil eines Releases sind. Berichte ausgeführte Prüfungen, offene Risiken und nicht ausgeführte Prüfungen.
 
-## Official documentation
+## Offizielle Dokumentation
 
-Use the documentation matching the project's current CLI, SDK, and Postgres versions. Useful entry points include:
+Nutze die Dokumentation passend zu den aktuellen CLI-, SDK- und Postgres-Versionen des Projekts. Nützliche Einstiege sind:
 
-- [Local development and CLI](https://supabase.com/docs/guides/local-development)
-- [Database migrations and CLI workflow](https://supabase.com/docs/guides/local-development/cli-workflows)
+- [Lokale Entwicklung und CLI](https://supabase.com/docs/guides/local-development)
+- [Datenbankmigrationen und CLI-Workflow](https://supabase.com/docs/guides/local-development/cli-workflows)
 - [Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
 - [Supabase Auth](https://supabase.com/docs/guides/auth)
-- [Managing user data](https://supabase.com/docs/guides/auth/managing-user-data)
-- [Storage access control](https://supabase.com/docs/guides/storage/security/access-control)
-- [Edge Function secrets](https://supabase.com/docs/guides/functions/secrets)
+- [Nutzerdaten verwalten](https://supabase.com/docs/guides/auth/managing-user-data)
+- [Storage-Zugriffskontrolle](https://supabase.com/docs/guides/storage/security/access-control)
+- [Geheimnisse für Edge Functions](https://supabase.com/docs/guides/functions/secrets)

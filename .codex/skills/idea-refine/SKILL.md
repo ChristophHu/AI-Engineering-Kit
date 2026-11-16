@@ -1,33 +1,33 @@
 ---
 name: idea-refine
-description: Refines raw ideas into sharp, actionable concepts through structured divergent and convergent thinking. Use when an idea is still vague, when you need to stress-test assumptions before committing to a plan, or when you want to expand options before converging on one. Triggers on "ideate", "refine this idea", or "stress-test my plan".
+description: Schärft rohe Ideen durch strukturiertes divergentes und konvergentes Denken zu konkreten, umsetzbaren Konzepten. Nutzen, wenn eine Idee vage ist, Annahmen vor einem Plan geprüft oder Alternativen vor einer Entscheidung erweitert werden sollen. Auslöser sind unter anderem "ideate", "refine this idea" und "stress-test my plan".
 ---
 
 # Idea Refine
 
-## Overview
+## Überblick
 
-Refines raw ideas into sharp, actionable concepts worth building through structured divergent and convergent thinking.
+Schärft rohe Ideen durch strukturiertes divergentes und konvergentes Denken zu konkreten, umsetzbaren Konzepten.
 
-## When to Use
+## Wann der Skill verwendet wird
 
 Bei der Projektinitialisierung ist `$init` der Einstieg und steuert diesen Skill nach einem gegebenenfalls notwendigen `$interview-me`-Interview, sofern die Ideenschärfung noch nicht abgeschlossen ist. Lies die ursprüngliche Idee aus `.codex/IDEA.md`, berücksichtige Angaben aus dem Gespräch und bewahre die Ausgangsdatei unverändert. Schärfe die Idee mit dem Nutzer und erstelle anschließend `.codex/PROJECT.md` als nachvollziehbare Ausarbeitung mit Verweis auf `.codex/IDEA.md`. Lies eine bereits vorhandene `.codex/PROJECT.md` vor einem Schreibzugriff; gleiche sie mit der geschärften Idee ab, kläre wesentliche Widersprüche und überschreibe bestehende Inhalte nicht stillschweigend. Übergib das Ergebnis an `$init`, das bestehende Entscheidungen übernimmt und keine erneute Ideenschärfung durchführt. Stelle eine Frage pro Gesprächsrunde, wiederhole keine beantworteten Fragen und berücksichtige Alternativen entsprechend der noch offenen Unsicherheit.
 
-- Use when an idea is still vague and needs shaping before it can become a plan
-- Use when you need to stress-test assumptions before committing to a direction
-- Use when you want to expand options before converging on one
-- Trigger phrases: "Help me refine this idea", "Ideate on [concept]", "Stress-test my plan"
-- Not for: a user who is unsure what they want at all (use `interview-me`), or a direction already chosen that needs a spec (use `spec-driven-development`)
+- Wenn eine Idee noch vage ist und vor der Planung konkretisiert werden muss
+- Wenn Annahmen vor einer Richtungsentscheidung kritisch geprüft werden sollen
+- Wenn vor der Auswahl einer Richtung weitere Möglichkeiten betrachtet werden sollen
+- Auslösende Formulierungen: „Hilf mir, diese Idee zu schärfen“, „Entwickle Ideen zu [Konzept]“ oder „Prüfe meinen Plan kritisch“; ebenso die bestehenden englischen Ausdrücke
+- Nicht für Nutzer, deren Absicht grundsätzlich unklar ist (nutze `interview-me`), oder eine bereits gewählte Richtung, für die eine Spec benötigt wird (nutze `spec-driven-development`)
 
-## How It Works
+## Arbeitsweise
 
-1.  **Understand & Expand (Divergent):** Restate the idea, ask sharpening questions, and generate variations.
-2.  **Evaluate & Converge:** Cluster ideas, stress-test them, and surface hidden assumptions.
-3.  **Sharpen & Ship:** Produce a concrete markdown one-pager moving work forward.
+1. **Verstehen und erweitern (divergent):** Idee wiedergeben, klärende Fragen stellen und Varianten entwickeln.
+2. **Bewerten und eingrenzen:** Ideen gruppieren, kritisch prüfen und verborgene Annahmen offenlegen.
+3. **Schärfen und übergeben:** Eine konkrete Markdown-Kurzbeschreibung erstellen, die die Arbeit voranbringt.
 
-## Usage
+## Verwendung
 
-This skill is primarily an interactive dialogue. Invoke it with an idea, and the agent will guide you through the process.
+Dieser Skill wird hauptsächlich im Dialog verwendet. Rufe ihn mit einer Idee auf; der Agent führt durch den Prozess.
 
 ```bash
 # Optional. Run from the project root so this creates ./docs/ideas.
@@ -36,87 +36,87 @@ This skill is primarily an interactive dialogue. Invoke it with an idea, and the
 bash <skill-dir>/scripts/idea-refine.sh
 ```
 
-## Output
+## Ergebnis
 
 Bei `$init` wird das konkretisierte Ergebnis in `.codex/PROJECT.md` gespeichert und an `$init` übergeben. Bei eigenständiger Nutzung kann auf Wunsch ein separates Dokument entstehen. Das Ergebnis enthält:
-- Problem Statement
-- Recommended Direction
-- Key Assumptions
-- MVP Scope
-- Not Doing list
+- Problembeschreibung
+- Empfohlene Richtung
+- Wesentliche Annahmen
+- MVP-Umfang
+- Liste der bewusst ausgeschlossenen Punkte
 
-## Detailed Instructions
+## Detaillierte Anweisungen
 
-You are an ideation partner. Your job is to help refine raw ideas into sharp, actionable concepts worth building.
+Unterstütze als Gesprächspartner dabei, rohe Ideen zu konkreten, umsetzbaren Konzepten zu schärfen.
 
-### Philosophy
+### Grundsätze
 
-- Simplicity is the ultimate sophistication. Push toward the simplest version that still solves the real problem.
-- Start with the user experience, work backwards to technology.
-- Say no to 1,000 things. Focus beats breadth.
-- Challenge every assumption. "How it's usually done" is not a reason.
-- Show people the future — don't just give them better horses.
-- The parts you can't see should be as beautiful as the parts you can.
+- Strebe die einfachste Lösung an, die das tatsächliche Problem noch löst.
+- Beginne mit der Nutzererfahrung und leite daraus die Technologie ab.
+- Grenze den Umfang bewusst ein; Fokus geht vor Breite.
+- Hinterfrage Annahmen. „So macht man es üblicherweise“ ist keine Begründung.
+- Zeige neue Möglichkeiten auf, statt nur bestehende Lösungen geringfügig zu verbessern.
+- Achte auch bei nicht sichtbaren Bestandteilen auf Qualität.
 
-### Process
+### Ablauf
 
-When the user invokes this skill with an idea (`$ARGUMENTS`), guide them through three phases. Adapt your approach based on what they say — this is a conversation, not a template.
+Wenn der Nutzer diesen Skill mit einer Idee (`$ARGUMENTS`) aufruft, führe durch drei Phasen. Passe das Vorgehen an die Antworten an; es handelt sich um ein Gespräch und nicht um eine starre Vorlage.
 
-#### Phase 1: Understand & Expand (Divergent)
+#### Phase 1: Verstehen und erweitern (divergent)
 
-**Goal:** Take the raw idea and open it up.
+**Ziel:** Die ursprüngliche Idee aufnehmen und ihren Lösungsraum öffnen.
 
-1. **Restate the idea** as a crisp "How Might We" problem statement. This forces clarity on what's actually being solved.
+1. **Formuliere die Idee erneut** als prägnante „Wie könnten wir …?“-Problemstellung. So wird klar, was tatsächlich gelöst werden soll.
 
-2. **Ask only necessary sharpening questions**, one per turn. Focus on unresolved points such as:
-   - Who is this for, specifically?
-   - What does success look like?
-   - What are the real constraints (time, tech, resources)?
-   - What's been tried before?
-   - Why now?
+2. **Stelle nur notwendige Fragen zur Schärfung**, jeweils eine pro Gesprächsrunde. Konzentriere dich auf offene Punkte, etwa:
+   - Für wen genau ist die Idee gedacht?
+   - Woran ist Erfolg erkennbar?
+   - Welche tatsächlichen Grenzen bestehen bei Zeit, Technik und Ressourcen?
+   - Was wurde bereits versucht?
+   - Warum ist die Idee jetzt relevant?
 
-   Do NOT proceed until you understand who this is for and what success looks like.
+   Fahre nicht fort, bevor Zielgruppe und Erfolgskriterien verstanden sind.
 
-3. **Generate suitable idea variations when useful** using these lenses:
-   - **Inversion:** "What if we did the opposite?"
-   - **Constraint removal:** "What if budget/time/tech weren't factors?"
-   - **Audience shift:** "What if this were for [different user]?"
-   - **Combination:** "What if we merged this with [adjacent idea]?"
-   - **Simplification:** "What's the version that's 10x simpler?"
-   - **10x version:** "What would this look like at massive scale?"
-   - **Expert lens:** "What would [domain] experts find obvious that outsiders wouldn't?"
+3. **Entwickle bei Bedarf geeignete Varianten** anhand dieser Perspektiven:
+   - **Umkehrung:** „Was wäre, wenn wir das Gegenteil täten?“
+   - **Grenzen aufheben:** „Was wäre ohne Einschränkungen bei Budget, Zeit oder Technik möglich?“
+   - **Zielgruppe wechseln:** „Wie sähe es für [andere Nutzer] aus?“
+   - **Kombination:** „Was wäre bei einer Verbindung mit [benachbarter Idee] möglich?“
+   - **Vereinfachung:** „Wie sähe eine zehnmal einfachere Version aus?“
+   - **Zehnfache Größenordnung:** „Wie sähe die Lösung in großem Maßstab aus?“
+   - **Expertenperspektive:** „Was wäre Experten für [Fachgebiet] offensichtlich, Außenstehenden aber nicht?“
 
-   Push beyond what the user initially asked for. Create products people don't know they need yet.
+   Denke über den ursprünglichen Wunsch hinaus und prüfe mögliche neue Produktansätze.
 
-**In einer bestehenden Codebasis:** Beachte die Reihenfolge oben. Nach der Ideenschärfung prüfe eine bereits vorhandene `.codex/PROJECT.md` vor Änderungen und kläre Widersprüche; anschließend liest `$init` die Ausarbeitung und den relevanten Projektkontext. Außerhalb der Initialisierung untersuche vorhandene Architektur, Muster und Vorgaben, soweit angemessen.
+**In einer bestehenden Codebasis:** Untersuche vorhandene Architektur, Muster und Vorgaben, soweit für die Idee angemessen. Prüfe eine vorhandene `.codex/PROJECT.md` vor Änderungen und kläre wesentliche Widersprüche, ohne bestehende Inhalte stillschweigend zu überschreiben. Während einer Projektinitialisierung übergib die abgestimmte Ausarbeitung an `$init`. Wird eine Feature-Idee in einem bestehenden Projekt durch `$spec-driven-development` koordiniert, übergib das Ergebnis zur Spec dorthin; initialisiere das Projekt nicht erneut. Bei eigenständiger Nutzung richte die Übergabe nach dem Auftrag.
 
-Read `frameworks.md` in this skill directory for additional ideation frameworks you can draw from. Use them selectively — pick the lens that fits the idea, don't run every framework mechanically.
+Lies `frameworks.md` in diesem Skill-Verzeichnis für zusätzliche Methoden zur Ideenentwicklung. Wende sie gezielt an: Wähle eine zur Idee passende Perspektive und arbeite nicht alle Methoden mechanisch ab.
 
-#### Phase 2: Evaluate & Converge
+#### Phase 2: Bewerten und eingrenzen
 
-After the user reacts to Phase 1 (indicates which ideas resonate, pushes back, adds context), shift to convergent mode:
+Nachdem der Nutzer auf Phase 1 reagiert und etwa passende Ideen markiert, widerspricht oder Kontext ergänzt hat, wechsle zur Eingrenzung:
 
-1. **Cluster** the ideas that resonated into distinct directions when meaningful alternatives remain. Each direction should be materially different.
+1. **Gruppiere** passende Ideen zu unterschiedlichen Richtungen, wenn sinnvolle Alternativen verbleiben. Jede Richtung soll sich wesentlich unterscheiden.
 
-2. **Stress-test** each direction against three criteria:
-   - **User value:** Who benefits and how much? Is this a painkiller or a vitamin?
-   - **Feasibility:** What's the technical and resource cost? What's the hardest part?
-   - **Differentiation:** What makes this genuinely different? Would someone switch from their current solution?
+2. **Prüfe** jede Richtung kritisch anhand von drei Kriterien:
+   - **Nutzerwert:** Wer profitiert und wie stark? Löst die Idee ein dringendes Problem oder bietet sie lediglich einen Zusatznutzen?
+   - **Machbarkeit:** Welcher technische Aufwand und Ressourcenbedarf entstehen? Was ist besonders schwierig?
+   - **Abgrenzung:** Was unterscheidet die Lösung? Würde jemand von seiner bisherigen Lösung wechseln?
 
-   Read `refinement-criteria.md` in this skill directory for the full evaluation rubric.
+   Lies `refinement-criteria.md` in diesem Skill-Verzeichnis für das vollständige Bewertungsraster.
 
-3. **Surface hidden assumptions.** For each direction, explicitly name:
-   - What you're betting is true (but haven't validated)
-   - What could kill this idea
-   - What you're choosing to ignore (and why that's okay for now)
+3. **Lege verborgene Annahmen offen.** Nenne für jede Richtung ausdrücklich:
+   - Was als wahr angenommen, aber noch nicht überprüft wird
+   - Was die Idee scheitern lassen könnte
+   - Was bewusst unbeachtet bleibt und warum dies vorerst vertretbar ist
 
-   This is where most ideation fails. Don't skip it.
+   Überspringe diese Prüfung nicht.
 
-**Be honest, not supportive.** If an idea is weak, say so with kindness. A good ideation partner is not a yes-machine. Push back on complexity, question real value, and point out when the emperor has no clothes.
+**Sei ehrlich und respektvoll.** Benenne Schwächen einer Idee freundlich und konkret. Hinterfrage unnötige Komplexität und den tatsächlichen Nutzen, statt lediglich zuzustimmen.
 
-#### Phase 3: Sharpen & Ship
+#### Phase 3: Schärfen und übergeben
 
-Produce a concrete artifact — a markdown one-pager that moves work forward:
+Erstelle ein konkretes Artefakt: eine Markdown-Kurzbeschreibung, die die Arbeit voranbringt:
 
 ```markdown
 # [Idea Name]
@@ -144,54 +144,54 @@ Produce a concrete artifact — a markdown one-pager that moves work forward:
 - [Question that needs answering before building]
 ```
 
-**The "Not Doing" list is arguably the most valuable part.** Focus is about saying no to good ideas. Make the trade-offs explicit.
+**Die Liste ausgeschlossener Punkte ist besonders wertvoll.** Fokus bedeutet, auch gute Ideen zurückzustellen. Mache die Abwägungen ausdrücklich sichtbar.
 
 Erstelle während `$init` nach der abgestimmten Ideenschärfung `.codex/PROJECT.md` und verweise darin auf `.codex/IDEA.md`. Bei einer bereits existierenden Projektdatei beachte die Abgleich- und Schutzregel oben. Ein zusätzlicher One-Pager unter `docs/ideas/[idea-name].md` ist nur bei entsprechendem Nutzerwunsch nötig; bestehende Dateien bleiben erhalten. Bei eigenständiger Nutzung kläre den Speicherort, wenn ein dauerhaftes Artefakt benötigt wird und der Ort unklar ist.
 
-### Anti-patterns to Avoid
+### Zu vermeidende Vorgehensweisen
 
-- **Don't generate an excessive number of ideas.** Prefer a few relevant alternatives where they help; preserve settled decisions.
-- **Don't be a yes-machine.** Push back on weak ideas with specificity and kindness.
-- **Don't skip "who is this for."** Every good idea starts with a person and their problem.
-- **Don't produce a plan without surfacing assumptions.** Untested assumptions are the #1 killer of good ideas.
-- **Don't over-engineer the process.** Three phases, each doing one thing well. Resist adding steps.
-- **Don't just list ideas — tell a story.** Each variation should have a reason it exists, not just be a bullet point.
-- **Don't ignore the codebase.** If you're in a project, the existing architecture is a constraint and an opportunity. Use it.
+- **Erzeuge nicht übermäßig viele Ideen.** Bevorzuge einige relevante Alternativen, wenn sie helfen; bewahre bereits getroffene Entscheidungen.
+- **Stimme nicht unkritisch zu.** Hinterfrage schwache Ideen konkret und freundlich.
+- **Übergehe die Zielgruppe nicht.** Jede gute Idee beginnt bei Menschen und ihrem Problem.
+- **Erstelle keinen Plan, ohne Annahmen offenzulegen.** Ungeprüfte Annahmen können gute Ideen scheitern lassen.
+- **Überfrachte den Prozess nicht.** Drei Phasen erfüllen jeweils eine Aufgabe; ergänze nicht unnötig Schritte.
+- **Liste Ideen nicht nur auf.** Erkläre, warum jede Variante existiert.
+- **Ignoriere die Codebasis nicht.** In bestehenden Projekten ist die Architektur zugleich Rahmenbedingung und Chance; berücksichtige sie.
 
-### Tone
+### Ton
 
-Direct, thoughtful, slightly provocative. You're a sharp thinking partner, not a facilitator reading from a script. Channel the energy of "that's interesting, but what if..." -- always pushing one step further without being exhausting.
+Direkt, überlegt und leicht provokativ. Sei ein mitdenkender Gesprächspartner statt einer Person, die ein Skript abliest. Hinterfrage konstruktiv und gehe einen Schritt weiter, ohne zu ermüden.
 
-Read `examples.md` in this skill directory for examples of what great ideation sessions look like.
+Lies `examples.md` in diesem Skill-Verzeichnis für Beispiele gelungener Ideenentwicklung.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Einordnung |
 |---|---|
-| I'll generate 20+ ideas to cover all bases | A few relevant alternatives are more useful than many shallow ones. |
-| The user just needs encouragement, not critique | A yes-machine produces weak ideas. Push back with specificity and kindness. |
-| Who this is for is already known | Use the established target group and problem; ask only when the answer is missing or unclear. |
-| We'll surface assumptions once we start building | Untested assumptions are the #1 killer of good ideas. Surface them before committing. |
-| A plan without a Not Doing list is fine | The Not Doing list is arguably the most valuable part. Make trade-offs explicit. |
+| Ich erzeuge über 20 Ideen, um alles abzudecken | Einige relevante Alternativen sind nützlicher als viele oberflächliche. |
+| Der Nutzer braucht Zuspruch statt Kritik | Unkritische Zustimmung führt zu schwachen Ideen. Hinterfrage freundlich und konkret. |
+| Die Zielgruppe ist bereits bekannt | Übernimm bekannte Zielgruppe und Problem; frage nur bei fehlender oder unklarer Antwort nach. |
+| Annahmen klären wir erst bei der Umsetzung | Lege ungeprüfte Annahmen vor der Festlegung offen. |
+| Ein Plan braucht keine Liste ausgeschlossener Punkte | Die Ausschlussliste verdeutlicht wichtige Abwägungen. |
 
-## Red Flags
+## Warnzeichen
 
-- Generating many shallow variations instead of considering only useful alternatives
-- Proceeding without understanding the target group and problem; repeat no question already answered clearly
-- No assumptions surfaced before committing to a direction
-- Yes-machining weak ideas instead of pushing back with specificity
-- Producing a plan without a "Not Doing" list
-- Ignoring existing codebase constraints when ideating inside a project
-- Jumping straight to Phase 3 output without running Phases 1 and 2
+- Viele oberflächliche Varianten statt nützlicher Alternativen erzeugen
+- Ohne Verständnis von Zielgruppe und Problem fortfahren; wiederhole keine klar beantwortete Frage
+- Vor der Richtungsentscheidung keine Annahmen offenlegen
+- Schwachen Ideen zustimmen, statt sie konkret zu hinterfragen
+- Einen Plan ohne Liste ausgeschlossener Punkte erstellen
+- Rahmenbedingungen der bestehenden Codebasis bei der Ideenentwicklung ignorieren
+- Direkt das Ergebnis von Phase 3 erstellen, ohne Phase 1 und 2 zu durchlaufen
 
-## Verification
+## Verifikation
 
-After completing an ideation session:
+Nach Abschluss der Ideenentwicklung:
 
-- [ ] A clear "How Might We" problem statement exists
-- [ ] The target user and success criteria are defined
-- [ ] Relevant alternatives were considered where useful, without reopening settled decisions
-- [ ] Hidden assumptions are explicitly listed with validation strategies
-- [ ] A "Not Doing" list makes trade-offs explicit
+- [ ] Eine klare „Wie könnten wir …?“-Problemstellung liegt vor
+- [ ] Zielnutzer und Erfolgskriterien sind definiert
+- [ ] Relevante Alternativen wurden, wo hilfreich, betrachtet, ohne geklärte Entscheidungen erneut zu öffnen
+- [ ] Verborgene Annahmen und Strategien zu ihrer Überprüfung sind ausdrücklich aufgeführt
+- [ ] Eine Liste ausgeschlossener Punkte macht Abwägungen sichtbar
 - [ ] Bei Initialisierung liegt die abgestimmte Ausarbeitung in `.codex/PROJECT.md` mit Bezug auf die erhaltene `.codex/IDEA.md` vor; andernfalls erfolgt die Übergabe am vereinbarten Ort
-- [ ] The user confirmed the final direction before any implementation work
+- [ ] Der Nutzer hat die endgültige Richtung vor Beginn der Implementierung bestätigt

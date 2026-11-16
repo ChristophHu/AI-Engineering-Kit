@@ -1,76 +1,77 @@
 ---
 name: code-simplification
-description: Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complexity. Use when asked to simplify, clean up, or reduce the nesting of a function or module that already works, even when the code is pasted inline and nothing else needs to change.
+description: Vereinfacht funktionierenden Code für bessere Verständlichkeit, ohne sein Verhalten zu ändern. Nutze den Skill bei unnötiger Komplexität, schwer lesbaren Funktionen oder Modulen und ausdrücklich gewünschtem Refactoring, auch bei direkt übergebenem Code.
 ---
 
-# Code Simplification
+# Code vereinfachen
 
-> Inspired by the [Claude Code Simplifier plugin](https://github.com/anthropics/claude-plugins-official/blob/main/plugins/code-simplifier/agents/code-simplifier.md). Adapted here as a model-agnostic, process-driven skill for any AI coding agent.
+## Überblick
 
-## Overview
+Vereinfache Code durch geringere Komplexität und bewahre dabei sein Verhalten exakt. Ziel ist Code, der leichter zu lesen, zu verstehen, zu ändern und zu untersuchen ist; eine geringere Zeilenzahl allein genügt nicht. Prüfe jede Vereinfachung mit der Frage: „Würde ein neues Teammitglied diese Fassung schneller verstehen als das Original?“
 
-Simplify code by reducing complexity while preserving exact behavior. The goal is not fewer lines — it's code that is easier to read, understand, modify, and debug. Every simplification must pass a simple test: "Would a new team member understand this faster than the original?"
+## Wann verwenden
 
-## When to Use
+- Ein Feature funktioniert und Tests bestehen, die Implementierung ist jedoch unnötig komplex
+- Im Code-Review werden Probleme mit Lesbarkeit oder Komplexität erkannt
+- Tief verschachtelte Logik, lange Funktionen oder unklare Namen erschweren das Verständnis
+- Unter Zeitdruck entstandener Code wird überarbeitet
+- Zusammengehörige, über Dateien verteilte Logik wird zusammengeführt
+- Nach einem Merge sind Duplikate oder Inkonsistenzen entstanden
 
-- After a feature is working and tests pass, but the implementation feels heavier than it needs to be
-- During code review when readability or complexity issues are flagged
-- When you encounter deeply nested logic, long functions, or unclear names
-- When refactoring code written under time pressure
-- When consolidating related logic scattered across files
-- After merging changes that introduced duplication or inconsistency
+**Nicht verwenden, wenn:**
 
-**When NOT to use:**
+- Der Code bereits klar und lesbar ist; vereinfache nicht ohne Anlass
+- Du das Verhalten noch nicht verstehst; kläre es vor der Vereinfachung
+- Der Code performancekritisch und die vermeintlich einfachere Variante messbar langsamer ist
+- Das Modul ohnehin vollständig neu geschrieben wird und die Vereinfachung wegfallenden Code beträfe
 
-- Code is already clean and readable — don't simplify for the sake of it
-- You don't understand what the code does yet — comprehend before you simplify
-- The code is performance-critical and the "simpler" version would be measurably slower
-- You're about to rewrite the module entirely — simplifying throwaway code wastes effort
+## Die fünf Prinzipien
 
-## The Five Principles
+### 1. Verhalten exakt bewahren
 
-### 1. Preserve Behavior Exactly
-
-Don't change what the code does — only how it expresses it. All inputs, outputs, side effects, error behavior, and edge cases must remain identical. If you're not sure a simplification preserves behavior, don't make it.
+Ändere nur, wie der Code sein Verhalten ausdrückt. Eingaben, Ausgaben, Seiteneffekte, Fehlerverhalten und Randfälle müssen identisch bleiben. Ist nicht sicher, dass eine Vereinfachung das Verhalten erhält, führe sie nicht aus.
 
 ```
-ASK BEFORE EVERY CHANGE:
-→ Does this produce the same output for every input?
-→ Does this maintain the same error behavior?
-→ Does this preserve the same side effects and ordering?
-→ Do all existing tests still pass without modification?
+VOR JEDER ÄNDERUNG FRAGEN:
+→ Entsteht für jede Eingabe dieselbe Ausgabe?
+→ Bleibt das Fehlerverhalten gleich?
+→ Bleiben Seiteneffekte und ihre Reihenfolge erhalten?
+→ Bestehen alle vorhandenen Tests weiterhin unverändert?
 ```
 
-### 2. Follow Project Conventions
+### 2. Projektkonventionen befolgen
 
-Simplification means making code more consistent with the codebase, not imposing external preferences. Before simplifying:
+Vereinfachung soll die Konsistenz mit der Codebasis verbessern, nicht externe Vorlieben durchsetzen. Vor der Vereinfachung:
 
 ```
-1. Read CLAUDE.md / project conventions
-2. Study how neighboring code handles similar patterns
-3. Match the project's style for:
-   - Import ordering and module system
-   - Function declaration style
-   - Naming conventions
-   - Error handling patterns
-   - Type annotation depth
+1. AGENTS.md / Projektkonventionen lesen
+2. Untersuchen, wie benachbarter Code ähnliche Muster behandelt
+3. Den Projektstil beachten für:
+   - Importreihenfolge und Modulsystem
+   - Deklarationsstil von Funktionen
+   - Namenskonventionen
+   - Muster zur Fehlerbehandlung
+   - Umfang von Typannotationen
 ```
 
-Simplification that breaks project consistency is not simplification — it's churn.
+Eine Vereinfachung, die Projektkonventionen verletzt, erzeugt unnötige Änderungen und soll nicht erfolgen.
 
-### 3. Prefer Clarity Over Cleverness
+### 3. Klarheit vor Raffinesse bevorzugen
 
-Explicit code is better than compact code when the compact version requires a mental pause to parse.
+Ausdrücklicher Code ist besser als kompakter Code, wenn Letzterer erst mühsam gedanklich entschlüsselt werden muss.
 
 ```typescript
 // UNCLEAR: Dense ternary chain
 const label = isNew ? 'New' : isUpdated ? 'Updated' : isArchived ? 'Archived' : 'Active';
 
 // CLEAR: Readable mapping
-function getStatusLabel(item: Item): string {
+type StatusLabel = 'New' | 'Updated' | 'Archived' | 'Active';
+
+function getStatusLabel(item: Item): StatusLabel {
   if (item.isNew) return 'New';
   if (item.isUpdated) return 'Updated';
   if (item.isArchived) return 'Archived';
+
   return 'Active';
 }
 ```
@@ -89,102 +90,102 @@ for (const item of items) {
 }
 ```
 
-### 4. Maintain Balance
+### 4. Das richtige Maß halten
 
-Simplification has a failure mode: over-simplification. Watch for these traps:
+Vereinfachung kann zu weit gehen. Achte auf diese Fallen:
 
-- **Inlining too aggressively** — removing a helper that gave a concept a name makes the call site harder to read
-- **Combining unrelated logic** — two simple functions merged into one complex function is not simpler
-- **Removing "unnecessary" abstraction** — some abstractions exist for extensibility or testability, not complexity
-- **Optimizing for line count** — fewer lines is not the goal; easier comprehension is
+- **Zu aggressives Inlining** — das Entfernen einer Hilfsfunktion, die ein Konzept benennt, kann die Aufrufstelle schwerer lesbar machen
+- **Sachfremde Logik zusammenführen** — zwei einfache Funktionen in einer komplexen Funktion sind keine Vereinfachung
+- **„Unnötige“ Abstraktionen entfernen** — manche Abstraktionen dienen Erweiterbarkeit oder Testbarkeit
+- **Auf Zeilenzahl optimieren** — Ziel ist leichteres Verständnis, nicht möglichst wenig Code
 
-### 5. Scope to What Changed
+### 5. Auf den Änderungsumfang begrenzen
 
-Default to simplifying recently modified code. Avoid drive-by refactors of unrelated code unless explicitly asked to broaden scope. Unscoped simplification creates noise in diffs and risks unintended regressions.
+Vereinfache standardmäßig kürzlich geänderten Code. Vermeide beiläufiges Refactoring unabhängigen Codes, sofern der Auftrag nicht ausdrücklich erweitert wurde. Unbegrenzte Änderungen erschweren das Review und können unbeabsichtigte Regressionen verursachen.
 
-## The Simplification Process
+## Vorgehen bei der Vereinfachung
 
-### Step 1: Understand Before Touching (Chesterton's Fence)
+### Schritt 1: Vor Änderungen verstehen (Chesterton's Fence)
 
-Before changing or removing anything, understand why it exists. This is Chesterton's Fence: if you see a fence across a road and don't understand why it's there, don't tear it down. First understand the reason, then decide if the reason still applies.
+Verstehe vor einer Änderung oder Entfernung, warum der betreffende Code existiert. Chesterton's Fence besagt: Reiße einen Zaun nicht ab, solange du seinen Zweck nicht kennst. Verstehe zuerst den Grund und entscheide dann, ob er weiterhin gilt.
 
 ```
-BEFORE SIMPLIFYING, ANSWER:
-- What is this code's responsibility?
-- What calls it? What does it call?
-- What are the edge cases and error paths?
-- Are there tests that define the expected behavior?
-- Why might it have been written this way? (Performance? Platform constraint? Historical reason?)
-- Check git blame: what was the original context for this code?
+VOR DER VEREINFACHUNG BEANTWORTEN:
+- Welche Verantwortung hat der Code?
+- Was ruft ihn auf und was ruft er selbst auf?
+- Welche Rand- und Fehlerfälle gibt es?
+- Definieren Tests das erwartete Verhalten?
+- Warum könnte der Code so geschrieben worden sein? Performance, Plattformbeschränkung oder historischer Grund?
+- Prüfe git blame: Was war der ursprüngliche Kontext?
 ```
 
-If you can't answer these, you're not ready to simplify. Read more context first.
+Sind diese Fragen nicht beantwortbar, lies zuerst weiteren Kontext, bevor du vereinfachst.
 
-### Step 2: Identify Simplification Opportunities
+### Schritt 2: Vereinfachungsmöglichkeiten erkennen
 
-Scan for these patterns — each one is a concrete signal, not a vague smell:
+Suche nach folgenden konkreten Mustern:
 
-**Structural complexity:**
+**Strukturelle Komplexität:**
 
-| Pattern | Signal | Simplification |
+| Muster | Anzeichen | Vereinfachung |
 |---------|--------|----------------|
-| Deep nesting (3+ levels) | Hard to follow control flow | Extract conditions into guard clauses or helper functions |
-| Long functions (50+ lines) | Multiple responsibilities | Split into focused functions with descriptive names |
-| Nested ternaries | Requires mental stack to parse | Replace with if/else chains, switch, or lookup objects |
-| Boolean parameter flags | `doThing(true, false, true)` | Replace with options objects or separate functions |
-| Repeated conditionals | Same `if` check in multiple places | Extract to a well-named predicate function |
+| Tiefe Verschachtelung (ab drei Ebenen) | Schwer nachvollziehbarer Kontrollfluss | Bedingungen als Guard Clauses oder Hilfsfunktionen auslagern |
+| Lange Funktionen (ab 50 Zeilen) | Mehrere Verantwortlichkeiten | In fokussierte Funktionen mit aussagekräftigen Namen aufteilen |
+| Verschachtelte ternäre Ausdrücke | Gedanklich schwer nachzuvollziehen | Durch if/else-Ketten, switch oder Nachschlageobjekte ersetzen |
+| Boolesche Parameterflags | `doThing(true, false, true)` | Durch Optionsobjekte oder getrennte Funktionen ersetzen |
+| Wiederholte Bedingungen | Dieselbe `if`-Prüfung an mehreren Stellen | In eine aussagekräftig benannte Prädikatfunktion auslagern |
 
-**Naming and readability:**
+**Benennung und Lesbarkeit:**
 
-| Pattern | Signal | Simplification |
+| Muster | Anzeichen | Vereinfachung |
 |---------|--------|----------------|
-| Generic names | `data`, `result`, `temp`, `val`, `item` | Rename to describe the content: `userProfile`, `validationErrors` |
-| Abbreviated names | `usr`, `cfg`, `btn`, `evt` | Use full words unless the abbreviation is universal (`id`, `url`, `api`) |
-| Misleading names | Function named `get` that also mutates state | Rename to reflect actual behavior |
-| Comments explaining "what" | `// increment counter` above `count++` | Delete the comment — the code is clear enough |
-| Comments explaining "why" | `// Retry because the API is flaky under load` | Keep these — they carry intent the code can't express |
+| Allgemeine Namen | `data`, `result`, `temp`, `val`, `item` | Inhalt beschreibend benennen: `userProfile`, `validationErrors` |
+| Abgekürzte Namen | `usr`, `cfg`, `btn`, `evt` | Vollständige Wörter verwenden, außer bei allgemein bekannten Abkürzungen (`id`, `url`, `api`) |
+| Irreführende Namen | Eine Funktion namens `get` verändert auch Zustand | Nach dem tatsächlichen Verhalten benennen |
+| Kommentare zum „Was“ | `// increment counter` über `count++` | Den Kommentar entfernen, wenn der Code für sich klar ist |
+| Kommentare zum „Warum“ | `// Retry because the API is flaky under load` | Beibehalten, da sie eine nicht aus dem Code ersichtliche Absicht erklären |
 
-**Redundancy:**
+**Redundanz:**
 
-| Pattern | Signal | Simplification |
+| Muster | Anzeichen | Vereinfachung |
 |---------|--------|----------------|
-| Duplicated logic | Same 5+ lines in multiple places | Extract to a shared function |
-| Dead code | Unreachable branches, unused variables, commented-out blocks | Remove (after confirming it's truly dead) |
-| Unnecessary abstractions | Wrapper that adds no value | Inline the wrapper, call the underlying function directly |
-| Over-engineered patterns | Factory-for-a-factory, strategy-with-one-strategy | Replace with the simple direct approach |
-| Redundant type assertions | Casting to a type that's already inferred | Remove the assertion |
+| Doppelte Logik | Dieselben mindestens fünf Zeilen an mehreren Stellen | In eine gemeinsame Funktion auslagern |
+| Toter Code | Unerreichbare Zweige, ungenutzte Variablen, auskommentierte Blöcke | Nach Bestätigung, dass er tatsächlich ungenutzt ist, entfernen |
+| Unnötige Abstraktionen | Wrapper ohne Mehrwert | Wrapper auflösen und zugrunde liegende Funktion direkt aufrufen |
+| Überkonstruierte Muster | Factory-for-a-factory, strategy-with-one-strategy | Durch einen einfachen direkten Ansatz ersetzen |
+| Redundante Typassertions | Cast auf einen bereits abgeleiteten Typ | Assertion entfernen |
 
-### Step 3: Apply Changes Incrementally
+### Schritt 3: Änderungen inkrementell anwenden
 
-Make one simplification at a time. Run tests after each change. **Submit refactoring changes separately from feature or bug fix changes.** A PR that refactors and adds a feature is two PRs — split them.
-
-```
-FOR EACH SIMPLIFICATION:
-1. Make the change
-2. Run the test suite
-3. If tests pass → commit (or continue to next simplification)
-4. If tests fail → revert and reconsider
-```
-
-Avoid batching multiple simplifications into a single untested change. If something breaks, you need to know which simplification caused it.
-
-**The Rule of 500:** If a refactoring would touch more than 500 lines, invest in automation (codemods, sed scripts, AST transforms) rather than making the changes by hand. Manual edits at that scale are error-prone and exhausting to review.
-
-### Step 4: Verify the Result
-
-After all simplifications, step back and evaluate the whole:
+Nimm jeweils eine Vereinfachung vor und führe danach Tests aus. **Reiche Refactoring getrennt von Feature-Änderungen oder Fehlerkorrekturen ein.** Ein PR mit Refactoring und neuem Feature umfasst zwei Änderungen und sollte aufgeteilt werden.
 
 ```
-COMPARE BEFORE AND AFTER:
-- Is the simplified version genuinely easier to understand?
-- Did you introduce any new patterns inconsistent with the codebase?
-- Is the diff clean and reviewable?
-- Would a teammate approve this change?
+FÜR JEDE VEREINFACHUNG:
+1. Änderung vornehmen
+2. Testsuite ausführen
+3. Bestehen die Tests → committen oder mit der nächsten Vereinfachung fortfahren
+4. Schlagen die Tests fehl → betroffene Änderungen eingrenzen, vorhandene Arbeit bewahren und die Korrektur überdenken; einen eigenen Schritt nur im Rahmen der bestehenden Autorisierung sicher zurücknehmen
 ```
 
-If the "simplified" version is harder to understand or review, revert. Not every simplification attempt succeeds.
+Fasse nicht mehrere Vereinfachungen zu einer ungeprüften Änderung zusammen. Bei einem Fehler muss erkennbar bleiben, welche Vereinfachung ihn verursacht hat.
 
-## Language-Specific Guidance
+**The Rule of 500:** Würde ein Refactoring mehr als 500 Zeilen betreffen, nutze Automatisierung wie Codemods, sed-Skripte oder AST-Transformationen statt manueller Änderungen. Manuelle Bearbeitung in diesem Umfang ist fehleranfällig und aufwendig zu prüfen.
+
+### Schritt 4: Ergebnis überprüfen
+
+Beurteile nach allen Vereinfachungen das Gesamtergebnis:
+
+```
+VORHER UND NACHHER VERGLEICHEN:
+- Ist die vereinfachte Fassung tatsächlich leichter zu verstehen?
+- Wurden neue, mit der Codebasis unvereinbare Muster eingeführt?
+- Ist der Diff übersichtlich und überprüfbar?
+- Würde ein Teammitglied die Änderung freigeben?
+```
+
+Ist die „vereinfachte“ Fassung schwerer zu verstehen oder zu prüfen, grenze den eigenen Schritt ein und schlage eine sichere Rücknahme vor beziehungsweise nimm ihn im Rahmen der bestehenden Autorisierung zurück. Bewahre bereits vorhandene gestagte und ungestagte Nutzerarbeit; Verwerfen oder Zurücksetzen von Arbeit folgt `$git-workflow-and-versioning` und den geltenden Autorisierungen. Nicht jeder Vereinfachungsversuch gelingt.
+
+## Sprachspezifische Hinweise
 
 ### TypeScript / JavaScript
 
@@ -294,38 +295,38 @@ function UserBadge({ user }: Props) {
 // This is a judgment call — flag it, don't auto-refactor.
 ```
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "It's working, no need to touch it" | Working code that's hard to read will be hard to fix when it breaks. Simplifying now saves time on every future change. |
-| "Fewer lines is always simpler" | A 1-line nested ternary is not simpler than a 5-line if/else. Simplicity is about comprehension speed, not line count. |
-| "I'll just quickly simplify this unrelated code too" | Unscoped simplification creates noisy diffs and risks regressions in code you didn't intend to change. Stay focused. |
-| "The types make it self-documenting" | Types document structure, not intent. A well-named function explains *why* better than a type signature explains *what*. |
-| "This abstraction might be useful later" | Don't preserve speculative abstractions. If it's not used now, it's complexity without value. Remove it and re-add when needed. |
-| "The original author must have had a reason" | Maybe. Check git blame — apply Chesterton's Fence. But accumulated complexity often has no reason; it's just the residue of iteration under pressure. |
-| "I'll refactor while adding this feature" | Separate refactoring from feature work. Mixed changes are harder to review, revert, and understand in history. |
+| „Es funktioniert, ich muss es nicht ändern.“ | Schwer lesbarer Code ist bei Fehlern schwerer zu korrigieren. Eine Vereinfachung kann spätere Änderungen erleichtern. |
+| „Weniger Zeilen sind immer einfacher.“ | Ein einzeiliger verschachtelter ternärer Ausdruck kann schwerer zu verstehen sein als fünf Zeilen mit if/else. Verständlichkeit zählt, nicht die Zeilenzahl. |
+| „Ich vereinfache schnell auch diesen unabhängigen Code.“ | Änderungen außerhalb des Umfangs erzeugen unübersichtliche Diffs und können unbeabsichtigte Regressionen verursachen. |
+| „Die Typen dokumentieren den Code selbst.“ | Typen beschreiben Struktur, nicht unbedingt Absicht. Ein guter Funktionsname kann das *Warum* erläutern. |
+| „Diese Abstraktion könnte später nützlich sein.“ | Rein spekulative, derzeit ungenutzte Abstraktionen verursachen Komplexität. Entferne sie und ergänze sie bei Bedarf erneut. |
+| „Der ursprüngliche Autor wird einen Grund gehabt haben.“ | Prüfe den Kontext mit git blame und beachte Chesterton's Fence. Komplexität kann aber auch durch frühere Arbeitsschritte entstanden sein. |
+| „Ich führe das Refactoring beim Feature gleich mit durch.“ | Trenne Refactoring und Feature-Arbeit; gemischte Änderungen lassen sich schwerer prüfen, zurücknehmen und in der Historie verstehen. |
 
-## Red Flags
+## Warnzeichen
 
-- Simplification that requires modifying tests to pass (you likely changed behavior)
-- "Simplified" code that is longer and harder to follow than the original
-- Renaming things to match your preferences rather than project conventions
-- Removing error handling because "it makes the code cleaner"
-- Simplifying code you don't fully understand
-- Batching many simplifications into one large, hard-to-review commit
-- Refactoring code outside the scope of the current task without being asked
+- Tests müssen für eine Vereinfachung geändert werden, damit sie bestehen; möglicherweise wurde das Verhalten verändert
+- „Vereinfachter“ Code ist länger und schwerer nachzuvollziehen als das Original
+- Namen werden nach persönlichen Vorlieben statt nach Projektkonventionen geändert
+- Fehlerbehandlung wird entfernt, weil der Code dadurch „sauberer“ wirkt
+- Code wird vereinfacht, obwohl er nicht vollständig verstanden wurde
+- Viele Vereinfachungen werden in einem großen, schwer prüfbaren Commit gebündelt
+- Code außerhalb des aktuellen Auftrags wird ohne entsprechende Bitte überarbeitet
 
-## Verification
+## Überprüfung
 
-After completing a simplification pass:
+Nach Abschluss einer Vereinfachung:
 
-- [ ] All existing tests pass without modification
-- [ ] Build succeeds with no new warnings
-- [ ] Linter/formatter passes (no style regressions)
-- [ ] Each simplification is a reviewable, incremental change
-- [ ] The diff is clean — no unrelated changes mixed in
-- [ ] Simplified code follows project conventions (checked against CLAUDE.md or equivalent)
-- [ ] No error handling was removed or weakened
-- [ ] No dead code was left behind (unused imports, unreachable branches)
-- [ ] A teammate or review agent would approve the change as a net improvement
+- [ ] Alle vorhandenen Tests bestehen unverändert
+- [ ] Der Build ist ohne neue Warnungen erfolgreich
+- [ ] Linter und Formatter bestehen ohne Stilregressionen
+- [ ] Jede Vereinfachung ist eine überprüfbare, inkrementelle Änderung
+- [ ] Der Diff ist übersichtlich und enthält keine vermischten unabhängigen Änderungen
+- [ ] Der vereinfachte Code folgt den anhand von CLAUDE.md oder einer entsprechenden Datei geprüften Projektkonventionen
+- [ ] Fehlerbehandlung wurde weder entfernt noch abgeschwächt
+- [ ] Kein toter Code wie ungenutzte Imports oder unerreichbare Zweige blieb zurück
+- [ ] Ein Teammitglied oder Review-Agent würde die Änderung als Verbesserung freigeben

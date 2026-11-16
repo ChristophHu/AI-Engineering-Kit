@@ -1,61 +1,61 @@
 ---
 name: ci-cd-and-automation
-description: Automates CI/CD pipeline setup. Use when setting up or modifying build and deployment pipelines. Use when you need to automate quality gates, configure test runners in CI, or establish deployment strategies.
+description: Richtet CI/CD-Pipelines ein und automatisiert projektgeeignete Qualitätsprüfungen. Nutze den Skill für Build- und Deployment-Pipelines, Testausführung in CI und Deployment-Strategien.
 ---
 
-# CI/CD and Automation
+# CI/CD und Automatisierung
 
-## Overview
+## Überblick
 
-Automate project-appropriate quality gates for the supported platforms, changes, and deployment targets. Preserve the project's established required checks and report unavailable or failing checks.
+Automatisiere projektgeeignete Qualitätsschranken für die unterstützten Plattformen, Änderungen und Deployment-Ziele. Erhalte die bestehenden verpflichtenden Prüfungen des Projekts und melde nicht verfügbare oder fehlgeschlagene Prüfungen.
 
-**Shift Left:** Catch problems as early in the pipeline as possible. A bug caught in linting costs minutes; the same bug caught in production costs hours. Move checks upstream — static analysis before tests, tests before staging, staging before production.
+**Shift Left:** Erkenne Probleme möglichst früh in der Pipeline. Ein beim Linting entdeckter Fehler kostet weniger Zeit als derselbe Fehler in Produktion. Ordne Prüfungen früh ein: statische Analyse vor Tests, Tests vor Staging und Staging vor Produktion.
 
-**Faster is Safer:** Smaller batches and more frequent releases reduce risk, not increase it. A deployment with 3 changes is easier to debug than one with 30. Frequent releases build confidence in the release process itself.
+**Faster is Safer:** Kleinere Änderungspakete und häufigere Releases können das Risiko verringern. Ein Deployment mit drei Änderungen lässt sich leichter untersuchen als eines mit 30. Regelmäßige Releases schaffen zudem Vertrauen in den Release-Prozess.
 
-## When to Use
+## Wann verwenden
 
-- Setting up a new project's CI pipeline
-- Adding or modifying automated checks
-- Configuring deployment pipelines
-- When a change should trigger automated verification
-- Debugging CI failures
+- Die CI-Pipeline eines neuen Projekts einrichten
+- Automatisierte Prüfungen ergänzen oder ändern
+- Deployment-Pipelines konfigurieren
+- Eine Änderung soll eine automatisierte Prüfung auslösen
+- CI-Fehler untersuchen
 
-## The Quality Gate Pipeline
+## Pipeline mit Qualitätsschranken
 
-The following is an illustrative JavaScript web pipeline, not a mandatory list for every project. Select applicable checks for the actual stack, supported Apple or web platforms, change and risk, and existing CI conventions:
+Das folgende Beispiel zeigt eine JavaScript-Web-Pipeline und ist keine Pflichtliste für jedes Projekt. Wähle die Prüfungen anhand des tatsächlichen Stacks, der unterstützten Apple- oder Webplattformen, der Änderung und ihres Risikos sowie der bestehenden CI-Konventionen:
 
 ```
-Pull Request Opened
+Pull Request geöffnet
     │
     ▼
 ┌─────────────────┐
 │   LINT CHECK     │  eslint, prettier
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   TYPE CHECK     │  tsc --noEmit
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   UNIT TESTS     │  jest/vitest
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   BUILD          │  npm run build
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   INTEGRATION    │  API/DB tests
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   E2E (optional) │  Playwright/Cypress
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   SECURITY AUDIT │  npm audit
-│   ↓ pass         │
+│   ↓ bestanden    │
 │   BUNDLE SIZE    │  bundlesize check
 └─────────────────┘
     │
     ▼
-  Ready for review
+  Bereit für das Review
 ```
 
-Do not silently bypass an applicable required gate or weaken a check to obtain a pass. Investigate failures and report blockers; any exception follows the project's authorized process. A gate that is not applicable is not a failed gate.
+Umgehe keine anwendbare Pflichtprüfung stillschweigend und schwäche keine Prüfung ab, um ein erfolgreiches Ergebnis zu erhalten. Untersuche Fehler und melde Hindernisse; Ausnahmen folgen dem autorisierten Verfahren des Projekts. Eine nicht anwendbare Prüfung ist nicht fehlgeschlagen.
 
-## GitHub Actions Configuration
+## GitHub Actions konfigurieren
 
-### Basic CI Pipeline
+### Grundlegende CI-Pipeline
 
 ```yaml
 # .github/workflows/ci.yml
@@ -97,7 +97,7 @@ jobs:
         run: npm audit --audit-level=high
 ```
 
-### With Database Integration Tests
+### Mit Datenbankintegrationstests
 
 ```yaml
   integration:
@@ -134,9 +134,9 @@ jobs:
           DATABASE_URL: postgresql://ci_user:${{ secrets.CI_DB_PASSWORD }}@localhost:5432/testdb
 ```
 
-> **Note:** Even for CI-only test databases, use GitHub Secrets for credentials rather than hardcoding values. This builds good habits and prevents accidental reuse of test credentials in other contexts.
+> **Hinweis:** Verwende auch für reine CI-Testdatenbanken GitHub Secrets für Zugangsdaten, statt Werte fest zu hinterlegen. Das verhindert unter anderem eine versehentliche Wiederverwendung in anderen Kontexten.
 
-### E2E Tests
+### E2E-Tests
 
 ```yaml
   e2e:
@@ -161,40 +161,40 @@ jobs:
           path: playwright-report/
 ```
 
-## Feeding CI Failures Back to Agents
+## CI-Fehler an Agenten zurückmelden
 
-The power of CI with AI agents is the feedback loop. When CI fails:
+Der Nutzen von CI mit KI-Agenten liegt in der Rückkopplung. Wenn CI fehlschlägt:
 
 ```
-CI fails
+CI schlägt fehl
     │
     ▼
-Copy the failure output
+Fehlerausgabe kopieren
     │
     ▼
-Feed it to the agent:
-"The CI pipeline failed with this error:
-[paste specific error]
-Fix the issue and verify locally before pushing again."
+An den Agenten übergeben:
+„Die CI-Pipeline ist mit folgendem Fehler fehlgeschlagen:
+[konkreten Fehler einfügen]
+Behebe das Problem und prüfe es lokal, bevor du erneut pushst.“
     │
     ▼
-Agent fixes → pushes → CI runs again
+Agent behebt den Fehler → pusht → CI läuft erneut
 ```
 
-**Key patterns:**
+**Typische Abläufe:**
 
 ```
-Lint failure → Agent runs `npm run lint -- --fix` and commits
-Type error  → Agent reads the error location and fixes the type
-Test failure → Agent follows debugging-and-error-recovery skill
-Build error → Agent checks config and dependencies
+Lint-Fehler → Agent führt `npm run lint -- --fix` aus und committet
+Typfehler   → Agent liest die Fehlerstelle und korrigiert den Typ
+Testfehler  → Agent folgt dem Skill debugging-and-error-recovery
+Build-Fehler → Agent prüft Konfiguration und Abhängigkeiten
 ```
 
-## Deployment Strategies
+## Deployment-Strategien
 
-### Preview Deployments
+### Preview-Deployments
 
-Every PR gets a preview deployment for manual testing:
+Jeder PR erhält ein Preview-Deployment für manuelle Tests:
 
 ```yaml
 # Deploy preview on PR (Vercel/Netlify/etc.)
@@ -209,12 +209,12 @@ deploy-preview:
 
 ### Feature Flags
 
-Feature flags decouple deployment from release. Deploy incomplete or risky features behind flags so you can:
+Feature Flags entkoppeln Deployment und Release. Stelle unvollständige oder risikoreiche Features hinter Flags bereit, um Folgendes zu ermöglichen:
 
-- **Ship code without enabling it.** Merge to main early, enable when ready.
-- **Roll back without redeploying.** Disable the flag instead of reverting code.
-- **Canary new features.** Enable for 1% of users, then 10%, then 100%.
-- **Run A/B tests.** Compare behavior with and without the feature.
+- **Code ausliefern, ohne ihn zu aktivieren.** Früh nach main mergen und bei Bereitschaft aktivieren.
+- **Ohne erneutes Deployment zurücknehmen.** Das Flag deaktivieren, statt Code zurückzusetzen.
+- **Neue Features schrittweise ausrollen.** Erst für 1 % der Nutzer aktivieren, dann für 10 % und schließlich für 100 %.
+- **A/B-Tests durchführen.** Verhalten mit und ohne Feature vergleichen.
 
 ```typescript
 // Simple feature flag pattern
@@ -224,29 +224,29 @@ if (featureFlags.isEnabled('new-checkout-flow', { userId })) {
 return renderLegacyCheckout();
 ```
 
-**Flag lifecycle:** Create → Enable for testing → Canary → Full rollout → Remove the flag and dead code. Flags that live forever become technical debt — set a cleanup date when you create them.
+**Lebenszyklus eines Flags:** Erstellen → für Tests aktivieren → schrittweise ausrollen → vollständig ausrollen → Flag und toten Code entfernen. Dauerhaft bestehende Flags werden zu technischer Schuld; lege bei ihrer Erstellung einen Bereinigungstermin fest.
 
-### Staged Rollouts
+### Gestufte Rollouts
 
 ```
-PR merged to main
+PR nach main gemergt
     │
     ▼
-  Staging deployment (auto)
-    │ Manual verification
+  Staging-Deployment (automatisch)
+    │ Manuelle Prüfung
     ▼
-  Production deployment (manual trigger or auto after staging)
+  Produktions-Deployment (manuell ausgelöst oder automatisch nach Staging)
     │
     ▼
-  Monitor for errors (15-minute window)
+  Auf Fehler überwachen (15 Minuten)
     │
-    ├── Errors detected → Rollback
-    └── Clean → Done
+    ├── Fehler erkannt → Rollback
+    └── Keine Fehler → Fertig
 ```
 
-### Rollback Plan
+### Rollback-Plan
 
-Every deployment should be reversible:
+Jedes Deployment sollte rücknehmbar sein:
 
 ```yaml
 # Manual rollback workflow
@@ -271,19 +271,19 @@ jobs:
           npx vercel rollback "$VERSION"
 ```
 
-## Environment Management
+## Verwaltung von Umgebungen
 
 ```
-.env.example       → Committed (template for developers)
-.env                → NOT committed (local development)
-.env.test           → Committed (test environment, no real secrets)
-CI secrets          → Stored in GitHub Secrets / vault
-Production secrets  → Stored in deployment platform / vault
+.env.example       → Committet (Vorlage für Entwickler)
+.env                → NICHT committet (lokale Entwicklung)
+.env.test           → Committet (Testumgebung, keine echten Geheimnisse)
+CI-Geheimnisse      → In GitHub Secrets / Vault gespeichert
+Produktionsgeheimnisse → In Deployment-Plattform / Vault gespeichert
 ```
 
-CI should never have production secrets. Use separate secrets for CI testing.
+CI sollte keine Produktionsgeheimnisse enthalten. Verwende separate Geheimnisse für CI-Tests.
 
-## Automation Beyond CI
+## Automatisierung über CI hinaus
 
 ### Dependabot / Renovate
 
@@ -298,40 +298,40 @@ updates:
     open-pull-requests-limit: 5
 ```
 
-### Build Cop Role
+### Rolle des Build Cop
 
-Designate someone responsible for keeping CI green. When the build breaks, the Build Cop's job is to fix or revert — not the person whose change caused the break. This prevents broken builds from accumulating while everyone assumes someone else will fix it.
+Bestimme eine verantwortliche Person für eine funktionierende CI. Schlägt der Build fehl, kümmert sich der Build Cop um Korrektur oder Rücknahme, statt dies allein der Person zu überlassen, deren Änderung den Fehler verursacht hat. So bleiben Fehler nicht liegen, weil alle auf andere warten.
 
-### PR Checks
+### PR-Prüfungen
 
-The following are examples; apply the repository's established review, branch protection and merge rules. Do not enable auto-merge or change remote policy without authorization.
+Die folgenden Punkte sind Beispiele; verwende die geltenden Review-, Branch-Schutz- und Merge-Regeln des Repositorys. Aktiviere Auto-Merge und ändere Remote-Richtlinien nicht ohne Autorisierung.
 
-- **Required reviews:** At least 1 approval before merge
-- **Required status checks:** CI must pass before merge
-- **Branch protection:** No force-pushes to main
-- **Auto-merge:** If all checks pass and approved, merge automatically
+- **Erforderliche Reviews:** Mindestens eine Freigabe vor dem Merge
+- **Erforderliche Statusprüfungen:** CI muss vor dem Merge bestehen
+- **Branch-Schutz:** Keine Force-Pushes auf main
+- **Auto-Merge:** Nach bestandenen Prüfungen und Freigabe automatisch mergen
 
-## CI Optimization
+## CI optimieren
 
-When the pipeline exceeds 10 minutes, apply these strategies in order of impact:
+Wenn die Pipeline länger als zehn Minuten dauert, prüfe diese Strategien nach erwarteter Wirkung:
 
 ```
-Slow CI pipeline?
-├── Cache dependencies
-│   └── Use the setup-node cache option (or actions/cache) for the package manager cache, not node_modules
-├── Run jobs in parallel
-│   └── Split lint, typecheck, test, build into separate parallel jobs
-├── Only run what changed
-│   └── Use path filters to skip unrelated jobs (e.g., skip e2e for docs-only PRs)
-├── Use matrix builds
-│   └── Shard test suites across multiple runners
-├── Optimize the test suite
-│   └── Remove slow tests from the critical path, run them on a schedule instead
-└── Use larger runners
-    └── GitHub-hosted larger runners or self-hosted for CPU-heavy builds
+Langsame CI-Pipeline?
+├── Abhängigkeiten zwischenspeichern
+│   └── Die Cache-Option von setup-node oder actions/cache für den Paketmanager-Cache verwenden, nicht für node_modules
+├── Jobs parallel ausführen
+│   └── lint, typecheck, test und build in separate parallele Jobs aufteilen
+├── Nur betroffene Prüfungen ausführen
+│   └── Pfadfilter für unabhängige Jobs nutzen, etwa e2e bei reinen Dokumentations-PRs auslassen
+├── Matrix-Builds verwenden
+│   └── Testsuiten auf mehrere Runner verteilen
+├── Testsuite optimieren
+│   └── Langsame Tests aus dem kritischen Pfad nehmen und stattdessen zeitgesteuert ausführen
+└── Größere Runner verwenden
+    └── Größere GitHub-Runner oder selbst gehostete Runner für rechenintensive Builds nutzen
 ```
 
-**Example: caching and parallelism**
+**Beispiel: Caching und Parallelisierung**
 ```yaml
 jobs:
   lint:
@@ -362,34 +362,34 @@ jobs:
       - run: npm test -- --coverage
 ```
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "CI is too slow" | Optimize the pipeline (see CI Optimization below), don't skip it. A 5-minute pipeline prevents hours of debugging. |
-| "This change is trivial, skip CI" | Trivial changes break builds. CI is fast for trivial changes anyway. |
-| "The test is flaky, just re-run" | Flaky tests mask real bugs and waste everyone's time. Fix the flakiness. |
-| "We'll add CI later" | Projects without CI accumulate broken states. Set it up on day one. |
-| "Manual testing is enough" | Manual testing doesn't scale and isn't repeatable. Automate what you can. |
+| „CI ist zu langsam.“ | Optimiere die Pipeline, statt sie zu überspringen. Eine kurze Pipeline kann langwierige Fehlerdiagnose vermeiden. |
+| „Die Änderung ist trivial, CI ist unnötig.“ | Auch kleine Änderungen können Builds beschädigen. |
+| „Der Test ist unzuverlässig, einfach erneut ausführen.“ | Unzuverlässige Tests können echte Fehler verdecken. Behebe die Ursache. |
+| „CI ergänzen wir später.“ | Ohne CI können sich fehlerhafte Zustände ansammeln. Richte sie frühzeitig ein. |
+| „Manuelle Tests reichen aus.“ | Manuelle Prüfungen skalieren schlecht und sind nicht zuverlässig wiederholbar. Automatisiere geeignete Prüfungen. |
 
-## Red Flags
+## Warnzeichen
 
-- No CI pipeline in the project
-- CI failures ignored or silenced
-- Tests disabled in CI to make the pipeline pass
-- Production deploys without staging verification
-- No rollback mechanism
-- Secrets stored in code or CI config files (not secrets manager)
-- Long CI times with no optimization effort
+- Keine CI-Pipeline im Projekt
+- CI-Fehler werden ignoriert oder unterdrückt
+- Tests werden in CI deaktiviert, damit die Pipeline besteht
+- Produktions-Deployments ohne Staging-Prüfung
+- Kein Rollback-Mechanismus
+- Geheimnisse im Code oder in CI-Konfigurationsdateien statt in einem Secrets Manager
+- Lange CI-Laufzeiten ohne Bemühungen zur Optimierung
 
-## Verification
+## Überprüfung
 
-After setting up or modifying CI:
+Nach dem Einrichten oder Ändern von CI:
 
-- [ ] All quality gates are present (lint, types, tests, build, audit)
-- [ ] Pipeline runs on every PR and push to main
-- [ ] Failures block merge (branch protection configured)
-- [ ] CI results feed back into the development loop
-- [ ] Secrets are stored in the secrets manager, not in code
-- [ ] Deployment has a rollback mechanism
-- [ ] Pipeline runs in under 10 minutes for the test suite
+- [ ] Alle Qualitätsschranken sind vorhanden (lint, types, tests, build, audit)
+- [ ] Die Pipeline läuft bei jedem PR und Push nach main
+- [ ] Fehler blockieren den Merge; Branch-Schutz ist konfiguriert
+- [ ] CI-Ergebnisse fließen in den Entwicklungsablauf zurück
+- [ ] Geheimnisse stehen im Secrets Manager, nicht im Code
+- [ ] Das Deployment verfügt über einen Rollback-Mechanismus
+- [ ] Die Pipeline benötigt für die Testsuite weniger als zehn Minuten

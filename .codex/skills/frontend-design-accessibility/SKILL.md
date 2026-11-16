@@ -1,33 +1,33 @@
 ---
 name: frontend-design-accessibility
-description: Design or review user interfaces in native Apple and web apps for responsive behavior, accessibility, and consistency with the project's established visual and interaction patterns.
+description: Gestaltet oder prüft Oberflächen nativer Apple- und Web-Apps hinsichtlich Anpassungsfähigkeit, Barrierefreiheit sowie bestehender visueller und interaktiver Projektmuster.
 ---
 
-# Frontend Design and Accessibility
+# Frontend-Gestaltung und Barrierefreiheit
 
-Use this skill when creating or reviewing app UI, interaction patterns, or accessibility. It covers SwiftUI and browser-based interfaces; it does not prescribe a visual brand or replace the platform's native conventions.
+Nutze diesen Skill beim Erstellen oder Prüfen von App-Oberflächen, Interaktionsmustern oder Barrierefreiheit. Er umfasst SwiftUI- und browserbasierte Oberflächen und gibt weder eine visuelle Marke vor noch ersetzt er die nativen Konventionen der Plattform.
 
-For native SwiftUI interfaces on iOS and iPadOS, also use `$native-ios-design`; for macOS, apply only its cross-platform guidance that fits macOS conventions. Respect the project's supported OS versions and existing design, especially before using Liquid Glass APIs.
+Nutze für native SwiftUI-Oberflächen auf iOS und iPadOS zusätzlich `$native-ios-design`; wende bei macOS nur dessen plattformübergreifende Hinweise an, die zu den macOS-Konventionen passen. Beachte die unterstützten Betriebssystemversionen und das bestehende Design des Projekts, insbesondere vor der Verwendung von Liquid-Glass-APIs.
 
-## Inspect before designing
+## Vor der Gestaltung prüfen
 
-1. Read project instructions, `.codex/PROJECT.md`, `docs/design-system.md` if present, relevant Specs, and existing design or accessibility guidance.
-2. Inspect nearby screens and components, design tokens, typography, spacing, navigation, and interaction patterns. Reuse them where suitable.
-3. Identify the target platform, supported devices or viewports, input methods, and accessibility needs from the project and Spec. Ask only when a missing decision would materially change the interface.
+1. Lies Projektanweisungen, `.codex/PROJECT.md`, `docs/design-system.md`, sofern vorhanden, relevante Specs und bestehende Gestaltungs- oder Barrierefreiheitsvorgaben.
+2. Prüfe benachbarte Ansichten und Komponenten, Design-Tokens, Typografie, Abstände, Navigation und Interaktionsmuster. Verwende sie wieder, soweit sie passen.
+3. Ermittle Zielplattform, unterstützte Geräte oder Ansichtsgrößen, Eingabemethoden und Anforderungen an die Barrierefreiheit aus Projekt und Spec. Frage nur nach, wenn eine fehlende Entscheidung die Oberfläche wesentlich verändern würde.
 
-## Design and review
+## Gestalten und prüfen
 
-For the affected screens and flows, check the relevant areas:
+Prüfe für betroffene Ansichten und Abläufe die relevanten Bereiche:
 
-- layouts adapt to supported screen sizes and content lengths
-- visual hierarchy, spacing, typography, color, and interaction states are consistent with the product
-- web UI uses semantic HTML and meaningful headings, labels, and landmarks
-- keyboard users can reach and operate controls, and focus is visible and predictable
-- screen readers receive useful names, roles, values, and state changes
-- text and controls have sufficient contrast; text scaling and zoom remain usable
-- loading, empty, validation, success, and error states are understandable
-- native Apple UI respects platform interaction conventions, Dynamic Type, VoiceOver, and relevant focus/input behavior
+- Layouts passen sich an unterstützte Bildschirmgrößen und Inhaltslängen an.
+- Visuelle Hierarchie, Abstände, Typografie, Farben und Interaktionszustände passen zum Produkt.
+- Web-Oberflächen verwenden semantisches HTML sowie aussagekräftige Überschriften, Beschriftungen und Orientierungspunkte.
+- Tastaturnutzer können Bedienelemente erreichen und bedienen; der Fokus ist sichtbar und vorhersehbar.
+- Screenreader erhalten hilfreiche Namen, Rollen, Werte und Zustandsänderungen.
+- Text und Bedienelemente bieten ausreichenden Kontrast; Textskalierung und Zoom bleiben nutzbar.
+- Lade-, Leer-, Validierungs-, Erfolgs- und Fehlerzustände sind verständlich.
+- Native Apple-Oberflächen beachten plattformgerechte Interaktion, Dynamic Type, VoiceOver sowie relevantes Fokus- und Eingabeverhalten.
 
-Report concrete findings by screen or component and connect them to user impact. Make focused changes that fit the existing design system; avoid unsolicited restyling or introducing a new component library.
+Berichte konkrete Befunde je Ansicht oder Komponente und beschreibe ihre Auswirkung auf Nutzer. Nimm gezielte Änderungen passend zum bestehenden Designsystem vor; vermeide nicht beauftragte Neugestaltungen und die Einführung einer neuen Komponentenbibliothek.
 
-Use `$verify-ui` to choose and record hands-on UI checks when the task includes verification.
+Nutze `$verify-ui`, um praktische UI-Prüfungen auszuwählen und zu dokumentieren, wenn die Aufgabe eine Verifikation umfasst.

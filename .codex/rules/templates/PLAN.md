@@ -1,7 +1,7 @@
 # Implementierungsplan: <Titel>
 
 ## Bezug zur Spec
-Pfad/Link zur Spec und wichtige Entscheidungen.
+Pfad/Link zur Spec und wichtige Entscheidungen. Bei vorhandenen Anforderungskennungen wesentliche Anforderungen mit Kriterien, Schritten oder verlinkten Aufgaben und geplanten Prüfungen verbinden; reine Querschnitts- oder Verwaltungsaufgaben brauchen keine künstliche Zuordnung.
 
 ## Plattform und Architekturentscheidungen
 Plattform(en), betroffene Komponenten und begründete technische Entscheidungen. Nur relevante Punkte ausfüllen.
@@ -30,6 +30,7 @@ Plattform(en), betroffene Komponenten und begründete technische Entscheidungen.
 - [ ] Datenflüsse, Vertrauensgrenzen, Berechtigungen und Integrationen sind verstanden.
 - [ ] Offene Entscheidungen sind geklärt oder als Annahmen mit Auswirkung festgehalten.
 - [ ] Abnahmekriterien sind prüfbar und durch Plan-Schritte sowie Nachweise abgedeckt.
+- [ ] Begriffe, Schnittstellen und Anforderungskennungen stimmen zwischen Spec, Plan und gegebenenfalls Aufgaben überein; offene Abhängigkeiten und Entscheidungen sind erkennbar.
 
 ## Schritte
 Aufgaben und Status können hier stehen. Wenn ein vorhandenes Aufgabensystem maßgeblich ist, verlinke die Aufgaben und ihren Status dort; führe keinen zweiten Aufgabenstatus.

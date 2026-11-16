@@ -1,218 +1,218 @@
 ---
 name: security-and-hardening
-description: Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.
+description: Härtet Code gegen Sicherheitslücken. Nutze den Skill bei Nutzereingaben, Authentifizierung, Datenspeicherung, externen Integrationen, Sitzungen und Prüfungen auf OWASP-Risiken sowie bei Abhängigkeitsprüfungen, Lieferkettenrisiken und Datenschutzanforderungen.
 ---
 
-# Security and Hardening
+# Sicherheit und Härtung
 
-## Overview
+## Überblick
 
-Security-first development practices for web applications. Treat every external input as hostile, every secret as sacred, and every authorization check as mandatory. Security isn't a phase — it's a constraint on every line of code that touches user data, authentication, or external systems.
+Sicherheitsorientierte Entwicklung für Webanwendungen: Behandle externe Eingaben als potenziell schädlich, schütze Geheimnisse und prüfe Berechtigungen zuverlässig. Sicherheit ist eine Anforderung an jeden Code, der Nutzerdaten, Authentifizierung oder externe Systeme berührt.
 
-## When to Use
+## Wann verwenden
 
-- Building anything that accepts user input
-- Implementing authentication or authorization
-- Storing or transmitting sensitive data
-- Integrating with external APIs or services
-- Adding file uploads, webhooks, or callbacks
-- Handling payment or PII data
+- Funktionen mit Nutzereingaben erstellen
+- Authentifizierung oder Autorisierung implementieren
+- Vertrauliche Daten speichern oder übertragen
+- Externe APIs oder Dienste integrieren
+- Datei-Uploads, Webhooks oder Callbacks ergänzen
+- Zahlungsdaten oder PII verarbeiten
 
-## Process: Threat Model First
+## Vorgehen: Bedrohungsmodell zuerst
 
-Controls bolted on without a threat model are guesses. Before hardening, spend five minutes thinking like an attacker:
+Ohne Bedrohungsmodell beruhen Schutzmaßnahmen auf Vermutungen. Betrachte vor der Härtung kurz die Perspektive eines Angreifers:
 
-1. **Map the trust boundaries.** Where does untrusted data cross into your system? HTTP requests, form fields, file uploads, webhooks, third-party APIs, message queues, and **LLM output** — plus the local values that look internal because the OS handed them to you: another process's command line or environment, filenames on a shared volume, a path in a job payload. Trust follows who *wrote* a value, not which channel delivered it. Every boundary is attack surface.
-2. **Name the assets.** What's worth stealing or breaking? Credentials, PII, payment data, admin actions, money movement.
-3. **Run STRIDE over each boundary** — a quick lens, not a ceremony:
+1. **Erfasse die Vertrauensgrenzen.** Wo gelangen nicht vertrauenswürdige Daten ins System? Berücksichtige HTTP-Anfragen, Formularfelder, Uploads, Webhooks, APIs Dritter, Nachrichtenwarteschlangen und **LLM-Ausgaben** sowie scheinbar interne lokale Werte: Befehlszeile oder Umgebung eines anderen Prozesses, Dateinamen auf einem gemeinsamen Datenträger oder Pfade in einer Job-Nutzlast. Entscheidend ist, wer einen Wert *geschrieben* hat, nicht sein Übertragungskanal. Jede Grenze ist eine Angriffsfläche.
+2. **Benenne die Schutzgüter.** Dazu gehören Zugangsdaten, PII, Zahlungsdaten, Verwaltungsaktionen und Geldbewegungen.
+3. **Prüfe jede Grenze mit STRIDE** als kurze Orientierung:
 
-| Threat | Ask | Typical mitigation |
+| Bedrohung | Frage | Typische Gegenmaßnahme |
 |---|---|---|
-| **S**poofing | Can someone impersonate a user/service? | Authentication, signature verification |
-| **T**ampering | Can data be altered in transit or at rest? | Integrity checks, parameterized queries, HTTPS |
-| **R**epudiation | Can an action be denied later? | Audit logging of security events |
-| **I**nformation disclosure | Can data leak? | Encryption, field allowlists, generic errors |
-| **D**enial of service | Can it be overwhelmed? | Rate limiting, input size caps, timeouts |
-| **E**levation of privilege | Can a user gain rights they shouldn't? | Authorization checks, least privilege |
+| **S**poofing | Kann jemand einen Nutzer oder Dienst vortäuschen? | Authentifizierung, Signaturprüfung |
+| **T**ampering | Können Daten bei Übertragung oder Speicherung verändert werden? | Integritätsprüfungen, parametrisierte Abfragen, HTTPS |
+| **R**epudiation | Kann eine Handlung später bestritten werden? | Audit-Protokollierung sicherheitsrelevanter Ereignisse |
+| **I**nformation disclosure | Können Daten offengelegt werden? | Verschlüsselung, Feld-Allowlisten, allgemeine Fehlermeldungen |
+| **D**enial of service | Kann das System überlastet werden? | Ratenbegrenzung, Größenlimits, Timeouts |
+| **E**levation of privilege | Kann ein Nutzer unzulässige Rechte erlangen? | Autorisierungsprüfungen, minimale Rechte |
 
-4. **Write abuse cases next to use cases.** For each feature, ask "how would I misuse this?" — then make that your first test.
+4. **Halte Missbrauchsfälle neben Anwendungsfällen fest.** Frage bei jedem Feature, wie es missbraucht werden könnte, und mache daraus den ersten Test.
 
-If you can't name the trust boundaries for a feature, you're not ready to secure it. This is OWASP **A04: Insecure Design** — most breaches begin in design, not code.
+Sind die Vertrauensgrenzen eines Features unbekannt, fehlt eine Grundlage für seine Absicherung. Dies betrifft OWASP **A04: Insecure Design**: Viele Sicherheitsvorfälle beginnen beim Entwurf.
 
-## The Three-Tier Boundary System
+## Das dreistufige Grenzsystem
 
-### Always Do (No Exceptions)
+### Immer durchführen (ohne Ausnahmen)
 
-- **Validate all external input** at the system boundary (API routes, form handlers)
-- **Parameterize all database queries** — never concatenate user input into SQL
-- **Encode output** to prevent XSS (use framework auto-escaping, don't bypass it)
-- **Use HTTPS** for all external communication
-- **Hash passwords** with bcrypt/scrypt/argon2 (never store plaintext)
-- **Set security headers** (CSP, HSTS, X-Frame-Options, X-Content-Type-Options)
-- **Use httpOnly, secure, sameSite cookies** for sessions
-- **Run the detected package manager's native audit** against the committed lockfile before every release
+- **Alle externen Eingaben** an der Systemgrenze validieren, etwa in API-Routen und Formularhandlern
+- **Alle Datenbankabfragen parametrisieren** und Nutzereingaben niemals in SQL verketten
+- **Ausgaben kodieren**, um XSS zu verhindern; automatisches Escaping des Frameworks verwenden und nicht umgehen
+- **HTTPS** für externe Kommunikation verwenden
+- **Passwörter hashen** mit bcrypt/scrypt/argon2, niemals im Klartext speichern
+- **Sicherheitsheader setzen** (CSP, HSTS, X-Frame-Options, X-Content-Type-Options)
+- **httpOnly-, secure- und sameSite-Cookies** für Sitzungen verwenden
+- **Den nativen Audit des erkannten Paketmanagers** vor jedem Release gegen die committete Lockfile ausführen
 
 ### Klärung und Autorisierung
 
 Prüfe bei den folgenden Änderungen zuerst den Auftrag und bereits erteilte, einschlägige Autorisierungen. Ist die konkrete Änderung bereits eindeutig beauftragt und zulässig, arbeite innerhalb dieses Umfangs weiter, ohne erneut um dieselbe Zustimmung zu bitten. Kläre wesentliche offene Entscheidungen und hole tatsächlich erforderliche Freigaben für nicht autorisierte oder zusätzlich freigabepflichtige Aktionen ein; bestehende Projekt- und Sitzungsgrenzen gelten weiterhin.
 
-- Adding new authentication flows or changing auth logic
-- Storing new categories of sensitive data (PII, payment info)
-- Adding new external service integrations
-- Changing CORS configuration
-- Adding file upload handlers
-- Modifying rate limiting or throttling
-- Granting elevated permissions or roles
+- Neue Authentifizierungsabläufe oder Änderungen an der Authentifizierungslogik
+- Speicherung neuer Kategorien sensibler Daten (PII, Zahlungsinformationen)
+- Integration neuer externer Dienste
+- Änderungen an der CORS-Konfiguration
+- Ergänzung von Datei-Upload-Handlern
+- Änderungen an Ratenbegrenzung oder Drosselung
+- Vergabe erhöhter Berechtigungen oder Rollen
 
-### Never Do
+### Niemals durchführen
 
-- **Never commit secrets** to version control (API keys, passwords, tokens)
-- **Never log sensitive data** (passwords, tokens, full credit card numbers)
-- **Never trust client-side validation** as a security boundary
-- **Never disable security headers** for convenience
-- **Never use `eval()` or `innerHTML`** with user-provided data
-- **Never store sessions in client-accessible storage** (localStorage for auth tokens)
-- **Never expose stack traces** or internal error details to users
+- **Niemals Geheimnisse committen** (API-Schlüssel, Passwörter, Tokens)
+- **Niemals sensible Daten protokollieren** (Passwörter, Tokens, vollständige Kreditkartennummern)
+- **Clientseitige Validierung niemals als Sicherheitsgrenze betrachten**
+- **Sicherheitsheader niemals aus Bequemlichkeit deaktivieren**
+- **`eval()` oder `innerHTML` niemals mit Nutzerdaten verwenden**
+- **Sitzungen niemals in clientseitig zugänglichem Speicher ablegen** (localStorage für Authentifizierungstokens)
+- **Nutzern niemals Stacktraces oder interne Fehlerdetails anzeigen**
 
-## Hardening Controls
+## Härtungsmaßnahmen
 
-The rules below are the workflow; a concrete implementation of each lives in [references/hardening-patterns.md](references/hardening-patterns.md). Open the section you need when you reach that code, not before.
+Die folgenden Regeln beschreiben den Ablauf; konkrete Implementierungen stehen in [references/hardening-patterns.md](references/hardening-patterns.md). Öffne den benötigten Abschnitt, sobald du den betreffenden Code bearbeitest.
 
-### Injection, XSS, and access control
+### Injection, XSS und Zugriffskontrolle
 
-- Parameterize every query. Never build SQL, NoSQL, or shell commands from input strings.
-- Encode output through the framework's auto-escaping. If raw HTML is unavoidable, sanitize with an allowlist sanitizer first.
-- Check **authorization** on every request, not just authentication: the authenticated user must own, or be permitted on, the specific resource (A01, IDOR).
+- Parametrisiere jede Abfrage. Erzeuge SQL, NoSQL oder Shellbefehle niemals durch Zusammenfügen von Eingaben.
+- Kodiere Ausgaben über das automatische Escaping des Frameworks. Ist rohes HTML unvermeidbar, bereinige es zuvor mit einer Allowlist.
+- Prüfe bei jeder Anfrage die **Autorisierung** zusätzlich zur Authentifizierung: Der Nutzer muss die konkrete Ressource besitzen oder dafür berechtigt sein (A01, IDOR).
 
-Patterns: [Injection](references/hardening-patterns.md#injection), [XSS](references/hardening-patterns.md#cross-site-scripting-xss), [Access control](references/hardening-patterns.md#broken-access-control).
+Muster: [Injection](references/hardening-patterns.md#injection), [XSS](references/hardening-patterns.md#cross-site-scripting-xss), [Zugriffskontrolle](references/hardening-patterns.md#broken-access-control).
 
-### Authentication and sessions
+### Authentifizierung und Sitzungen
 
-- Hash passwords with bcrypt (≥12 rounds), scrypt, or argon2. The session secret comes from the environment, never from code.
-- Session cookies are `httpOnly`, `secure`, and `sameSite: 'lax'` or `'strict'` (the CSRF defense; `'none'` sends the cookie on cross-site requests), with a bounded `maxAge`.
+- Hashe Passwörter mit bcrypt (≥12 Runden), scrypt oder argon2. Das Sitzungsgeheimnis stammt aus der Umgebung, niemals aus dem Code.
+- Sitzungscookies verwenden `httpOnly`, `secure` und `sameSite: 'lax'` oder `'strict'` als CSRF-Schutz sowie ein begrenztes `maxAge`; `'none'` sendet Cookies auch bei seitenübergreifenden Anfragen.
 
-Pattern: [Authentication](references/hardening-patterns.md#broken-authentication).
+Muster: [Authentifizierung](references/hardening-patterns.md#broken-authentication).
 
-### Headers, CORS, and responses
+### Header, CORS und Antworten
 
-- Security headers on every response (helmet or the framework equivalent); CSP starts from `default-src 'self'` and is tightened, not loosened.
-- CORS restricted to an explicit origin list from configuration. Never `*` with credentials.
-- Strip sensitive fields (`passwordHash`, reset tokens) before any response. Error bodies are generic; internals go to server logs only.
+- Setze Sicherheitsheader bei jeder Antwort mit helmet oder einem entsprechenden Framework-Werkzeug; CSP beginnt bei `default-src 'self'` und wird weiter eingeschränkt.
+- Begrenze CORS auf eine explizite Origin-Liste aus der Konfiguration. Verwende niemals `*` mit Zugangsdaten.
+- Entferne sensible Felder (`passwordHash`, Reset-Tokens) vor jeder Antwort. Fehlerantworten bleiben allgemein; interne Details gehören ausschließlich ins Serverprotokoll.
 
-Patterns: [Misconfiguration](references/hardening-patterns.md#security-misconfiguration), [Sensitive data exposure](references/hardening-patterns.md#sensitive-data-exposure).
+Muster: [Fehlkonfiguration](references/hardening-patterns.md#security-misconfiguration), [Offenlegung sensibler Daten](references/hardening-patterns.md#sensitive-data-exposure).
 
-### Input validation and uploads
+### Eingabevalidierung und Uploads
 
-- Validate at the boundary with a schema: allowlisted shape, lengths, enums, formats. Reject with 422 and structured details; downstream code uses only the parsed, typed value.
-- Uploads: allowlist MIME types, cap size, verify content (magic bytes) when it matters. The extension proves nothing.
+- Validiere an der Grenze anhand eines Schemas: erlaubte Struktur, Längen, Enums und Formate. Weise Ungültiges mit 422 und strukturierten Details zurück; nachgelagerter Code verwendet nur den geparsten, typisierten Wert.
+- Uploads: Erlaube nur festgelegte MIME-Typen, begrenze die Größe und prüfe bei Bedarf den Inhalt anhand der Magic Bytes. Die Dateiendung allein belegt nichts.
 
-Patterns: [Schema validation](references/hardening-patterns.md#schema-validation-at-boundaries), [File upload](references/hardening-patterns.md#file-upload-safety).
+Muster: [Schemavalidierung](references/hardening-patterns.md#schema-validation-at-boundaries), [Datei-Upload](references/hardening-patterns.md#file-upload-safety).
 
-### Server-side fetches (SSRF)
+### Serverseitige Abrufe (SSRF)
 
-Any URL the user influences — webhooks, import-from-URL, image proxies, link previews — can be aimed at internal services. Allowlist scheme and host, resolve **all** DNS records and reject any private or reserved address (loopback, link-local `169.254.169.254`, private, unique-local, for IPv4 and IPv6), and forbid redirects. That check still has a DNS-rebinding TOCTOU gap: for high-risk surfaces, pin the resolved IP or put a filtering agent in front.
+Jede vom Nutzer beeinflusste URL kann auf interne Dienste zielen, etwa bei Webhooks, URL-Importen, Bild-Proxys und Linkvorschauen. Erlaube nur festgelegte Schemata und Hosts, löse **alle** DNS-Einträge auf und lehne private oder reservierte IPv4- und IPv6-Adressen ab (Loopback, Link-Local `169.254.169.254`, private und Unique-Local-Adressen). Verbiete Weiterleitungen. Wegen einer verbleibenden DNS-Rebinding-TOCTOU-Lücke binde bei hohem Risiko die aufgelöste IP fest oder schalte einen filternden Agenten vor.
 
-Pattern: [SSRF](references/hardening-patterns.md#server-side-request-forgery-ssrf).
+Muster: [SSRF](references/hardening-patterns.md#server-side-request-forgery-ssrf).
 
-### Destructive operations on derived paths
+### Destruktive Operationen auf abgeleiteten Pfaden
 
-A delete, move, or overwrite is only as safe as the value naming its target, and trust follows who *wrote* that value, not which channel delivered it: another process's command line is as attacker-controlled as a form field. A shape check proves well-formedness, not authorization. Before the call, require all three: the resolved target (symlinks resolved) sits under an **allowlisted root**; it is at least one level **below** that root; and it carries **ownership evidence read before the operation**. On refusal, log the rejected target and stop; never fall back to a broader default path.
+Löschen, Verschieben und Überschreiben sind nur so sicher wie der Wert, der das Ziel bestimmt. Entscheidend ist, wer den Wert *geschrieben* hat: Die Befehlszeile eines anderen Prozesses kann ebenso angreifbar sein wie ein Formularfeld. Eine Strukturprüfung belegt keine Berechtigung. Prüfe vor dem Aufruf alle drei Bedingungen: Das Ziel liegt nach Auflösung von Symlinks unter einem **erlaubten Wurzelverzeichnis**, mindestens eine Ebene **unterhalb** davon, und ein **vor der Operation gelesener Eigentumsnachweis** liegt vor. Bei Ablehnung das Ziel protokollieren und abbrechen; niemals auf einen übergeordneten Standardpfad zurückfallen.
 
-Why the check is weaker than it reads (marker self-attestation, check/use races): [Destructive paths](references/hardening-patterns.md#destructive-operations-on-derived-paths). Worked code: `.codex/ai-engineering/references/security-checklist.md` relative to the project root.
+Grenzen dieser Prüfung, darunter selbst bestätigte Marker und Race Conditions zwischen Prüfung und Nutzung: [Destruktive Pfade](references/hardening-patterns.md#destructive-operations-on-derived-paths). Ausgearbeiteter Code: `.codex/ai-engineering/references/security-checklist.md` relativ zum Projektverzeichnis.
 
-### Rate limiting
+### Ratenbegrenzung
 
-Limit the API generally and auth endpoints strictly (about 10 attempts per 15 minutes). Once more than one process serves traffic, in-memory counters silently become `max × instances`, or never fire on serverless: back the limiter with a shared store.
+Begrenze API-Anfragen allgemein und Authentifizierungsendpunkte streng auf etwa zehn Versuche je 15 Minuten. Bei mehreren Prozessen vervielfacht sich ein lokaler Zähler auf `max × instances` oder greift bei Serverless nicht zuverlässig. Verwende einen gemeinsamen Speicher.
 
-Pattern: [Rate limiting](references/hardening-patterns.md#rate-limiting).
+Muster: [Ratenbegrenzung](references/hardening-patterns.md#rate-limiting).
 
 ### Secrets
 
-Secrets come from the environment. `.env.example` is committed with placeholders; real `.env*` files and key material are gitignored; grep the staged diff before committing. **A secret that reaches a remote is compromised the moment it lands: rotate it first, then purge history.**
+Geheimnisse stammen aus der Umgebung. `.env.example` wird mit Platzhaltern committet; echte `.env*`-Dateien und Schlüsselmaterial werden durch Git ignoriert. Durchsuche den vorgemerkten Diff vor dem Commit. **Ein Geheimnis auf einem Remote gilt als kompromittiert: zuerst austauschen, dann aus der Historie entfernen.**
 
-Pattern: [Secrets management](references/hardening-patterns.md#secrets-management).
+Muster: [Verwaltung von Geheimnissen](references/hardening-patterns.md#secrets-management).
 
-### Dependencies and supply chain
+### Abhängigkeiten und Lieferkette
 
-1. **Find the installation boundary and manager.** Use the workspace root that owns the lockfile, or an independent nested project only when it is outside that workspace. Corroborate `packageManager` (when present), the lockfile, and CI; stop on disagreement or competing lockfiles. Pin the manager version.
-2. **Block dependency scripts before first execution.** Bootstrap with scripts disabled or a documented fail-closed policy, inspect the pending script source, approve only the minimum, commit the policy, then verify with a clean frozen/immutable install. Never blanket-approve.
-3. **Run the native audit against the committed lockfile before every release.** Triage critical/high by **reachability** (runtime, build, test, deploy paths) and fix availability. Never apply forced remediation (`npm audit fix --force` or equivalent) automatically, since forced fixes may cross declared dependency ranges; preview, read changelogs, test each upgrade. Document every deferral with a reason and a review date.
-4. **Audits only match known advisories.** They do not catch a newly malicious or typosquatted package (`cross-env` vs `crossenv`). Review new dependencies, lockfile diffs, and script-policy changes together: ownership, maintenance, release age, provenance, transitive graph. Verify registry signatures where supported (`npm audit signatures`, `pnpm audit signatures`) and treat their absence as a signal to investigate, not automatic proof of compromise (A06, LLM03).
+1. **Ermittle Installationsgrenze und Paketmanager.** Verwende das Workspace-Wurzelverzeichnis der Lockfile oder ein eigenständiges verschachteltes Projekt außerhalb dieses Workspace. Gleiche `packageManager`, falls vorhanden, Lockfile und CI ab; stoppe bei Widersprüchen oder konkurrierenden Lockfiles. Fixiere die Version des Paketmanagers.
+2. **Blockiere Abhängigkeitsskripte vor ihrer ersten Ausführung.** Initialisiere mit deaktivierten Skripten oder einer dokumentierten standardmäßig sperrenden Richtlinie, prüfe den Skriptquelltext, erlaube nur das Nötigste, committe die Richtlinie und prüfe eine saubere frozen/immutable-Installation. Erteile niemals pauschale Freigaben.
+3. **Führe vor jedem Release den nativen Audit gegen die committete Lockfile aus.** Bewerte kritische und hohe Befunde nach **Erreichbarkeit** in Laufzeit-, Build-, Test- und Deployment-Pfaden sowie Verfügbarkeit einer Korrektur. Erzwinge Behebungen (`npm audit fix --force` oder vergleichbar) niemals automatisch, da sie deklarierte Versionsbereiche überschreiten können. Prüfe Vorschau und Changelogs und teste jedes Upgrade. Dokumentiere jede Verschiebung mit Grund und Prüfdatum.
+4. **Audits erkennen nur bekannte Meldungen.** Neue schädliche oder namensähnliche Pakete (`cross-env` vs `crossenv`) können unentdeckt bleiben. Prüfe neue Abhängigkeiten, Lockfile-Diffs und Änderungen der Skriptrichtlinie gemeinsam auf Eigentümerschaft, Pflege, Alter des Releases, Herkunft und transitive Abhängigkeiten. Prüfe unterstützte Registry-Signaturen (`npm audit signatures`, `pnpm audit signatures`); fehlende Signaturen sind Anlass zur Untersuchung, kein automatischer Nachweis einer Kompromittierung (A06, LLM03).
 
-Triage decision tree: [Dependency audit triage](references/hardening-patterns.md#dependency-audit-triage). Manager matrix and install-script gate: `.codex/ai-engineering/references/security-checklist.md` relative to the project root.
+Entscheidungsbaum: [Bewertung von Abhängigkeitsprüfungen](references/hardening-patterns.md#dependency-audit-triage). Paketmanager-Matrix und Installationsskript-Prüfschranke: `.codex/ai-engineering/references/security-checklist.md` relativ zum Projektverzeichnis.
 
-### Personal data and privacy
+### Personenbezogene Daten und Datenschutz
 
-Hardening asks "can an attacker read it?" Privacy asks "should *we* hold it at all, and for how long?" The cheapest data to protect, breach, and comply over is the data you never collected; treat personal data as a liability to minimize.
+Härtung fragt, ob Angreifer Daten lesen können. Datenschutz fragt zusätzlich, ob und wie lange *wir* sie überhaupt speichern sollten. Minimiere die Erhebung personenbezogener Daten.
 
-- **Classify fields as you add them** (non-personal, PII, sensitive) and handle each class accordingly. You cannot protect, or honor a deletion request for, data you cannot find.
-- **Collect only against a stated purpose.** "Might be useful later" is latent breach scope, not a purpose. Keep PII out of telemetry (the `observability-and-instrumentation` skill makes the same point from the ops side).
-- **Set retention up front, then actually delete.** Every personal-data store needs a TTL and a working deletion path, including backups, caches, search indexes, and analytics copies.
-- **Support the data-subject rights your jurisdiction requires** (GDPR, CCPA, and kin): export, correct, delete. Design the schema so a user's data is findable and erasable, not smeared irreversibly across systems.
-- **Consent gates collection and third-party sharing, and is auditable.** Sending PII to an analytics, ad, or LLM vendor is sharing; the vendor needs a data-processing agreement. Make region a configurable policy, not a hardcoded assumption.
+- **Klassifiziere Felder bei ihrer Einführung** als nicht personenbezogen, PII oder sensibel und behandle sie entsprechend. Nicht auffindbare Daten lassen sich weder schützen noch zuverlässig löschen.
+- **Erhebe Daten nur für einen festgelegten Zweck.** Eine mögliche spätere Nutzung ist kein Zweck. Halte PII aus Telemetriedaten heraus; `observability-and-instrumentation` behandelt dies aus Betriebssicht.
+- **Lege die Aufbewahrung vorab fest und lösche tatsächlich.** Jeder Speicher personenbezogener Daten benötigt TTL und funktionierenden Löschweg, einschließlich Backups, Caches, Suchindizes und Analysekopien.
+- **Unterstütze die geltenden Betroffenenrechte** (GDPR, CCPA und vergleichbare): Export, Berichtigung und Löschung. Gestalte das Schema so, dass Nutzerdaten auffindbar und löschbar bleiben.
+- **Einwilligungen steuern Erhebung und Weitergabe und sind überprüfbar.** Die Übermittlung von PII an Analyse-, Werbe- oder LLM-Anbieter ist eine Weitergabe; der Anbieter benötigt eine Vereinbarung zur Datenverarbeitung. Gestalte regionale Regeln konfigurierbar.
 
-Classification table: [Data classification](references/hardening-patterns.md#data-classification). A privacy incident starts the breach-notification clock; run the postmortem with the `debugging-and-error-recovery` skill.
+Klassifizierungstabelle: [Datenklassifizierung](references/hardening-patterns.md#data-classification). Ein Datenschutzvorfall kann Meldefristen auslösen; führe die Nachbereitung mit `debugging-and-error-recovery` durch.
 
-### AI / LLM features
+### KI- / LLM-Funktionen
 
-Calling an LLM — chatbots, summarizers, agents, RAG — adds a new attack surface; map it to the [OWASP Top 10 for LLM Applications (2025)](https://genai.owasp.org/llm-top-10/):
+Der Einsatz eines LLM für Chatbots, Zusammenfassungen, Agenten oder RAG schafft zusätzliche Angriffsflächen. Ordne sie den [OWASP Top 10 for LLM Applications (2025)](https://genai.owasp.org/llm-top-10/) zu:
 
-- **Model output is untrusted input** (LLM05). Never into `eval`, SQL, a shell, `innerHTML`, or a file path; parse defensively, validate against a schema, then encode.
-- **Prompts can be hijacked** (LLM01). Untrusted text in the context — a user message, a fetched page, a PDF — can carry instructions. The system prompt is not a security boundary; enforce permissions in code.
-- **Keep secrets, other tenants' data, and the full system prompt out of the context window** (LLM02, LLM07); scope tool permissions, validate every tool argument, and confirm destructive actions (LLM06); cap tokens, request rate, and recursion depth (LLM10); partition RAG embeddings per tenant and validate documents before indexing (LLM08).
+- **Modellausgabe ist nicht vertrauenswürdig** (LLM05). Niemals ungeprüft an `eval`, SQL, eine Shell, `innerHTML` oder einen Dateipfad übergeben; defensiv parsen, anhand eines Schemas validieren und anschließend kodieren.
+- **Prompts können manipuliert werden** (LLM01). Nicht vertrauenswürdiger Text im Kontext, etwa Nachrichten, Webseiten oder PDFs, kann Anweisungen enthalten. Der System-Prompt ist keine Sicherheitsgrenze; Berechtigungen müssen im Code durchgesetzt werden.
+- **Halte Geheimnisse, Daten anderer Mandanten und den vollständigen System-Prompt aus dem Kontextfenster heraus** (LLM02, LLM07). Begrenze Werkzeugberechtigungen, validiere jedes Argument und bestätige destruktive Aktionen (LLM06). Begrenze Tokens, Anfragerate und Rekursionstiefe (LLM10). Trenne RAG-Embeddings nach Mandanten und prüfe Dokumente vor der Indexierung (LLM08).
 
-Pattern: [LLM output handling](references/hardening-patterns.md#llm-output-handling).
+Muster: [Verarbeitung von LLM-Ausgaben](references/hardening-patterns.md#llm-output-handling).
 
-## Review Checklist
+## Prüfliste
 
-Before sign-off, walk `.codex/ai-engineering/references/security-checklist.md` relative to the project root: it covers authentication, authorization, input, data protection and privacy, headers and CORS, dependencies and supply chain, AI/LLM, and error handling, plus the OWASP quick-reference tables.
+Gehe vor der Freigabe `.codex/ai-engineering/references/security-checklist.md` relativ zum Projektverzeichnis durch. Sie behandelt Authentifizierung, Autorisierung, Eingaben, Datenschutz, Header und CORS, Abhängigkeiten und Lieferkette, KI/LLM und Fehlerbehandlung sowie OWASP-Übersichtstabellen.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "This is an internal tool, security doesn't matter" | Internal tools get compromised. Attackers target the weakest link. |
-| "We'll add security later" | Security retrofitting is 10x harder than building it in. Add it now. |
-| "No one would try to exploit this" | Automated scanners will find it. Security by obscurity is not security. |
-| "The framework handles security" | Frameworks provide tools, not guarantees. You still need to use them correctly. |
-| "It's just a prototype" | Prototypes become production. Security habits from day one. |
-| "Threat modeling is overkill here" | Five minutes of "how would I attack this?" prevents the design flaws no control can patch later. |
-| "It's just LLM output, it's only text" | That "text" can be a SQL statement, a script tag, or a shell command. Treat it like any untrusted input. |
-| "The audit passed, so the dependency is safe" | Audits match known advisories. They do not detect a newly malicious package or make unreviewed install scripts safe to execute. |
-| "Collect it now, we might need it later" | Data you don't hold can't be breached, subpoenaed, or mis-deleted. "Might need it" is breach scope, not a purpose. |
-| "We'll handle deletion requests manually" | Manual erasure misses backups, caches, and analytics copies. If the schema can't find a user's data, you can't honor the request — design for it. |
-| "Compliance is legal's problem, not ours" | Export, deletion, retention, and consent are schema and code. Legal can't bolt them on after you've smeared PII across ten systems. |
+| „Das ist ein internes Werkzeug, Sicherheit ist egal.“ | Auch interne Werkzeuge werden kompromittiert; Angreifer suchen die schwächste Stelle. |
+| „Sicherheit ergänzen wir später.“ | Nachträgliche Absicherung ist aufwendiger als frühzeitige Berücksichtigung. |
+| „Niemand würde das ausnutzen.“ | Automatische Scanner können es finden; Unbekanntheit bietet keinen Schutz. |
+| „Das Framework kümmert sich darum.“ | Frameworks bieten Werkzeuge, aber keine Garantie; sie müssen richtig eingesetzt werden. |
+| „Es ist nur ein Prototyp.“ | Prototypen können produktiv werden; berücksichtige Sicherheit von Beginn an. |
+| „Ein Bedrohungsmodell ist übertrieben.“ | Eine kurze Angreiferperspektive kann schwer nachträglich behebbare Entwurfsfehler verhindern. |
+| „LLM-Ausgabe ist nur Text.“ | Der Text kann SQL, ein Skript oder einen Shellbefehl enthalten und ist nicht vertrauenswürdig. |
+| „Der Audit war erfolgreich, also ist die Abhängigkeit sicher.“ | Audits erkennen bekannte Meldungen, aber keine neuen schädlichen Pakete oder ungeprüften Installationsskripte. |
+| „Wir erheben es jetzt für später.“ | Nicht erhobene Daten können weder verloren gehen noch fehlerhaft gelöscht werden; eine mögliche Nutzung ist kein Zweck. |
+| „Löschanfragen bearbeiten wir manuell.“ | Dabei können Backups, Caches und Analysekopien übersehen werden. Daten müssen auffindbar und löschbar sein. |
+| „Compliance ist Aufgabe der Rechtsabteilung.“ | Export, Löschung, Aufbewahrung und Einwilligung betreffen Schema und Code. |
 
-## Red Flags
+## Warnzeichen
 
-- User input passed directly to database queries, shell commands, or HTML rendering
-- A delete, move, or overwrite whose target comes from a payload, a config value, or another process's command line, guarded only by a shape check on the path
-- Secrets in source code or commit history
-- API endpoints without authentication or authorization checks
-- Missing CORS configuration or wildcard (`*`) origins
-- No rate limiting on authentication endpoints, or an in-memory limiter in front of more than one instance
-- Stack traces or internal errors exposed to users
-- Dependencies with known critical vulnerabilities, competing lockfiles at one installation boundary, non-reproducible installs, or blanket-approved scripts
-- Server fetches user-supplied URLs without an allowlist (SSRF)
-- LLM/model output passed into a query, the DOM, a shell, or `eval`
-- Secrets, PII, or the full system prompt placed inside an LLM context window
-- Personal data collected with no stated purpose, retention limit, or deletion path
-- PII sent to analytics/ad/LLM vendors with no consent or data-processing agreement
-- "Delete my account" that only flips a flag while the personal data lingers in stores and backups
+- Nutzereingaben gelangen direkt in Datenbankabfragen, Shellbefehle oder HTML-Ausgaben
+- Löschen, Verschieben oder Überschreiben anhand eines Ziels aus Nutzlast, Konfiguration oder der Befehlszeile eines anderen Prozesses, abgesichert nur durch eine Strukturprüfung
+- Geheimnisse im Quellcode oder in der Commit-Historie
+- API-Endpunkte ohne Authentifizierungs- oder Autorisierungsprüfung
+- Fehlende CORS-Konfiguration oder Wildcard-Origins (`*`)
+- Fehlende Ratenbegrenzung an Authentifizierungsendpunkten oder lokale Zähler bei mehreren Instanzen
+- Stacktraces oder interne Fehler werden Nutzern angezeigt
+- Abhängigkeiten mit bekannten kritischen Lücken, konkurrierende Lockfiles an einer Installationsgrenze, nicht reproduzierbare Installationen oder pauschal freigegebene Skripte
+- Der Server ruft vom Nutzer vorgegebene URLs ohne Allowlist ab (SSRF)
+- LLM-/Modellausgabe gelangt ungeprüft in Abfragen, DOM, Shell oder `eval`
+- Geheimnisse, PII oder der vollständige System-Prompt stehen im LLM-Kontextfenster
+- Personenbezogene Daten werden ohne festgelegten Zweck, Aufbewahrungsgrenze oder Löschweg erhoben
+- PII wird ohne Einwilligung oder Datenverarbeitungsvereinbarung an Analyse-, Werbe- oder LLM-Anbieter gesendet
+- „Konto löschen“ setzt nur ein Flag, während personenbezogene Daten in Speichern und Backups bleiben
 
-## Verification
+## Überprüfung
 
-After implementing security-relevant code:
+Nach der Implementierung sicherheitsrelevanten Codes:
 
-- [ ] The native audit has no unmitigated reachable critical/high findings; CI preserves the authoritative lockfile and blocks unreviewed dependency scripts
-- [ ] No secrets in source code or git history
-- [ ] All user input validated at system boundaries
-- [ ] Destructive filesystem operations resolve symlinks, then verify allowlisted root, minimum depth, and ownership before running
-- [ ] Authentication and authorization checked on every protected endpoint
-- [ ] Security headers present in response (check with browser DevTools)
-- [ ] Error responses don't expose internal details
-- [ ] Rate limiting active on auth endpoints, backed by a shared store when more than one instance serves traffic
-- [ ] Server-side URL fetches validated against an allowlist (no SSRF)
-- [ ] LLM/model output validated and encoded before use (if AI features present)
-- [ ] Personal data is classified, minimized to a stated purpose, and has a retention limit
-- [ ] Deletion and export requests work end-to-end (including backups, caches, and analytics copies)
+- [ ] Der native Audit enthält keine unbehandelten erreichbaren kritischen oder hohen Befunde; CI erhält die maßgebliche Lockfile und blockiert ungeprüfte Abhängigkeitsskripte
+- [ ] Keine Geheimnisse im Quellcode oder in der Git-Historie
+- [ ] Alle Nutzereingaben werden an Systemgrenzen validiert
+- [ ] Destruktive Dateisystemoperationen lösen Symlinks auf und prüfen vor der Ausführung erlaubtes Wurzelverzeichnis, Mindesttiefe und Eigentümerschaft
+- [ ] Authentifizierung und Autorisierung werden an jedem geschützten Endpunkt geprüft
+- [ ] Sicherheitsheader sind in Antworten vorhanden, geprüft mit Browser-DevTools
+- [ ] Fehlerantworten legen keine internen Details offen
+- [ ] Ratenbegrenzung ist an Authentifizierungsendpunkten aktiv und verwendet bei mehreren Instanzen gemeinsamen Speicher
+- [ ] Serverseitige URL-Abrufe werden anhand einer Allowlist geprüft (kein SSRF)
+- [ ] LLM-/Modellausgaben werden vor der Nutzung validiert und kodiert, falls KI-Funktionen vorhanden sind
+- [ ] Personenbezogene Daten sind klassifiziert, auf einen Zweck minimiert und mit einer Aufbewahrungsgrenze versehen
+- [ ] Lösch- und Exportanfragen funktionieren durchgängig einschließlich Backups, Caches und Analysekopien

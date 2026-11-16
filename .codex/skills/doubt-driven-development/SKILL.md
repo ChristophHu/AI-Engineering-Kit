@@ -1,112 +1,112 @@
 ---
 name: doubt-driven-development
-description: Subjects every non-trivial decision to a fresh-context adversarial review before it stands. Use when you want every assumption cross-examined before proceeding, when stress-testing a plan for hidden failure modes, when correctness matters more than speed, when working in unfamiliar code, when stakes are high (production auth, security-sensitive logic, a high-stakes migration, irreversible operations), or any time a confident output would be cheaper to verify now than to debug later.
+description: Prüft nicht triviale Entscheidungen während der Arbeit kritisch in einem unabhängigen Kontext, sofern verfügbar und zulässig. Nutze den Skill bei unsicheren Annahmen, risikoreichen Änderungen, unbekanntem Code oder zur gezielten Suche nach verborgenen Fehlerfällen.
 ---
 
-# Doubt-Driven Development
+# Zweifelgeleitete Entwicklung
 
-## Overview
+## Überblick
 
-A confident answer is not a correct one. Long sessions accumulate context that quietly turns assumptions into "facts" without anyone noticing. Doubt-driven development is the discipline of materializing a fresh-context reviewer — biased to **disprove**, not approve — before any non-trivial output stands.
+Eine selbstsichere Antwort ist nicht zwangsläufig korrekt. In langen Sitzungen können Annahmen unbemerkt zu vermeintlichen Fakten werden. Doubt-Driven Development setzt deshalb vor der Übernahme nicht trivialer Ergebnisse auf eine Prüfung in frischem Kontext, die gezielt nach **Widerlegung** sucht.
 
-This differs from a final review of a finished artifact. This is an in-flight posture: non-trivial decisions get cross-examined while course-correction is still cheap.
+Anders als ein abschließendes Review prüft dieses Vorgehen nicht triviale Entscheidungen bereits während der Arbeit, solange Korrekturen noch wenig Aufwand verursachen.
 
-## When to Use
+## Wann verwenden
 
-A decision is **non-trivial** when at least one of these is true:
+Eine Entscheidung ist **nicht trivial**, wenn mindestens eine dieser Bedingungen zutrifft:
 
-- It introduces or modifies branching logic
-- It crosses a module or service boundary
-- It asserts a property the type system or compiler cannot verify (thread safety, idempotence, ordering, invariants)
-- Its correctness depends on context the future reader cannot see
-- Its blast radius is irreversible (production deploy, data migration, public API change)
+- Sie führt Verzweigungslogik ein oder ändert sie
+- Sie überschreitet eine Modul- oder Dienstgrenze
+- Sie behauptet eine Eigenschaft, die Typsystem oder Compiler nicht prüfen können, etwa Thread-Sicherheit, Idempotenz, Reihenfolge oder Invarianten
+- Ihre Korrektheit hängt von Kontext ab, der späteren Lesenden nicht vorliegt
+- Ihre Auswirkungen sind unumkehrbar, etwa bei Produktions-Deployment, Datenmigration oder Änderung einer öffentlichen API
 
-Apply the skill when:
+Nutze den Skill:
 
-- About to make an architectural decision under uncertainty
-- About to commit non-trivial code
-- About to claim a non-obvious fact ("this is safe", "this scales", "this matches the spec")
-- Working in code you don't fully understand
+- Vor einer unsicheren Architekturentscheidung
+- Vor dem Commit nicht trivialen Codes
+- Vor einer nicht offensichtlichen Aussage wie „das ist sicher“, „das skaliert“ oder „das entspricht der Spec“
+- Bei Arbeit an Code, den du noch nicht vollständig verstehst
 
-**When NOT to use:**
+**Nicht verwenden bei:**
 
-- Mechanical operations (renaming, formatting, file moves)
-- Following a clear, unambiguous user instruction
-- Reading or summarizing existing code
-- One-line changes with obvious correctness
-- Pure tooling operations (running tests, listing files)
-- The user has explicitly asked for speed over verification
+- Mechanischen Arbeiten wie Umbenennen, Formatieren oder Verschieben
+- Der Ausführung einer klaren, eindeutigen Nutzeranweisung
+- Dem Lesen oder Zusammenfassen bestehenden Codes
+- Offensichtlich korrekten einzeiligen Änderungen
+- Reinen Werkzeugoperationen wie Tests ausführen oder Dateien auflisten
+- Ausdrücklichem Wunsch des Nutzers nach Geschwindigkeit statt Überprüfung
 
-If you doubt every keystroke, you ship nothing. The skill applies only to non-trivial decisions as defined above.
+Der Skill gilt nur für die oben definierten nicht trivialen Entscheidungen, nicht für jeden einzelnen Arbeitsschritt.
 
-## Loading Constraints
+## Voraussetzungen
 
-This skill is intended for the **main-session coordinator**. Follow `.codex/rules/DELEGATION.md` relative to the project root; check whether a suitably independent reviewer and delegation are actually available and permitted in the current session. A profile or read-only instruction is not a technical sandbox. Do not assume that nested delegation is technically impossible or authorized. If independent review is unavailable, report that limitation and, if useful, perform a clearly labeled self-review without presenting it as fresh-context review.
+Dieser Skill richtet sich an die **koordinierende Hauptinstanz**. Beachte `.codex/rules/DELEGATION.md` relativ zum Projektstamm und prüfe, ob Delegation und eine hinreichend unabhängige Prüfung in der aktuellen Sitzung tatsächlich verfügbar und zulässig sind. Ein Profil oder eine Nur-Lese-Anweisung ist keine technische Sandbox. Setze weder voraus, dass verschachtelte Delegation technisch unmöglich ist, noch dass sie autorisiert ist. Ist keine unabhängige Prüfung verfügbar, melde diese Einschränkung und führe bei Bedarf eine klar gekennzeichnete Selbstprüfung durch, ohne sie als Review in frischem Kontext darzustellen.
 
-## The Process
+## Vorgehen
 
-Copy this checklist when applying the skill:
-
-```
-Doubt cycle:
-- [ ] Step 1: CLAIM — wrote the claim + why-it-matters
-- [ ] Step 2: EXTRACT — isolated artifact + contract, stripped reasoning
-- [ ] Step 3: DOUBT — invoked a fresh-context reviewer where available and permitted, otherwise disclosed the limitation
-- [ ] Step 4: RECONCILE — classified every finding against the artifact text
-- [ ] Step 5: STOP — met stop condition (trivial findings, 3 cycles, or user override)
-```
-
-### Step 1: CLAIM — Surface what stands
-
-Name the decision in two or three lines:
+Verwende bei Anwendung des Skills diese Checkliste:
 
 ```
-CLAIM: "The new caching layer is thread-safe under the
-        read-heavy workload described in the spec."
-WHY THIS MATTERS: a race here corrupts user data and is
-                  hard to detect in QA.
+Zweifelzyklus:
+- [ ] Schritt 1: CLAIM — Behauptung und ihre Bedeutung festgehalten
+- [ ] Schritt 2: EXTRACT — Artefakt und Vertrag isoliert, eigene Begründung entfernt
+- [ ] Schritt 3: DOUBT — sofern verfügbar und zulässig, Prüfung in frischem Kontext veranlasst; sonst Einschränkung offengelegt
+- [ ] Schritt 4: RECONCILE — jeden Befund anhand des Artefakts eingeordnet
+- [ ] Schritt 5: STOP — Abbruchbedingung erfüllt (triviale Befunde, drei Zyklen oder Nutzerentscheidung)
 ```
 
-If you can't write the claim that compactly, you have a vibe, not a decision. Surface it before scrutinizing it.
+### Schritt 1: CLAIM — Behauptung benennen
 
-### Step 2: EXTRACT — Smallest reviewable unit
-
-A fresh-context reviewer needs the **artifact** and the **contract**, not the journey.
-
-- Code: the diff or the function — not the whole file
-- Decision: the proposal in 3–5 sentences plus the constraints it has to satisfy
-- Assertion: the claim plus the evidence that supposedly supports it (kept distinct from the Step 1 CLAIM block, which is the orchestrator's hypothesis under scrutiny)
-
-Strip your reasoning. If you hand over conclusions, you'll get back validation of your conclusions. The unit must be small enough that a reviewer can hold it in mind in one read — if it's a 500-line PR, decompose first.
-
-Strip reasoning, not evidence: if a caller, guard or test contradicts the claim, include it in the unit.
-
-### Step 3: DOUBT — Invoke the fresh-context reviewer
-
-The reviewer's prompt **must be adversarial**. Framing decides the answer.
+Benenne die Entscheidung in zwei oder drei Zeilen:
 
 ```
-Adversarial review. Find what is wrong with this artifact.
-Assume the author is overconfident. Look for:
-- Unstated assumptions
-- Edge cases not handled
-- Hidden coupling or shared state
-- Ways the contract could be violated
-- Existing conventions this might break
-- Failure modes under unexpected input
-
-Do NOT validate. Do NOT summarize. Find issues, or state
-explicitly that you cannot find any after thorough examination.
-
-ARTIFACT: <paste artifact>
-CONTRACT: <paste contract>
+CLAIM: „Die neue Caching-Schicht ist bei der in der Spec beschriebenen
+        leselastigen Arbeitsbelastung thread-sicher.“
+WHY THIS MATTERS: Eine Race Condition kann Nutzerdaten beschädigen
+                  und ist in der QA schwer zu erkennen.
 ```
 
-**Pass ARTIFACT + CONTRACT only. Do NOT pass the CLAIM.** Handing the reviewer your conclusion biases it toward agreement. The reviewer must independently determine whether the artifact satisfies the contract.
+Lässt sich die Behauptung nicht so knapp formulieren, ist die Entscheidung noch nicht ausreichend klar. Formuliere sie vor der Prüfung.
 
-For this kit, consult `.codex/agents/README.md` and the available session roles for an appropriate reviewer. A profile file alone does not establish that the role is registered or that context isolation is available; verify the current session's capabilities.
+### Schritt 2: EXTRACT — Kleinste prüfbare Einheit
 
-**The adversarial prompt above takes precedence over the persona's default response shape.** Personas like `code-reviewer` are written to produce balanced verdicts with both strengths and weaknesses; doubt-driven needs issues-only output. Paste the adversarial prompt verbatim into the invocation so it overrides the persona's default. If a persona's response shape can't be overridden cleanly, fall back to a generic subagent with the adversarial prompt.
+Eine Prüfung in frischem Kontext benötigt das **Artefakt** und den **Vertrag**, nicht den bisherigen Lösungsweg.
+
+- Code: der Diff oder die Funktion, nicht die gesamte Datei
+- Entscheidung: der Vorschlag in drei bis fünf Sätzen samt einzuhaltenden Bedingungen
+- Tatsachenbehauptung: die Aussage und ihre mutmaßlichen Belege, getrennt vom CLAIM-Block aus Schritt 1 als zu prüfender Hypothese der Hauptinstanz
+
+Entferne deine eigene Herleitung und Schlussfolgerung, um die Prüfung nicht in Richtung Zustimmung zu lenken. Die Einheit muss bei einmaligem Lesen überschaubar sein; zerlege beispielsweise einen PR mit 500 Zeilen zuerst.
+
+Entferne die eigene Argumentation, nicht die Belege: Wenn ein Aufrufer, eine Schutzprüfung oder ein Test der Behauptung widerspricht, gehört dies zur Prüfeinheit.
+
+### Schritt 3: DOUBT — Prüfung in frischem Kontext veranlassen
+
+Der Prompt für die prüfende Instanz **muss gezielt kritisch sein**. Die Formulierung beeinflusst das Ergebnis.
+
+```
+Kritisches Review. Suche nach Fehlern in diesem Artefakt.
+Nimm an, dass der Autor zu selbstsicher ist. Suche nach:
+- Unausgesprochenen Annahmen
+- Nicht behandelten Randfällen
+- Verborgener Kopplung oder gemeinsamem Zustand
+- Möglichkeiten, den Vertrag zu verletzen
+- Bestehenden Konventionen, gegen die verstoßen werden könnte
+- Fehlerfällen bei unerwarteter Eingabe
+
+Bestätige NICHT pauschal und fasse NICHT zusammen. Nenne Probleme oder
+erkläre ausdrücklich, dass du nach gründlicher Prüfung keine gefunden hast.
+
+ARTIFACT: <Artefakt einfügen>
+CONTRACT: <Vertrag einfügen>
+```
+
+**Übergib nur ARTIFACT + CONTRACT, nicht den CLAIM-Block.** Eine vorgegebene Schlussfolgerung kann die Prüfung in Richtung Zustimmung lenken. Die prüfende Instanz muss selbst beurteilen, ob das Artefakt den Vertrag erfüllt.
+
+Prüfe für dieses Kit `.codex/agents/README.md` und die verfügbaren Sitzungsrollen auf eine geeignete prüfende Instanz. Eine Profildatei allein belegt weder eine registrierte Rolle noch verfügbaren getrennten Kontext; prüfe die Fähigkeiten der aktuellen Sitzung.
+
+**Der kritische Prompt oben hat Vorrang vor dem Standardantwortformat der Persona.** Rollen wie `code-reviewer` liefern häufig ausgewogene Urteile mit Stärken und Schwächen; dieses Vorgehen verlangt eine Ausgabe zu Problemen. Übernimm den kritischen Prompt wortgetreu in den Aufruf. Lässt sich das Antwortformat der Persona nicht sauber überschreiben, nutze einen allgemeinen Subagenten mit diesem Prompt.
 
 #### Modellwahl für die unabhängige Prüfung
 
@@ -116,77 +116,77 @@ Ist keine unabhängige Prüfung möglich, dokumentiere die Einschränkung. Eine 
 
 Wenn ein Prüfsubagent eingesetzt wurde, berichte, ob er denselben oder einen anderen Modelltyp verwendete und ob die Prüfung unabhängig war. Wurde kein Prüfsubagent eingesetzt, benenne stattdessen die Einschränkung und eine etwaige Selbstprüfung. Eine gesonderte Nachfrage nach einer zweiten Modellmeinung ist nicht in jedem Durchlauf erforderlich.
 
-### Step 4: RECONCILE — Fold findings back
+### Schritt 4: RECONCILE — Befunde einordnen
 
-The reviewer's output is data, not verdict. **You are still the orchestrator.** Re-read the artifact text against each finding before classifying — rubber-stamping the reviewer is the same failure mode as ignoring it.
+Die Ausgabe der prüfenden Instanz ist eine Datengrundlage, kein endgültiges Urteil. **Die Hauptinstanz bleibt für die Koordination verantwortlich.** Lies das Artefakt zu jedem Befund erneut, bevor du ihn einordnest. Ungeprüfte Zustimmung ist ebenso problematisch wie das Ignorieren der Prüfung.
 
-For each finding, classify in this **precedence order** (first matching class wins):
+Ordne jeden Befund in dieser **Reihenfolge** ein; die erste passende Kategorie gilt:
 
-1. **Contract misread** — reviewer flagged something specifically because the CONTRACT you provided was unclear or incomplete. Fix the contract first, re-classify on the next cycle.
-2. **Valid + actionable** — real issue requiring a change to the artifact. Change it, re-loop.
-3. **Valid trade-off** — issue is real but cost of fixing exceeds cost of accepting. Document the trade-off explicitly so the user sees it.
-4. **Noise** — reviewer flagged something that's actually correct under context the reviewer didn't have. Note it, move on, and ask: would adding that context to the contract have prevented the false flag?
+1. **Vertrag missverstanden** — der Befund entstand, weil der übergebene CONTRACT unklar oder unvollständig war. Korrigiere zuerst den Vertrag und ordne den Befund im nächsten Zyklus erneut ein.
+2. **Berechtigt und umsetzbar** — ein tatsächliches Problem erfordert eine Änderung am Artefakt. Ändere es und wiederhole den Zyklus.
+3. **Berechtigter Kompromiss** — das Problem ist real, aber seine Behebung kostet mehr als seine Akzeptanz. Dokumentiere diese Abwägung ausdrücklich für den Nutzer.
+4. **Fehlalarm** — der Befund ist unter Kontext, der der prüfenden Instanz fehlte, tatsächlich korrekt. Halte dies fest und prüfe, ob der Kontext im Vertrag den Fehlalarm verhindert hätte.
 
-A fresh reviewer can be wrong because it lacks context. Don't defer just because it's "fresh."
+Auch eine unabhängige Prüfung kann wegen fehlenden Kontexts falsch liegen. Übernimm ihr Urteil nicht allein deshalb, weil der Kontext frisch war.
 
-### Step 5: STOP — Bounded loop, not recursion
+### Schritt 5: STOP — Begrenzter Zyklus
 
-Stop when:
+Beende den Zyklus, wenn:
 
-- Next iteration returns only trivial or already-considered findings, **or**
-- 3 cycles completed (escalate to user, don't grind a fourth alone), **or**
-- User explicitly says "ship it"
+- Die nächste Iteration nur triviale oder bereits berücksichtigte Befunde ergibt, **oder**
+- Drei Zyklen abgeschlossen sind; informiere den Nutzer, statt eigenständig einen vierten anzuhängen, **oder**
+- Der Nutzer ausdrücklich die Veröffentlichung verlangt
 
-If after 3 cycles the reviewer still surfaces substantive issues, the artifact may not be ready. Surface this to the user — three unresolved cycles is information about the artifact, not a reason to keep looping.
+Werden nach drei Zyklen weiterhin wesentliche Probleme gefunden, ist das Artefakt möglicherweise nicht bereit. Teile dies dem Nutzer mit, statt unbegrenzt weiterzuprüfen.
 
-If 3 cycles is "obviously insufficient" because the artifact is large: the artifact is too big — return to Step 2 and decompose. Do not lift the bound.
+Reichen drei Zyklen wegen der Größe des Artefakts nicht aus, kehre zu Schritt 2 zurück und zerlege es. Hebe die Begrenzung nicht auf.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Tatsächliche Einordnung |
 |---|---|
-| "I'm confident, skip the doubt step" | Confidence correlates poorly with correctness on novel problems. Moments of certainty are exactly when blind spots hide. |
-| "Spawning a reviewer is expensive" | Debugging a wrong commit in production is more expensive. The check is bounded; the bug isn't. |
-| "The reviewer will just nitpick" | Only if unscoped. Constrain the prompt to "issues that would make this fail under the contract." |
-| "I'll do doubt at the end in the final review" | Final review is a later gate. Doubt-driven catches wrong directions while course-correction is cheap. |
-| "If I doubt every step I'll never ship" | The skill applies to non-trivial decisions, not every keystroke. Re-read "When NOT to Use." |
-| "Two opinions are always better than one" | Not when the second has less context and produces noise. Reconcile, don't defer. |
-| "The reviewer disagreed so I was wrong" | The reviewer lacks your context — disagreement is information, not verdict. Re-read the artifact, classify, then decide. |
-| "Only a different model can review this" | A fresh-context reviewer may use the same model when no suitable different model is available. Report the model choice and limitations. |
-| "An external CLI is always authorized" | Check the actual authorization, tool availability and data boundaries before using an external CLI or service. |
+| „Ich bin sicher und überspringe den Zweifel.“ | Selbstsicherheit ist bei neuen Problemen kein hinreichender Nachweis. |
+| „Ein Prüfsubagent ist zu aufwendig.“ | Eine fehlerhafte Änderung in Produktion zu untersuchen kann aufwendiger sein; die Prüfung ist begrenzt. |
+| „Die Prüfung findet nur Kleinigkeiten.“ | Begrenze den Prompt auf Probleme, die den Vertrag verletzen können. |
+| „Ich prüfe Zweifel erst im Abschlussreview.“ | Die laufende Prüfung erkennt falsche Richtungen früher, wenn Korrekturen günstiger sind. |
+| „Wenn ich jeden Schritt anzweifle, werde ich nie fertig.“ | Der Skill gilt für nicht triviale Entscheidungen, nicht für jeden Tastendruck. |
+| „Zwei Meinungen sind immer besser als eine.“ | Eine zweite Meinung mit fehlendem Kontext kann Fehlalarme erzeugen. Prüfe und ordne Befunde ein. |
+| „Die prüfende Instanz widerspricht, also liege ich falsch.“ | Ein Widerspruch ist ein Hinweis, kein Urteil. Lies das Artefakt erneut und ordne den Befund ein. |
+| „Nur ein anderes Modell kann prüfen.“ | Ist kein geeignetes anderes Modell verfügbar, kann dasselbe Modell in getrenntem Kontext prüfen. Berichte Modellwahl und Einschränkungen. |
+| „Ein externes CLI ist immer autorisiert.“ | Prüfe Autorisierung, Verfügbarkeit und Datengrenzen vor Nutzung eines externen CLI oder Dienstes. |
 
-## Red Flags
+## Warnzeichen
 
-- Spawning a fresh-context reviewer for a one-line rename or formatting change
-- Treating reviewer output as authoritative without re-reading the artifact text
-- Looping >3 cycles without escalating to the user
-- Prompting the reviewer with "is this good?" instead of "find issues"
-- Skipping doubt under time pressure on a high-stakes decision
-- Re-spawning fresh-context on an unchanged artifact (you'll get the same findings; you're stalling)
-- **Doubt theater (checkable signal)**: across 2 or more cycles where the reviewer surfaced substantive findings, zero findings were classified as actionable. You are validating, not doubting. Stop and escalate.
-- Doubting only after committing — that is final review, not in-flight doubt-driven development
-- Assuming an external CLI exists, is configured or is authorized without checking
-- Claiming a different-model or independent review when it did not happen
-- Concealing a failed or unavailable independent review
-- Stripping the contract from the reviewer's input
-- Passing the CLAIM to the reviewer (biases toward agreement)
+- Für eine einzeilige Umbenennung oder Formatänderung eine Prüfung in frischem Kontext starten
+- Befunde ohne erneutes Lesen des Artefakts als maßgeblich übernehmen
+- Mehr als drei Zyklen ohne Rückmeldung an den Nutzer durchführen
+- Statt gezielt nach Problemen nur fragen, ob das Ergebnis gut ist
+- Bei einer folgenreichen Entscheidung wegen Zeitdrucks auf die kritische Prüfung verzichten
+- Ein unverändertes Artefakt wiederholt in frischem Kontext prüfen lassen, ohne die Befunde zu bearbeiten
+- **Scheinkritik als überprüfbares Signal:** Über mindestens zwei Zyklen mit wesentlichen Befunden wurde kein einziger als umsetzbar eingeordnet. Stoppe und informiere den Nutzer.
+- Erst nach dem Commit zweifeln; das ist ein Abschlussreview statt einer laufenden Prüfung
+- Ohne Prüfung annehmen, dass ein externes CLI existiert, konfiguriert oder autorisiert ist
+- Ein anderes Modell oder eine unabhängige Prüfung behaupten, obwohl dies nicht stattgefunden hat
+- Eine fehlgeschlagene oder nicht verfügbare unabhängige Prüfung verschweigen
+- Den Vertrag aus der Eingabe für die prüfende Instanz entfernen
+- Den CLAIM-Block übergeben und dadurch Zustimmung begünstigen
 
-## Interaction with Other Skills
+## Zusammenspiel mit anderen Skills
 
-- **`code-review-and-quality`**: complementary final review; doubt-driven is in-flight per-decision. Use the applicable workflow without assuming a slash command exists.
-- **`source-driven-development`**: SDD verifies *facts about frameworks* against official docs. Doubt-driven verifies *your reasoning about the artifact*. SDD checks the API exists; doubt-driven checks you used it correctly under the contract.
-- **`test-driven-development`**: TDD's RED step is doubt made concrete — a failing test is a disproof attempt. When TDD applies, that failing test *is* the doubt step for behavioral claims.
-- **`debugging-and-error-recovery`**: when the reviewer surfaces a real failure mode, drop into the debugging skill to localize and fix.
+- **`code-review-and-quality`**: Ergänzendes Abschlussreview; Doubt-Driven Development prüft Entscheidungen während der Arbeit. Nutze den passenden Ablauf, ohne einen Slash-Befehl vorauszusetzen.
+- **`source-driven-development`**: SDD prüft *Fakten zu Frameworks* anhand offizieller Dokumentation. Doubt-Driven Development prüft die *Schlussfolgerungen zum Artefakt*: SDD prüft etwa die Existenz einer API, Doubt-Driven Development ihre korrekte Verwendung gemäß Vertrag.
+- **`test-driven-development`**: Der RED-Schritt von TDD macht Zweifel konkret; ein fehlschlagender Test versucht eine Aussage zu widerlegen. Wo TDD gilt, bildet dieser Test den Zweifelsschritt für Verhaltensbehauptungen.
+- **`debugging-and-error-recovery`**: Wenn die Prüfung einen tatsächlichen Fehlerfall aufdeckt, nutze den Debugging-Skill für Lokalisierung und Korrektur.
 - **Orchestrierungsregeln** (`.codex/rules/DELEGATION.md`, vom Projektstamm aus): Die Hauptinstanz koordiniert zulässige Prüfaufträge und beurteilt die Ergebnisse; vermeide unnötige Agentenebenen und unkontrollierte Verschachtelung.
 
-## Verification
+## Überprüfung
 
-After applying doubt-driven development:
+Nach Anwendung von Doubt-Driven Development:
 
-- [ ] Every non-trivial decision (per the definition above) was named explicitly as a CLAIM before standing
-- [ ] Where available and permitted, a fresh-context review was performed for each non-trivial artifact; otherwise the limitation and any self-review are clearly reported
-- [ ] If a reviewer was used, it received ARTIFACT + CONTRACT — NOT the CLAIM or your reasoning — and an adversarial prompt
-- [ ] Any findings were classified against the artifact text (not rubber-stamped) using the precedence: contract misread / actionable / trade-off / noise
-- [ ] A stop condition was met (trivial findings, 3 cycles, or user override)
-- [ ] If a reviewer was used, the report identifies its model choice and independence; otherwise it reports the unavailable review and any labeled self-review
-- [ ] Any external CLI or service was used only within the applicable authorization and data boundaries
+- [ ] Jede oben definierte nicht triviale Entscheidung wurde vor ihrer Übernahme ausdrücklich als CLAIM benannt
+- [ ] Sofern verfügbar und zulässig, wurde jedes nicht triviale Artefakt in frischem Kontext geprüft; andernfalls sind Einschränkung und etwaige Selbstprüfung klar benannt
+- [ ] Eine eingesetzte prüfende Instanz erhielt ARTIFACT + CONTRACT und einen kritischen Prompt, aber NICHT den CLAIM-Block oder die eigene Herleitung
+- [ ] Befunde wurden anhand des Artefakts nach der Reihenfolge Vertrag missverstanden / umsetzbar / Kompromiss / Fehlalarm eingeordnet
+- [ ] Eine Abbruchbedingung wurde erfüllt: triviale Befunde, drei Zyklen oder Nutzerentscheidung
+- [ ] Bei eingesetzter Prüfung nennt der Bericht Modellwahl und Unabhängigkeit; andernfalls nennt er die nicht verfügbare Prüfung und eine gekennzeichnete Selbstprüfung
+- [ ] Ein externes CLI oder ein externer Dienst wurde nur innerhalb der geltenden Autorisierung und Datengrenzen verwendet

@@ -1,46 +1,46 @@
 ---
 name: verify-ui
-description: Select and perform UI and feature checks for native Apple, Next.js, or Angular projects, then report evidence against acceptance criteria and disclose checks that were not run.
+description: Wählt UI- und Funktionsprüfungen für native Apple-, Next.js- und Angular-Projekte aus, führt sie durch und berichtet Nachweise sowie nicht ausgeführte Prüfungen.
 ---
 
-# UI Verification
+# UI-Verifikation
 
-Use this skill to verify a UI feature or release candidate. For a full implementation, use it after changes are complete. Read the Spec, Plan, project instructions, `docs/design-system.md` if present, and `.codex/rules/ARCHITECTURE.md` when present.
+Nutze diesen Skill, um eine UI-Funktion oder einen Release-Kandidaten zu prüfen. Bei einer vollständigen Implementierung erfolgt die Prüfung nach Abschluss der Änderungen. Lies Spec, Plan und Projektanweisungen sowie `docs/design-system.md` und `.codex/rules/ARCHITECTURE.md`, sofern vorhanden.
 
-## Select checks from the project
+## Prüfungen anhand des Projekts auswählen
 
-1. Identify the platform, affected user flows, acceptance criteria, supported targets, and available test/build commands.
-2. Inspect project scripts and existing tests before selecting commands. Preserve existing test strategy; do not add a separate platform-wide testing framework as part of verification.
-3. Select a proportionate set of automated and hands-on checks from the relevant platform profile below. Add other checks only when the changed behavior warrants them.
-4. For each check, record the command or procedure, environment, outcome, and acceptance criteria it supports. Distinguish executed checks from planned or unavailable checks.
-5. Report failed checks, untested flows, known limitations, and relevant accessibility or security findings. Do not claim verification that was not performed. Use `.codex/rules/templates/VERIFICATION.md` when a durable record is useful.
+1. Ermittle Plattform, betroffene Nutzerabläufe, Abnahmekriterien, unterstützte Ziele sowie verfügbare Test- und Build-Befehle.
+2. Prüfe Projektskripte und bestehende Tests, bevor du Befehle auswählst. Bewahre die vorhandene Teststrategie; ergänze im Rahmen der Verifikation kein separates plattformweites Test-Framework.
+3. Wähle aus dem zutreffenden Plattformprofil angemessene automatisierte und praktische Prüfungen. Ergänze weitere Prüfungen nur, wenn das geänderte Verhalten sie erfordert.
+4. Dokumentiere für jede Prüfung Befehl oder Vorgehen, Umgebung, Ergebnis und die unterstützten Abnahmekriterien. Unterscheide ausgeführte von geplanten oder nicht verfügbaren Prüfungen.
+5. Berichte fehlgeschlagene Prüfungen, ungeprüfte Abläufe, bekannte Einschränkungen sowie relevante Befunde zu Barrierefreiheit oder Sicherheit. Behaupte keine nicht durchgeführte Prüfung. Nutze `.codex/rules/templates/VERIFICATION.md`, wenn ein dauerhafter Nachweis sinnvoll ist.
 
-## Native Apple / SwiftUI profile
+## Profil für native Apple-Apps und SwiftUI
 
-Choose checks based on supported Apple platforms and deployment targets. For iPadOS, include adaptive layouts, resizing or multitasking, and keyboard/pointer behavior when affected. For macOS, include window, menu/command, keyboard, and pointer behavior when affected. Do not assume every app supports every platform.
+Wähle Prüfungen anhand der unterstützten Apple-Plattformen und Bereitstellungsziele. Berücksichtige für iPadOS bei betroffenen Änderungen adaptive Layouts, Größenänderungen oder Multitasking sowie Tastatur- und Zeigerverhalten. Berücksichtige für macOS bei betroffenen Änderungen Fenster, Menüs und Befehle sowie Tastatur- und Zeigerverhalten. Gehe nicht davon aus, dass jede App alle Plattformen unterstützt.
 
-- build the app or affected target for the configured destination
-- run relevant unit or UI tests that already exist
-- exercise the central flow for iOS/iPadOS in an appropriate simulator or on a physical device, when available; for macOS, use the native macOS test environment or a Mac
-- inspect permission prompts and denial/retry behavior when affected
-- inspect lifecycle, background/foreground, interruption, or restoration behavior when affected
-- check VoiceOver, Dynamic Type, focus/input behavior, and other relevant accessibility behavior
+- Erstelle einen Build der App oder des betroffenen Targets für das konfigurierte Ziel.
+- Führe relevante vorhandene Unit- oder UI-Tests aus.
+- Prüfe den zentralen Ablauf für iOS/iPadOS in einem geeigneten Simulator oder auf einem physischen Gerät, sofern verfügbar; nutze für macOS die native macOS-Testumgebung oder einen Mac.
+- Prüfe bei betroffenen Änderungen Berechtigungsabfragen sowie das Verhalten bei Ablehnung und erneutem Versuch.
+- Prüfe bei betroffenen Änderungen Lebenszyklus, Hintergrund und Vordergrund, Unterbrechung oder Wiederherstellung.
+- Prüfe VoiceOver, Dynamic Type, Fokus und Eingabe sowie weiteres relevantes Verhalten zur Barrierefreiheit.
 
-Use the project's Xcode build and test environment and configured unit/UI test tools. Native Apple interfaces are not browser interfaces and must not be verified using Chrome DevTools. Report the exact target and whether simulator, device, or macOS checks were unavailable or not run.
+Nutze die Xcode-Build- und Testumgebung des Projekts und die konfigurierten Unit- und UI-Testwerkzeuge. Native Apple-Oberflächen sind keine Browseroberflächen und dürfen nicht mit Chrome DevTools verifiziert werden. Berichte das genaue Ziel sowie nicht verfügbare oder nicht ausgeführte Simulator-, Geräte- oder macOS-Prüfungen.
 
-## Web profile: Next.js or Angular
+## Web-Profil: Next.js oder Angular
 
-Choose checks based on the framework version, router, runtime, browser support, and project scripts:
+Wähle Prüfungen anhand von Framework-Version, Router, Laufzeit, Browserunterstützung und Projektskripten:
 
-- run the configured production build and relevant existing tests
-- exercise central user flows in supported browsers and representative viewports when available
-- use `$browser-testing-with-devtools` when Chrome DevTools MCP is configured and available; otherwise use another available, authorized browser-testing tool or report browser checks as not run
-- cover loading, empty, validation, error, and recovery states affected by the change
-- inspect keyboard interaction, focus, semantic structure, screen-reader names, contrast, and zoom/reflow as relevant
-- inspect authentication, authorization, API boundaries, and handling of untrusted input when affected
+- Führe den konfigurierten Produktions-Build und relevante vorhandene Tests aus.
+- Prüfe zentrale Nutzerabläufe, sofern verfügbar, in unterstützten Browsern und repräsentativen Ansichtsgrößen.
+- Nutze `$browser-testing-with-devtools`, wenn Chrome DevTools MCP konfiguriert und verfügbar ist. Verwende andernfalls ein anderes verfügbares und autorisiertes Browser-Testwerkzeug oder berichte Browserprüfungen als nicht ausgeführt.
+- Berücksichtige von der Änderung betroffene Lade-, Leer-, Validierungs-, Fehler- und Wiederherstellungszustände.
+- Prüfe bei Bedarf Tastaturinteraktion, Fokus, semantische Struktur, Screenreader-Namen, Kontrast sowie Zoom und Umbruch.
+- Prüfe bei betroffenen Änderungen Authentifizierung, Autorisierung, API-Grenzen und den Umgang mit nicht vertrauenswürdigen Eingaben.
 
-Report which browsers and viewports were actually checked and identify checks not run.
+Berichte, welche Browser und Ansichtsgrößen tatsächlich geprüft wurden, und nenne nicht ausgeführte Prüfungen.
 
-## Acceptance summary
+## Zusammenfassung der Abnahme
 
-Map every acceptance criterion to evidence and a status: passed, failed, or open. A passing build alone does not establish that user-facing flows or accessibility behavior work.
+Ordne jedem Abnahmekriterium einen Nachweis und den Status „bestanden“, „fehlgeschlagen“ oder „offen“ zu. Ein erfolgreicher Build allein belegt nicht, dass Nutzerabläufe oder das Verhalten zur Barrierefreiheit funktionieren.

@@ -1,74 +1,74 @@
 ---
 name: deploy
-description: Prepare or execute a release and deployment for an existing SwiftUI, Next.js, Angular, or ASP.NET Core project by following its configured targets, provider, and CI/CD conventions.
+description: Bereitet Release und Deployment eines bestehenden SwiftUI-, Next.js-, Angular- oder ASP.NET-Core-Projekts vor oder führt sie anhand der konfigurierten Ziele, Anbieter und CI/CD-Konventionen aus.
 ---
 
 # Deploy
 
-Use this skill when preparing a release, changing deployment configuration, or deploying an application. Follow the approved Spec and Plan for substantial changes; use `$feature-planning` and `$implementation-review` when the release work needs a tracked plan and verification.
+Nutze diesen Skill zur Vorbereitung eines Releases, zur Änderung der Deployment-Konfiguration oder zur Bereitstellung einer Anwendung. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$feature-planning` und `$implementation-review`, wenn die Release-Arbeit einen nachvollziehbaren Plan und Verifikation benötigt.
 
-## Discover the current release setup
+## Bestehendes Release-Setup untersuchen
 
-1. Read project instructions, `.codex/PROJECT.md`, and relevant Specs and Plans.
-2. Inspect the repository, package/build configuration, CI workflows, release scripts, environment-variable documentation, and recent release conventions.
-3. Identify platform, application version, target environment (local, test, staging, production), hosting or store provider, deployment mode, required secrets, database changes, and rollback method.
-4. Preserve the current provider and release workflow. Do not infer Hostinger, App Store Connect, or any other provider from the kit's reference diagrams. If target environment, provider, or release channel is unclear, record the decision as open before changing deployment behavior.
-5. For current provider-specific requirements, consult that provider's official documentation and the current project configuration. Record relevant sources and verification date when a changing requirement affects the release.
+1. Lies Projektanweisungen, `.codex/PROJECT.md` sowie relevante Specs und Pläne.
+2. Prüfe Repository, Paket- und Build-Konfiguration, CI-Workflows, Release-Skripte, Dokumentation der Umgebungsvariablen und bisherige Release-Konventionen.
+3. Ermittle Plattform, Anwendungsversion, Zielumgebung (lokal, Test, Staging, Produktion), Hosting- oder Store-Anbieter, Deployment-Modus, benötigte Geheimnisse, Datenbankänderungen und Rückfallmethode.
+4. Bewahre den bestehenden Anbieter und Release-Workflow. Leite Hostinger, App Store Connect oder andere Anbieter nicht aus Referenzdiagrammen des Kits ab. Sind Zielumgebung, Anbieter oder Release-Kanal unklar, halte die Entscheidung vor Änderungen am Deployment-Verhalten als offen fest.
+5. Ziehe für aktuelle anbieterspezifische Anforderungen dessen offizielle Dokumentation und die aktuelle Projektkonfiguration hinzu. Halte relevante Quellen und Prüfdatum fest, wenn eine veränderliche Anforderung das Release beeinflusst.
 
-## Prepare the release
+## Release vorbereiten
 
-Plan and verify only the steps relevant to the project:
+Plane und prüfe nur die für das Projekt relevanten Schritte:
 
-- run the repository's configured build and release checks
-- confirm the target environment and required runtime/platform versions
-- identify required environment variables and secrets without revealing their values
-- keep secrets in the configured CI or hosting secret store; never commit them or embed server secrets in client bundles
-- check domain, TLS, routing, health checks, static assets, and server/runtime configuration as applicable
-- identify database migrations, compatibility requirements, backup needs, and rollback constraints
-- define deployment order, smoke checks, success criteria, and a practical rollback or recovery path
-- confirm versioning, release notes, signing, and store metadata when applicable
+- Führe die konfigurierten Build- und Release-Prüfungen des Repositorys aus.
+- Bestätige Zielumgebung und benötigte Laufzeit- und Plattformversionen.
+- Ermittle benötigte Umgebungsvariablen und Geheimnisse, ohne deren Werte offenzulegen.
+- Bewahre Geheimnisse im konfigurierten CI- oder Hosting-Secret-Store; committe sie niemals und bette keine Servergeheimnisse in Client-Bundles ein.
+- Prüfe soweit zutreffend Domain, TLS, Routing, Zustandsprüfungen, statische Ressourcen sowie Server- und Laufzeitkonfiguration.
+- Ermittle Datenbankmigrationen, Kompatibilitätsanforderungen, Sicherungsbedarf und Rückfallbeschränkungen.
+- Definiere Deployment-Reihenfolge, Smoke-Tests, Erfolgskriterien und einen praktikablen Rückfall- oder Wiederherstellungsweg.
+- Bestätige soweit zutreffend Versionierung, Release Notes, Signierung und Store-Metadaten.
 
-Do not invent deployment infrastructure or add a new provider when an existing process can meet the Spec.
+Erfinde keine Deployment-Infrastruktur und ergänze keinen neuen Anbieter, wenn ein bestehender Prozess die Spec erfüllen kann.
 
-## Platform profiles
+## Plattformprofile
 
-### SwiftUI and Apple release
+### SwiftUI und Apple-Release
 
-- Detect supported Apple platforms, deployment targets, schemes, configurations, bundle identifiers, signing setup, and existing archive/export process.
-- Preserve signing identities, provisioning profiles, entitlements, and identifiers. Do not create, replace, revoke, or expose credentials as an incidental release step.
-- Plan the configured build/archive and any existing TestFlight or App Store Connect handoff.
-- Verify the submitted build and release metadata against the project's release criteria. Store submission, phased release, or public publication is a distinct external action.
+- Ermittle unterstützte Apple-Plattformen, Bereitstellungsziele, Schemes, Konfigurationen, Bundle-Identifier, Signierung und den bestehenden Archivierungs- und Exportprozess.
+- Bewahre Signierungsidentitäten, Provisioning Profiles, Entitlements und Bezeichner. Erstelle, ersetze, widerrufe oder veröffentliche Zugangsdaten nicht beiläufig als Release-Schritt.
+- Plane den konfigurierten Build beziehungsweise das Archiv und die gegebenenfalls bestehende Übergabe an TestFlight oder App Store Connect.
+- Prüfe eingereichten Build und Release-Metadaten gegen die Release-Kriterien des Projekts. Store-Einreichung, gestaffelte Freigabe und öffentliche Veröffentlichung sind gesonderte externe Aktionen.
 
 ### Next.js deployment
 
-- Detect Next.js version, App or Pages Router, Node/runtime requirements, rendering mode, build/start scripts, and provider configuration.
-- Verify server/client boundaries, production environment variables, health behavior, routing, and any cache/revalidation behavior affected by release.
-- Confirm whether the target expects a Node server, serverless output, or static export; do not switch deployment mode without an approved plan.
+- Ermittle Next.js-Version, App Router oder Pages Router, Anforderungen an Node und Laufzeit, Rendering-Modus, Build- und Startskripte sowie Anbieterkonfiguration.
+- Prüfe Server- und Client-Grenzen, Produktionsumgebungsvariablen, Zustandsverhalten, Routing sowie vom Release betroffenes Cache- oder Revalidierungsverhalten.
+- Kläre, ob das Ziel einen Node-Server, serverlose Ausgabe oder statischen Export erwartet; wechsle den Deployment-Modus nicht ohne abgestimmten Plan.
 
 ### Angular deployment
 
-- Detect Angular version, production configuration in `angular.json`, output mode, SSR setup if present, and hosting configuration.
-- Verify build output, base path, client-side route fallback, cache behavior, and runtime configuration for the selected host.
-- Do not assume Angular is static-only or add SSR without an explicit requirement and an implementation plan.
+- Ermittle Angular-Version, Produktionskonfiguration in `angular.json`, Ausgabemodus, gegebenenfalls SSR-Setup und Hostingkonfiguration.
+- Prüfe Build-Ausgabe, Basispfad, Ausweichverhalten clientseitiger Routen, Cache-Verhalten und Laufzeitkonfiguration für den gewählten Host.
+- Setze nicht voraus, dass Angular ausschließlich statisch ist, und ergänze SSR nicht ohne ausdrückliche Anforderung und Implementierungsplan.
 
-### C# / ASP.NET Core backend deployment
+### Deployment eines C#- / ASP.NET-Core-Backends
 
-- Detect the target framework, pinned SDK/runtime, publish mode, hosting model, Windows Server/IIS configuration if selected, SQL Server target, secret mechanism, migration workflow, and existing CI/CD conventions.
-- For IIS, verify the required Hosting Bundle/runtime, app pool identity and permissions, HTTPS bindings, routing/forwarded headers, health checks, and whether deployment is in-process or out-of-process according to the existing configuration.
-- Keep SQL Server connection details in the approved server-side configuration or secret store. Verify the deployed API can reach only the intended database; do not expose connection strings in logs or reports.
-- Review SQL Server migration scripts/bundles and backup/rollback requirements before deployment. Keep application deployment and schema migration order compatible with active application versions.
-- If Swagger is provided, confirm UI and OpenAPI document endpoints are protected and non-public in the deployed topology; verify allowed and denied access where enabled, and that both endpoints are unreachable where disabled.
+- Ermittle Ziel-Framework, festgelegtes SDK und Laufzeit, Veröffentlichungsmodus, Hostingmodell, gegebenenfalls Windows-Server-/IIS-Konfiguration, SQL-Server-Ziel, Secret-Mechanismus, Migrations-Workflow und bestehende CI/CD-Konventionen.
+- Prüfe für IIS das benötigte Hosting Bundle und die Laufzeit, Identität und Berechtigungen des Anwendungspools, HTTPS-Bindungen, Routing und Forwarded Headers, Zustandsprüfungen sowie das zur bestehenden Konfiguration passende In-Process- oder Out-of-Process-Deployment.
+- Bewahre SQL-Server-Verbindungsdaten in der freigegebenen serverseitigen Konfiguration oder im Secret Store. Prüfe, dass die bereitgestellte API nur die vorgesehene Datenbank erreichen kann; lege Verbindungszeichenfolgen nicht in Logs oder Berichten offen.
+- Prüfe vor dem Deployment SQL-Server-Migrationsskripte oder -pakete und Anforderungen an Sicherung und Rückfall. Halte die Reihenfolge von Anwendungs-Deployment und Schemamigration mit aktiven Anwendungsversionen kompatibel.
+- Falls Swagger bereitgestellt wird, bestätige, dass UI und OpenAPI-Dokumentendpunkte in der bereitgestellten Topologie geschützt und nicht öffentlich sind. Prüfe bei Aktivierung erlaubten und abgelehnten Zugriff und bei Deaktivierung, dass beide Endpunkte nicht erreichbar sind.
 
-## Deploy and verify
+## Bereitstellen und prüfen
 
-Before deployment, confirm that the required checks pass or that exceptions are documented. Execute deployment commands only for the environment and scope authorized by the user. Production deployment, store submission, or public release requires explicit authorization when it has not already been given.
+Bestätige vor dem Deployment, dass erforderliche Prüfungen bestanden oder Ausnahmen dokumentiert sind. Führe Deployment-Befehle nur für die vom Nutzer autorisierte Umgebung und den autorisierten Umfang aus. Produktions-Deployment, Store-Einreichung und öffentliche Veröffentlichung erfordern eine ausdrückliche Autorisierung, sofern diese noch nicht erteilt wurde.
 
-After an authorized deployment:
+Nach einem autorisierten Deployment:
 
-1. Verify the deployed version and target environment.
-2. Run the planned health and smoke checks, including central user flows where available.
-3. Check relevant logs and service health without exposing personal data or secrets.
-4. Compare results to release criteria. If checks fail, follow the planned rollback/recovery path when authorized; otherwise stop and report the failure and required action.
-5. Report what was built, deployed or submitted, where it went, which checks ran, their results, and any open risks or follow-up work.
+1. Prüfe bereitgestellte Version und Zielumgebung.
+2. Führe geplante Zustands- und Smoke-Tests einschließlich zentraler Nutzerabläufe aus, soweit verfügbar.
+3. Prüfe relevante Logs und den Dienstzustand, ohne personenbezogene Daten oder Geheimnisse offenzulegen.
+4. Vergleiche Ergebnisse mit den Release-Kriterien. Folge bei fehlgeschlagenen Prüfungen dem geplanten Rückfall- oder Wiederherstellungsweg, sofern autorisiert; stoppe andernfalls und berichte Fehler und erforderliche Aktion.
+5. Berichte, was erstellt, bereitgestellt oder eingereicht wurde, wohin es ging, welche Prüfungen liefen, deren Ergebnisse und offene Risiken oder Folgearbeiten.
 
-Use `$verify-ui` for user-facing flows when appropriate and `$dsgvo` when the release changes personal-data processing or its operational handling. Never claim a release or deployment succeeded unless the resulting environment or store state was verified.
+Nutze `$verify-ui` für nutzerseitige Abläufe, soweit angemessen, und `$dsgvo`, wenn das Release die Verarbeitung personenbezogener Daten oder deren betrieblichen Umgang ändert. Behaupte niemals ein erfolgreiches Release oder Deployment, ohne den resultierenden Zustand der Umgebung beziehungsweise des Stores geprüft zu haben.

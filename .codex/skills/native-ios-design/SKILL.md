@@ -1,130 +1,97 @@
 ---
 name: native-ios-design
-description: Design and build iOS and iPadOS apps in SwiftUI that feel fully native, follow Apple's Human Interface Guidelines, adopt Liquid Glass, stay fast, and hold up at every Dynamic Type size. Use when building or reviewing SwiftUI screens, setting up typography, colors, or shared components, adopting Liquid Glass (glassEffect, glass button styles, toolbars, sheets), fixing layouts that break at large text sizes, or checking an app against the HIG.
+description: Gestaltet und erstellt native iOS- und iPadOS-Apps mit SwiftUI unter Beachtung der Human Interface Guidelines, Liquid Glass, Leistung und Dynamic Type. Nutze den Skill für SwiftUI-Oberflächen, Typografie, Farben, gemeinsame Komponenten, Liquid Glass, adaptive Layouts und HIG-Prüfungen.
 ---
 
-# Native iOS design
+# Native Gestaltung für iOS
 
-Build apps that look like Apple made them, then stand out through restraint and detail rather than custom chrome.
-The rules here come from shipping a SwiftUI chat app on iOS 26+ against the Human Interface Guidelines and the
-Liquid Glass guidance. Each rule says why, so you can judge the cases it doesn't cover.
+Erstelle Apps mit plattformtypischem Erscheinungsbild, die sich durch Zurückhaltung und Details statt durch eigene Bedienelementrahmen auszeichnen.
+Diese Regeln stammen aus der Veröffentlichung einer SwiftUI-Chat-App für iOS 26+ unter Beachtung der Human Interface Guidelines und der Liquid-Glass-Empfehlungen. Die Begründungen helfen bei der Beurteilung nicht abgedeckter Fälle.
 
-## How to work
+## Vorgehen
 
-1. **Start from system components.** `NavigationSplitView`, `NavigationStack`, `List`, `Form`, `toolbar`, `sheet`,
-   `Menu`, `contextMenu`, `confirmationDialog`, `searchable`, `PhotosPicker`. They get Liquid Glass, Dynamic Type,
-   VoiceOver, keyboard, pointer, and iPad behavior for free. Reach for a custom view only when no system one fits.
-2. **Centralize design decisions.** One `Typography.swift` (font roles), one `Colors.swift` (color roles), one
-   `Components.swift` (shared building blocks). Views use roles, never raw sizes or colors. Copy the starting
-   points in [templates/](templates/) and rename roles for the app.
-3. **Check every screen at three settings** before calling it done: the default text size, the largest
-   accessibility size (AX5), and Dark Mode. Then once with Increase Contrast and Reduce Transparency.
-4. **Review against [references/review-checklist.md](references/review-checklist.md)** when asked to check a screen
-   or an app.
+1. **Beginne mit Systemkomponenten.** `NavigationSplitView`, `NavigationStack`, `List`, `Form`, `toolbar`, `sheet`,
+   `Menu`, `contextMenu`, `confirmationDialog`, `searchable`, `PhotosPicker`. Sie bringen Liquid Glass, Dynamic Type,
+   VoiceOver, Tastatur-, Zeiger- und iPad-Verhalten mit. Verwende eine eigene View nur, wenn keine Systemkomponente passt.
+2. **Bündele Designentscheidungen.** Eine `Typography.swift` für Schriftrollen, eine `Colors.swift` für Farbrollen und eine
+   `Components.swift` für gemeinsame Bausteine. Views verwenden Rollen statt direkter Größen oder Farben. Nutze die Vorlagen in [templates/](templates/) als Ausgangspunkt und benenne Rollen passend zur App.
+3. **Prüfe jede Ansicht mit drei Einstellungen**, bevor sie als fertig gilt: Standardtextgröße, größte
+   Barrierefreiheitsgröße (AX5) und Dark Mode. Prüfe anschließend einmal mit Increase Contrast und Reduce Transparency.
+4. **Prüfe anhand von [references/review-checklist.md](references/review-checklist.md)**, wenn eine Ansicht oder App überprüft werden soll.
 
-## Typography that holds up at large sizes
+## Typografie für große Schriftgrößen
 
-Full guide: [references/typography.md](references/typography.md).
+Vollständige Anleitung: [references/typography.md](references/typography.md).
 
-- **Only system text styles.** `.largeTitle` through `.caption2`, with weight changes where needed. Never
-  `.font(.system(size: 17))` for text. Fixed sizes don't scale with Dynamic Type or Bold Text, and they lose the
-  system's tracking and leading.
-- **Name fonts by role, in one file.** `Font.rowTitle`, `Font.messageBody`, `Font.sectionLabel`, not
-  `.font(.subheadline.weight(.semibold))` scattered through views. Changing the scale becomes a one-line edit.
-- **Floor and weight limits.** Nothing below Caption 1 for reading text (12 pt at the default size; 11 pt is the
-  HIG minimum). No Ultralight, Thin, or Light weights for UI text.
-- **Text never gets a fixed height.** Use `minHeight`, padding, and `lineLimit` with care. A fixed `frame(height:)`
-  clips at large sizes.
-- **Rearrange at accessibility sizes.** When `dynamicTypeSize.isAccessibilitySize`, turn rows from horizontal to
-  vertical (`AdaptiveStack` in the templates), drop icons that steal width, show fewer items per row, and remove
-  `lineLimit`s. Words should never break mid-word.
-- **Cap chrome, not content.** Content text grows without limit. Bar controls, badges, and small round buttons
-  stop at `.dynamicTypeSize(...DynamicTypeSize.accessibility1)`, like the system's own toolbars. Their sizes come
-  from `@ScaledMetric` with a ceiling: `min(scaledSize, 64)`.
-- **Symbols scale with text.** Size SF Symbols with a font (`.font(.body.weight(.semibold))`), not a frame, so they
-  follow Dynamic Type and match nearby text weight.
-- **UIKit text views** use `UIFont.preferredFont(forTextStyle:)` and `adjustsFontForContentSizeCategory = true`.
-- **Short text gets balanced lines** (`BalancedText` in the templates) so a bubble or title doesn't end on one word.
+- **Nur Systemtextstile.** Verwende `.largeTitle` bis `.caption2` und ändere bei Bedarf das Gewicht. Verwende für Text niemals
+  `.font(.system(size: 17))`. Feste Größen skalieren nicht mit Dynamic Type oder Bold Text und verlieren Laufweite und Zeilenabstand des Systems.
+- **Benenne Schriften in einer Datei nach Rolle.** Verwende `Font.rowTitle`, `Font.messageBody`, `Font.sectionLabel` statt
+  `.font(.subheadline.weight(.semibold))` über Views zu verteilen. Die Skalierung lässt sich so an einer Stelle ändern.
+- **Mindestgröße und Schriftgewicht.** Lesetext nicht kleiner als Caption 1 (12 pt bei Standardgröße; 11 pt als HIG-Minimum). Verwende für UI-Text weder Ultralight, Thin noch Light.
+- **Keine feste Texthöhe.** Setze `minHeight`, Padding und `lineLimit` sorgfältig ein. Ein festes `frame(height:)` schneidet Text bei großen Größen ab.
+- **Bei Barrierefreiheitsgrößen neu anordnen.** Wenn `dynamicTypeSize.isAccessibilitySize`, ordne Zeilen statt horizontal vertikal an (`AdaptiveStack` in den Vorlagen), entferne platzraubende Symbole, zeige weniger Elemente pro Zeile und entferne `lineLimit`s. Wörter sollen nicht mitten im Wort umbrechen.
+- **Begrenze Bedienelemente, nicht Inhalte.** Inhaltstext wächst unbegrenzt. Leistensteuerungen, Badges und kleine runde Schaltflächen enden wie systemeigene Toolbars bei `.dynamicTypeSize(...DynamicTypeSize.accessibility1)`. Ihre Größen stammen aus `@ScaledMetric` mit Obergrenze: `min(scaledSize, 64)`.
+- **Symbole skalieren mit Text.** Bemaße SF Symbols über eine Schrift (`.font(.body.weight(.semibold))`) statt über einen Frame, damit sie Dynamic Type und dem benachbarten Schriftgewicht folgen.
+- **UIKit-Text-Views** verwenden `UIFont.preferredFont(forTextStyle:)` und `adjustsFontForContentSizeCategory = true`.
+- **Kurze Texte erhalten ausgeglichene Zeilen** (`BalancedText` in den Vorlagen), damit eine Sprechblase oder ein Titel nicht mit einem einzelnen Wort endet.
 
 ## Liquid Glass
 
-Full guide: [references/liquid-glass.md](references/liquid-glass.md).
+Vollständige Anleitung: [references/liquid-glass.md](references/liquid-glass.md).
 
-- **Glass is for the navigation layer, not content.** Toolbars, tab bars, floating controls, and sheets float above
-  content in glass. Lists, cards, and message bubbles stay solid. Glass on content makes everything compete.
-- **Let the system draw it first.** Standard toolbars, tab bars, sheets, menus, and `.buttonStyle(.glass)` /
-  `.glassProminent` already use Liquid Glass. Remove custom backgrounds, borders, and `presentationBackground`s that
-  hide it.
-- **Custom floating controls** use `.glassEffect(.regular.interactive(), in: .circle)` (or a rounded rect), grouped
-  in one `GlassEffectContainer` so nearby shapes blend and morph together and share one rendering pass.
-- **Never glass on glass.** A button inside a glass field gets a solid fill (like a black Send circle), not another
-  glass layer.
-- **Bars over scrolling content** go in `safeAreaBar(edge:)` so the scroll edge effect softens content under them.
-  Use `safeAreaInset` only when you don't want that effect.
-- **Close buttons** are `Button(role: .close)` in a `.cancellationAction` toolbar slot; the system draws the glass
-  xmark.
-- **Accessibility settings adapt glass for you** (Reduce Transparency, Increase Contrast, Reduce Motion), as long as
-  you use system glass instead of faking it with materials and blur.
+- **Glass gehört zur Navigationsebene, nicht zum Inhalt.** Toolbars, Tab-Leisten, schwebende Bedienelemente und Sheets schweben als Glass über dem Inhalt. Listen, Karten und Nachrichtenblasen bleiben deckend.
+- **Lass zuerst das System zeichnen.** Standard-Toolbars, Tab-Leisten, Sheets, Menüs und `.buttonStyle(.glass)` /
+  `.glassProminent` nutzen bereits Liquid Glass. Entferne eigene Hintergründe, Rahmen und `presentationBackground`s, die es verdecken.
+- **Eigene schwebende Bedienelemente** verwenden `.glassEffect(.regular.interactive(), in: .circle)` oder ein abgerundetes Rechteck. Gruppiere sie in einem `GlassEffectContainer`, damit benachbarte Formen ineinander übergehen und gemeinsam gerendert werden.
+- **Kein Glass auf Glass.** Eine Schaltfläche innerhalb eines Glass-Feldes erhält eine deckende Füllung, etwa einen schwarzen Send-Kreis, keine weitere Glass-Ebene.
+- **Leisten über scrollendem Inhalt** gehören in `safeAreaBar(edge:)`, damit der Scroll-Edge-Effekt den Inhalt darunter abschwächt. Nutze `safeAreaInset` nur, wenn dieser Effekt nicht gewünscht ist.
+- **Schließen-Schaltflächen** sind `Button(role: .close)` an einer `.cancellationAction`-Position der Toolbar; das System zeichnet das Glass-`xmark`.
+- **Barrierefreiheitseinstellungen passen Glass an**, darunter Reduce Transparency, Increase Contrast und Reduce Motion, sofern System-Glass statt nachgebildeter Materialien und Unschärfe verwendet wird.
 
-## Layout and components
+## Layout und Komponenten
 
-Full guide: [references/layout-and-components.md](references/layout-and-components.md).
+Vollständige Anleitung: [references/layout-and-components.md](references/layout-and-components.md).
 
-- **iPad gets a sidebar.** `NavigationSplitView` with selection in a router, collapsing to a stack on iPhone.
-  Readable widths on wide screens (about 560 pt for chat bubbles).
-- **Hit targets:** For iOS and iPadOS, aim for the 44 × 44 pt default target. A 20 pt visual can sit in an
-  interactive region of at least 44 × 44 pt using `contentShape`. Apple's accessibility guidance lists 28 × 28 pt
-  as the minimum control size for iOS/iPadOS; use smaller controls only when appropriate and account for spacing.
-  For macOS, Apple's accessibility guidance lists a 28 × 28 pt default and 20 × 20 pt minimum; use macOS conventions.
-  See [Apple's accessibility guidance](https://developer.apple.com/design/human-interface-guidelines/accessibility)
-  and [button guidance](https://developer.apple.com/design/human-interface-guidelines/buttons).
-- **Menus over custom popups.** `Menu`, `contextMenu` (with a palette `ControlGroup` for reactions),
-  `confirmationDialog` for destructive confirmation, `.sheet` with `presentationDetents` for secondary tasks.
-- **Keyboard behaves like Messages.** Tapping content hides the keyboard; scrolling doesn't
-  (`.scrollDismissesKeyboard(.never)` plus a tap gesture). Focusing the field doesn't jump the scroll position.
-- **Links open in the app** with `SFSafariViewController` via an `OpenURLAction` in the environment.
-- **Zoom transitions** (`matchedTransitionSource` + `.navigationTransition(.zoom(sourceID:in:))`) when opening a
-  photo or detail from a thumbnail.
+- **Das iPad erhält eine Seitenleiste.** Nutze `NavigationSplitView` mit Auswahl in einem Router und auf dem iPhone einem zusammengeklappten Stack. Sorge auf breiten Bildschirmen für lesbare Breiten, etwa 560 pt für Chatblasen.
+- **Treffbereiche:** Strebe für iOS und iPadOS den Standardwert von 44 × 44 pt an. Ein 20 pt großes sichtbares Element kann mit `contentShape` innerhalb eines interaktiven Bereichs von mindestens 44 × 44 pt liegen. Apple nennt in seinen Barrierefreiheitshinweisen 28 × 28 pt als Mindestgröße für Bedienelemente unter iOS/iPadOS; verwende kleinere Elemente nur, wenn angemessen, und berücksichtige Abstände. Für macOS nennt Apple 28 × 28 pt als Standard und 20 × 20 pt als Minimum; beachte macOS-Konventionen. Siehe [Apples Barrierefreiheitshinweise](https://developer.apple.com/design/human-interface-guidelines/accessibility) und [Hinweise zu Schaltflächen](https://developer.apple.com/design/human-interface-guidelines/buttons).
+- **Menüs statt eigener Pop-ups.** Nutze `Menu`, `contextMenu` mit einer `ControlGroup` als Palette für Reaktionen, `confirmationDialog` zur Bestätigung destruktiver Aktionen und `.sheet` mit `presentationDetents` für sekundäre Aufgaben.
+- **Tastatur wie in Messages.** Ein Tippen auf Inhalte blendet die Tastatur aus, Scrollen nicht (`.scrollDismissesKeyboard(.never)` zusammen mit einer Tippgeste). Beim Fokussieren des Feldes springt die Scrollposition nicht.
+- **Links öffnen sich innerhalb der App** mit `SFSafariViewController` über eine `OpenURLAction` in der Umgebung.
+- **Zoom-Übergänge** (`matchedTransitionSource` + `.navigationTransition(.zoom(sourceID:in:))`) beim Öffnen eines Fotos oder Details aus einem Vorschaubild verwenden.
 
-## Color and icons
+## Farben und Symbole
 
-Full guide: [references/color-and-icons.md](references/color-and-icons.md).
+Vollständige Anleitung: [references/color-and-icons.md](references/color-and-icons.md).
 
-- **System colors first** (`.primary`, `.secondary`, `Color(uiColor: .secondarySystemBackground)`); they adapt to
-  Dark Mode and Increase Contrast. Name any custom color by role.
-- **Text contrast at least 4.5:1**, or 3:1 at 18 pt and up or 14 pt bold. System orange, green, and blue text on
-  white fail this; use darker light-mode variants.
-- **Never color alone.** Underline links, pair status colors with a symbol or word.
-- **Row icons** are SF Symbols on 26–29 pt continuous-corner tiles (radius ≈ 22.5% of the side), like Settings.
-- **Stand out with restraint:** one strong color identity (even just black and white), one accent, a distinctive
-  layered app icon made in Icon Composer. Not custom navigation chrome.
+- **Systemfarben zuerst** (`.primary`, `.secondary`, `Color(uiColor: .secondarySystemBackground)`); sie passen sich an Dark Mode und Increase Contrast an. Benenne eigene Farben nach ihrer Rolle.
+- **Textkontrast mindestens 4.5:1**, beziehungsweise 3:1 ab 18 pt oder 14 pt fett. Systemfarben in Orange, Grün und Blau auf Weiß erfüllen dies für Text nicht; verwende dunklere Varianten für den hellen Modus.
+- **Farbe niemals allein verwenden.** Unterstreiche Links und ergänze Statusfarben durch ein Symbol oder Wort.
+- **Zeilensymbole** sind SF Symbols auf 26–29 pt großen Kacheln mit kontinuierlich abgerundeten Ecken (Radius ≈ 22,5 % der Seitenlänge), wie in Settings.
+- **Durch Zurückhaltung hervorheben:** eine klare Farbidentität, auch nur Schwarz und Weiß, eine Akzentfarbe und ein markantes, mehrschichtiges App-Icon aus Icon Composer. Keine eigenen Navigationsrahmen.
 
-## Motion, feedback, and performance
+## Bewegung, Feedback und Leistung
 
-Full guides: [references/accessibility.md](references/accessibility.md),
+Vollständige Anleitungen: [references/accessibility.md](references/accessibility.md),
 [references/performance.md](references/performance.md).
 
-- **Animate state, not layout jank.** `.animation(.smooth(duration: 0.2), value:)` scoped to the value that changed;
-  `.transition(.move(edge: .bottom).combined(with: .opacity))` for bars appearing.
-- **Respect Reduce Motion** for decorative motion: check `accessibilityReduceMotion` and drop or simplify it.
-- **Haptics through SwiftUI**: `.sensoryFeedback(.selection, trigger:)` for pickers, `.success` / `.error` for
-  results. Sparingly.
-- **Long lists** use `LazyVStack` / `List` with stable IDs, no `AnyView` in rows, and no heavy work in `body`.
-- **Scroll observation** returns the smallest value you need (`onScrollGeometryChange(for: Bool.self)`) so views
-  update only when it flips.
-- **Images** are downsampled before display (`preparingThumbnail(of:)`), never decoded full size in a list.
-- **Async work** lives in `.task(id:)` so it cancels when the view goes away or the input changes.
+- **Animiere Zustände statt ruckelnder Layouts.** Begrenze `.animation(.smooth(duration: 0.2), value:)` auf den geänderten Wert; nutze `.transition(.move(edge: .bottom).combined(with: .opacity))` für erscheinende Leisten.
+- **Beachte Reduce Motion** bei dekorativer Bewegung: Prüfe `accessibilityReduceMotion` und entferne oder vereinfache sie.
+- **Haptik über SwiftUI:** `.sensoryFeedback(.selection, trigger:)` für Picker und `.success` / `.error` für Ergebnisse. Setze sie sparsam ein.
+- **Lange Listen** verwenden `LazyVStack` / `List` mit stabilen IDs, kein `AnyView` in Zeilen und keine aufwendige Arbeit in `body`.
+- **Scroll-Beobachtung** liefert den kleinsten benötigten Wert (`onScrollGeometryChange(for: Bool.self)`), damit Views nur bei dessen Wechsel aktualisiert werden.
+- **Bilder** werden vor der Anzeige heruntergerechnet (`preparingThumbnail(of:)`) und in Listen niemals in voller Größe dekodiert.
+- **Asynchrone Arbeit** liegt in `.task(id:)`, damit sie beim Verschwinden der View oder bei Änderung der Eingabe abgebrochen wird.
 
-## Writing
+## Texte
 
-- Buttons and menu items in title case and as verbs: "Remove Photo", "Clear Chat", "Cancel Reply".
-- Descriptions, footers, and alerts in sentence case, short, saying what happens next.
-- Accessibility labels say what a control does, not what it looks like ("Scroll to Bottom", not "Chevron").
+- Schaltflächen und Menüpunkte im Stil von Überschriften und als Verben formulieren: „Remove Photo“, „Clear Chat“, „Cancel Reply“.
+- Beschreibungen, Fußtexte und Warnungen kurz und in Satzschreibweise formulieren; sie beschreiben den nächsten Schritt.
+- Beschriftungen für Barrierefreiheit beschreiben die Funktion eines Bedienelements, nicht sein Aussehen („Scroll to Bottom“, nicht „Chevron“).
 
-## What not to do
+## Was zu vermeiden ist
 
-- Custom tab bars, navigation bars, or back buttons that imitate the system ones.
-- Fixed font sizes, fixed text heights, or `minimumScaleFactor` on reading text.
-- Glass on content, glass on glass, or blur materials pretending to be glass.
-- Gestures with no visible or accessible alternative.
-- Styling that differs from screen to screen because each view picked its own values.
+- Eigene Tab-Leisten, Navigationsleisten oder Zurück-Schaltflächen, die Systemkomponenten nachahmen.
+- Feste Schriftgrößen, feste Texthöhen oder `minimumScaleFactor` für Lesetext.
+- Glass auf Inhalt, Glass auf Glass oder Unschärfematerialien, die Glass vortäuschen.
+- Gesten ohne sichtbare oder barrierefreie Alternative.
+- Unterschiedliche Gestaltung zwischen Ansichten, weil jede View eigene Werte gewählt hat.

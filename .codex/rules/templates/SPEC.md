@@ -30,10 +30,13 @@ Relevanter Produkt-, Code- oder Betriebskontext.
 -
 
 ## Abnahmekriterien
-- [ ] Bei <Ausgangslage> führt <Aktion> zu <beobachtbarem Ergebnis>.
+Bei mehrteiligen Vorhaben stabile Kennungen nach Projektkonvention vergeben; kleine eindeutige Änderungen benötigen keine zusätzlichen Kennungen. Eine Anforderung soll eine erkennbare Verpflichtung enthalten. Bedingungen, messbare Werte und Prüfmethode nach Bedarf ergänzen.
+
+- [ ] `REQ-01`: Bei <Ausgangslage> führt <Aktion> zu <beobachtbarem Ergebnis>. Prüfung: <Methode/Nachweis>.
 
 ## Annahmen und offene Fragen
 - Frage oder Annahme: … | Auswirkung: … | Status: …
+- Voraussetzung oder Abhängigkeit: … | Betroffene Anforderung: … | Prüfung und Umgang bei Ausfall: …
 - Nicht relevante Punkte bei Bedarf ausdrücklich als „nicht relevant“ markieren.
 
 ## Nichtfunktionale Anforderungen (falls relevant)
