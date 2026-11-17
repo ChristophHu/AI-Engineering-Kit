@@ -9,6 +9,18 @@ Kläre vor Erstellung eines Backends gemäß `.codex/rules/ARCHITECTURE.md` Back
 
 Nutze diesen Skill, wenn ein Projekt Supabase für Backend-Funktionen verwendet. Er unterstützt Clients mit SwiftUI, Next.js und Angular. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$spec-driven-development` und `$feature-planning`, wenn Anforderungen oder Umfang zuerst geklärt werden müssen.
 
+## Wann verwenden
+
+- Supabase ist für das Projekt als Backend gewählt oder bereits im Einsatz und soll eingerichtet, erweitert oder geprüft werden.
+- Datenbankschema, Migrationen, Grants oder Row Level Security eines Supabase-Projekts planen, ändern oder prüfen.
+- Supabase Auth, Storage, Edge Functions oder die Anbindung eines Clients an Supabase umsetzen oder überprüfen.
+
+**Nicht verwenden, wenn:**
+
+- Das Projekt kein Supabase verwendet oder vorsieht und die Aufgabe keine Supabase-Auswahl oder -Integration umfasst. Nutze für einen vereinbarten anderen Backend-Stack den entsprechenden Skill.
+- Ausschließlich lokale SQLite-Persistenz ohne Supabase-Anbindung bearbeitet wird; nutze dafür `$backend-dev-sqlite-data`.
+- Es ausschließlich um Gestaltung oder Verhalten einer Oberfläche ohne Bezug zu Supabase geht; nutze den passenden Plattform- oder UI-Skill.
+
 ## Bestehendes Projekt untersuchen
 
 1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante Specs und Pläne sowie `docs/data-model.md`, sofern vorhanden.

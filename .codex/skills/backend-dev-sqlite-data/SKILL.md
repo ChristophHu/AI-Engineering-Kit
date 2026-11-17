@@ -11,6 +11,19 @@ Nutze diesen Skill, wenn ein Projekt Daten in SQLite auf iOS, iPadOS, macOS, ein
 
 Folge bei größeren Änderungen der abgestimmten Spec und dem Plan. Nutze `$spec-driven-development` und `$feature-planning`, wenn Verhalten oder Architektur unklar sind. Bewahre das gewählte Backend: Lokales SQLite kann Supabase, NestJS/PostgreSQL oder C#/SQL Server als Offline-Speicher oder Cache ergänzen; ersetze das Server-Backend des Projekts nicht stillschweigend durch SQLite.
 
+## Wann verwenden
+
+- SQLite-Persistenz für eine native iOS-, iPadOS- oder macOS-App planen, implementieren oder prüfen.
+- SQLite als serverseitigen Datenspeicher hinter einer Web-API oder lokal im Browser mit WebAssembly und gegebenenfalls OPFS einsetzen.
+- Lokale SQLite-Daten für Offline-Nutzung, Cache oder Synchronisierung mit einem bestehenden Backend gestalten oder prüfen.
+- SQLite-Schema, Migrationen, Transaktionen, Datensicherung, Wiederherstellung oder Konfliktbehandlung bearbeiten.
+
+**Nicht verwenden, wenn:**
+
+- Weder SQLite noch eine darauf beruhende Persistenz für die Aufgabe vorgesehen ist und keine Entscheidung oder Integration zu SQLite ansteht. Nutze für den gewählten Datenspeicher oder Backend-Stack den entsprechenden Skill.
+- Ausschließlich die entfernte API oder Serverdatenbank eines Projekts ohne Bezug zur lokalen SQLite-Persistenz bearbeitet wird; nutze den passenden Backend-Skill.
+- Es ausschließlich um eine Oberfläche ohne Bezug zur SQLite-Persistenz oder zum Offline-Verhalten geht; nutze den passenden Plattform- oder UI-Skill.
+
 ## Modell der Datenhoheit untersuchen
 
 Kläre vor dem Entwurf eines Schemas oder einer Synchronisierung:

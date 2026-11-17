@@ -19,6 +19,19 @@ Entwirf stabile, gut dokumentierte Schnittstellen, die sich schwer falsch verwen
 
 ## Grundprinzipien
 
+### CRUD für Datenoperationen
+
+CRUD beschreibt grundlegende Operationen auf Daten – unabhängig davon, ob sie in einer Webanwendung, einer nativen App oder über eine API angeboten werden:
+
+- **Create:** Neue Daten anlegen, etwa einen Kunden erfassen.
+- **Read:** Vorhandene Daten abrufen, etwa eine Kundenübersicht oder ein Kundendetail anzeigen.
+- **Update:** Bestehende Daten ändern, etwa eine Adresse aktualisieren.
+- **Delete:** Daten entfernen, etwa einen Kundeneintrag löschen.
+
+Leite für jede Ressource aus den Anforderungen ab, welche dieser Operationen benötigt und für welche Nutzer oder Rollen erlaubt sind. Nicht jede Ressource benötigt alle vier Operationen; berücksichtige auch fachliche Vorgänge, die über CRUD hinausgehen. Definiere je angebotener Operation Eingaben, Ergebnisse, Fehlerfälle und Berechtigungen. Validiere Eingaben an der jeweiligen Vertrauensgrenze und prüfe Autorisierung für jede Aktion und betroffene Ressource. Vereinbare für Änderungen und Löschungen eindeutige Erfolgs- und Fehlerrückmeldungen; berücksichtige bei Löschungen Datenfolgen und gegebenenfalls eine Bestätigung in der Oberfläche. Die API muss auch bei Aufrufen ohne Oberfläche die Berechtigungen durchsetzen.
+
+Eine Kundenverwaltung kann beispielsweise das Anlegen per Formular, die Anzeige in einer Liste oder Detailansicht sowie das Bearbeiten und Löschen eines Eintrags anbieten. Das vorhandene REST-Ressourcenbeispiel unten zeigt eine mögliche Abbildung auf HTTP-Methoden; CRUD schreibt weder REST noch eine bestimmte technische Implementierung vor.
+
 ### Hyrum's Law
 
 > Bei einer ausreichend großen Zahl von API-Nutzern wird sich jemand auf jedes beobachtbare Verhalten des Systems verlassen, unabhängig davon, was der Vertrag zusichert.
@@ -355,6 +368,7 @@ function getTask(id: TaskId): Promise<Task> { ... }
 
 Nach dem Entwurf einer API:
 
+- [ ] Für Datenressourcen sind die benötigten CRUD-Operationen, ihre Berechtigungen und eindeutigen Ergebnisse beziehungsweise Fehlerfälle festgelegt; nicht benötigte Operationen werden nicht vorausgesetzt
 - [ ] Jeder Endpunkt besitzt typisierte Ein- und Ausgabeschemata
 - [ ] Fehlerantworten folgen einem einheitlichen Format
 - [ ] Validierung erfolgt nur an Systemgrenzen

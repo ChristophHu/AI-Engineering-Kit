@@ -24,6 +24,13 @@ Nach der Installation fragt das Skript interaktiv nach einer ersten Projektbesch
 
 Der erste Agent, der danach im Projekt arbeitet, prüft den Git-Status und folgt `$git-workflow-and-versioning`: Er initialisiert ein eigenständiges Projekt mit `git init`, falls noch kein übergeordnetes Repository zuständig ist, und erstellt nach Prüfung der Dateien den initialen Commit. In einem bestehenden Repository mit Historie bleiben fremde Änderungen unberührt; es wird kein verschachteltes Repository angelegt.
 
+Für Commits benötigt Git einen Namen und eine E-Mail-Adresse. So richtest du sie für alle Projekte auf deinem Rechner ein:
+
+```sh
+git config --global user.name "Vorname Nachname"
+git config --global user.email "name@example.com"
+```
+
 ## Projektarbeit nach der Installation starten
 
 Das Installationsskript startet keinen Agenten. Öffne nach erfolgreicher Installation das Zielprojekt in Codex oder starte eine Codex-Sitzung im Zielverzeichnis. Ergänze bei Bedarf die ursprüngliche Idee in `.codex/IDEA.md`.

@@ -7,6 +7,19 @@ description: Plant, implementiert oder prüft eine NestJS-API mit PostgreSQL ein
 
 Nutze diesen Skill, wenn die Projektbeschreibung oder die bestehende Codebasis ein NestJS-Backend mit PostgreSQL vorsieht. Er eignet sich besonders für Webanwendungen mit separat betriebener API. Folge bei größeren Änderungen der abgestimmten Spec und dem Plan; nutze `$spec-driven-development` und `$feature-planning`, wenn Anforderungen oder Umfang zuerst geklärt werden müssen. Ersetze Supabase oder ein anderes bestehendes Backend nicht ohne ausdrückliche Projektentscheidung durch diesen Stack.
 
+## Wann verwenden
+
+- Ein NestJS-Backend mit PostgreSQL ist für das Projekt gewählt oder bereits vorhanden und soll erstellt, erweitert oder geprüft werden.
+- NestJS-Module, Controller, Services, API-Verträge, Validierung oder serverseitige Authentifizierung und Autorisierung für diesen Stack bearbeiten.
+- PostgreSQL-Datenmodell, Datenbankzugriff oder Migrationen im Rahmen des NestJS-Backends planen, implementieren oder prüfen.
+- Die vereinbarte Swagger/OpenAPI-Dokumentation einer solchen API bereitstellen, absichern oder verifizieren.
+
+**Nicht verwenden, wenn:**
+
+- Das Projekt diesen Backend-Stack weder verwendet noch vorsieht und die Aufgabe keine entsprechende Auswahl oder Integration umfasst. Nutze für einen anderen vereinbarten Backend-Stack den passenden Skill.
+- Ausschließlich Supabase oder lokale SQLite-Persistenz ohne Bezug zu einer NestJS-API mit PostgreSQL bearbeitet wird; nutze `$backend-dev-supabase` beziehungsweise `$backend-dev-sqlite-data`.
+- Es ausschließlich um eine Oberfläche ohne Bezug zum NestJS-Backend geht; nutze den passenden Plattform- oder UI-Skill.
+
 ## Bestehendes Projekt untersuchen
 
 1. Lies Projektanweisungen, `.codex/PROJECT.md`, relevante Specs und Pläne sowie Datenmodell- und Deployment-Dokumentation.
