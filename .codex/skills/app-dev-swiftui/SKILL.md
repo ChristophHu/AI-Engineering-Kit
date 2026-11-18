@@ -14,6 +14,8 @@ Nutze diesen Skill für native Apple-Apps mit SwiftUI, einschließlich iOS, iPad
 3. Ermittle unterstützte Apple-Plattformen, Bereitstellungsziele, Swift- und SDK-Versionen, App-Lebenszyklus, Navigation, Zustandsverwaltung, Persistenz und vorhandene Apple-Frameworks. Schließe aus SwiftUI nicht auf die Unterstützung sämtlicher Apple-Plattformen.
 4. Beachte die Konventionen der Codebasis. Führe keine neue Architektur, Abhängigkeit, kein Framework und keine neue Betriebssystemmindestversion allein wegen verbreiteter SwiftUI-Muster ein.
 
+Bei Aufgaben zu Projektstruktur, gemeinsamen SwiftUI-Modifiern, Screenshot-Onboarding oder Farb- und Darstellungssystem lies zusätzlich `$ios-swiftui-projektmuster`. Die dortigen Muster stammen aus einer iOS-App: Übertrage sie selektiv und prüfe ihre Eignung für iPadOS und natives macOS sowie die vorhandenen Projektkonventionen.
+
 ## Planen und umsetzen
 
 Berücksichtige für die jeweilige Funktion die relevanten Bereiche:
